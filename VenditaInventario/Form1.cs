@@ -16,6 +16,7 @@ namespace VenditaInventario
     {
         SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;Version= 3;");
 
+        DataTable dt = new DataTable();
 
         public Vendita()
         {
@@ -51,6 +52,27 @@ namespace VenditaInventario
                     MessageBox.Show("Vendita_load Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Debug.WriteLine(ex.StackTrace);
                 }
+            }
+
+            populateTable();
+        }
+
+        public void populateTable()
+        {
+            try
+            {
+
+                SQLiteDataAdapter sqlite_adapter = new SQLiteDataAdapter("SELECT * FROM inventario", sqlite_conn);
+                DataTable sqlite_table = new DataTable();
+                sqlite_adapter.Fill(dt);
+
+                tabellaRicerca.DataSource = dt;
+
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
             }
         }
 
@@ -100,7 +122,7 @@ namespace VenditaInventario
             }
         }
 
-        private void isbnVendita_KeyUp(object sender, KeyEventArgs e)
+        private void isbnVendita_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -111,6 +133,32 @@ namespace VenditaInventario
         private void btnInserisci_Click(object sender, EventArgs e)
         {
             inserimento(isbnVendita.Text.Trim());
+        }
+
+        private void ricerca(String query)
+        {
+            //Per ricercare tutte le colonne programmaticamente aggiungo il nome delle colonne programmaticamente
+            //Non tutte le colonne sono del tipo String(VARCHAR) dal DB quindi le converto dentro il RowFilter automaticamente
+            StringBuilder sb = new StringBuilder();
+
+            foreach (DataColumn column in dt.DefaultView.Table.Columns)
+            {
+                sb.AppendFormat("CONVERT({0}, System.String) Like '%{1}%' OR ", column.ColumnName, query.Trim());
+            }
+
+            //Rimuovo gli ultimi tre caratteri cosi rimuovo le lettere 'OR ' e il RowFilter accetta la stringa
+            sb.Remove(sb.Length - 3, 3);
+
+            dt.DefaultView.RowFilter = sb.ToString();
+
+            tabellaRicerca.DataSource = dt;
+
+            
+        }
+
+        private void textboxRicerca_TextChanged(object sender, EventArgs e)
+        {
+            ricerca(textboxRicerca.Text);
         }
     }
 }

@@ -45,12 +45,6 @@
             this.isbnVendita = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tabellaVendita = new System.Windows.Forms.DataGridView();
-            this.ricercaTab = new System.Windows.Forms.TabPage();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importaInventarioxlsmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nome = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.autore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.casa = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,10 +52,21 @@
             this.prezzo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.anno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.indice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ricercaTab = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tabellaRicerca = new System.Windows.Forms.DataGridView();
+            this.textboxRicerca = new System.Windows.Forms.TextBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importaInventarioxlsmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaVendita)).BeginInit();
+            this.ricercaTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabellaRicerca)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,7 +78,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1413, 742);
+            this.tabControl1.Size = new System.Drawing.Size(1381, 718);
             this.tabControl1.TabIndex = 0;
             // 
             // venditaTab
@@ -84,7 +89,7 @@
             this.venditaTab.Location = new System.Drawing.Point(4, 22);
             this.venditaTab.Name = "venditaTab";
             this.venditaTab.Padding = new System.Windows.Forms.Padding(3);
-            this.venditaTab.Size = new System.Drawing.Size(1405, 716);
+            this.venditaTab.Size = new System.Drawing.Size(1373, 692);
             this.venditaTab.TabIndex = 0;
             this.venditaTab.Text = "Vendita";
             // 
@@ -244,7 +249,7 @@
             this.isbnVendita.Name = "isbnVendita";
             this.isbnVendita.Size = new System.Drawing.Size(264, 20);
             this.isbnVendita.TabIndex = 2;
-            this.isbnVendita.KeyUp += new System.Windows.Forms.KeyEventHandler(this.isbnVendita_KeyUp);
+            this.isbnVendita.KeyDown += new System.Windows.Forms.KeyEventHandler(this.isbnVendita_KeyDown);
             // 
             // label2
             // 
@@ -281,15 +286,94 @@
             this.tabellaVendita.Size = new System.Drawing.Size(986, 716);
             this.tabellaVendita.TabIndex = 0;
             // 
+            // nome
+            // 
+            this.nome.HeaderText = "Nome";
+            this.nome.Name = "nome";
+            this.nome.ReadOnly = true;
+            // 
+            // autore
+            // 
+            this.autore.HeaderText = "Autore";
+            this.autore.Name = "autore";
+            this.autore.ReadOnly = true;
+            // 
+            // casa
+            // 
+            this.casa.HeaderText = "Casa";
+            this.casa.Name = "casa";
+            this.casa.ReadOnly = true;
+            // 
+            // codice
+            // 
+            this.codice.HeaderText = "Codice";
+            this.codice.Name = "codice";
+            this.codice.ReadOnly = true;
+            // 
+            // prezzo
+            // 
+            this.prezzo.HeaderText = "Prezzo";
+            this.prezzo.Name = "prezzo";
+            this.prezzo.ReadOnly = true;
+            // 
+            // anno
+            // 
+            this.anno.HeaderText = "Anno";
+            this.anno.Name = "anno";
+            this.anno.ReadOnly = true;
+            // 
+            // indice
+            // 
+            this.indice.HeaderText = "Indice";
+            this.indice.Name = "indice";
+            this.indice.ReadOnly = true;
+            // 
             // ricercaTab
             // 
             this.ricercaTab.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ricercaTab.Controls.Add(this.label6);
+            this.ricercaTab.Controls.Add(this.tabellaRicerca);
+            this.ricercaTab.Controls.Add(this.textboxRicerca);
             this.ricercaTab.Location = new System.Drawing.Point(4, 22);
             this.ricercaTab.Name = "ricercaTab";
             this.ricercaTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ricercaTab.Size = new System.Drawing.Size(1405, 716);
+            this.ricercaTab.Size = new System.Drawing.Size(1373, 692);
             this.ricercaTab.TabIndex = 1;
             this.ricercaTab.Text = "Ricerca";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(321, 52);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Ricerca testo:";
+            // 
+            // tabellaRicerca
+            // 
+            this.tabellaRicerca.AllowUserToAddRows = false;
+            this.tabellaRicerca.AllowUserToDeleteRows = false;
+            this.tabellaRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabellaRicerca.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.tabellaRicerca.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tabellaRicerca.Location = new System.Drawing.Point(0, 110);
+            this.tabellaRicerca.Name = "tabellaRicerca";
+            this.tabellaRicerca.ReadOnly = true;
+            this.tabellaRicerca.RowHeadersVisible = false;
+            this.tabellaRicerca.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.tabellaRicerca.Size = new System.Drawing.Size(1377, 586);
+            this.tabellaRicerca.TabIndex = 1;
+            // 
+            // textboxRicerca
+            // 
+            this.textboxRicerca.Location = new System.Drawing.Point(406, 49);
+            this.textboxRicerca.Name = "textboxRicerca";
+            this.textboxRicerca.Size = new System.Drawing.Size(254, 20);
+            this.textboxRicerca.TabIndex = 0;
+            this.textboxRicerca.TextChanged += new System.EventHandler(this.textboxRicerca_TextChanged);
             // 
             // menuStrip1
             // 
@@ -297,7 +381,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1413, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1381, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -328,46 +412,11 @@
             this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
             // 
-            // nome
-            // 
-            this.nome.HeaderText = "Nome";
-            this.nome.Name = "nome";
-            // 
-            // autore
-            // 
-            this.autore.HeaderText = "Autore";
-            this.autore.Name = "autore";
-            // 
-            // casa
-            // 
-            this.casa.HeaderText = "Casa";
-            this.casa.Name = "casa";
-            // 
-            // codice
-            // 
-            this.codice.HeaderText = "Codice";
-            this.codice.Name = "codice";
-            // 
-            // prezzo
-            // 
-            this.prezzo.HeaderText = "Prezzo";
-            this.prezzo.Name = "prezzo";
-            // 
-            // anno
-            // 
-            this.anno.HeaderText = "Anno";
-            this.anno.Name = "anno";
-            // 
-            // indice
-            // 
-            this.indice.HeaderText = "Indice";
-            this.indice.Name = "indice";
-            // 
             // Vendita
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1413, 766);
+            this.ClientSize = new System.Drawing.Size(1381, 742);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Name = "Vendita";
@@ -378,6 +427,9 @@
             this.backgroundVendita.ResumeLayout(false);
             this.backgroundVendita.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaVendita)).EndInit();
+            this.ricercaTab.ResumeLayout(false);
+            this.ricercaTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabellaRicerca)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -417,6 +469,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn prezzo;
         private System.Windows.Forms.DataGridViewTextBoxColumn anno;
         private System.Windows.Forms.DataGridViewTextBoxColumn indice;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DataGridView tabellaRicerca;
+        private System.Windows.Forms.TextBox textboxRicerca;
     }
 }
 
