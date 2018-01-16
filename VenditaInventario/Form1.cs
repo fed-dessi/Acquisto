@@ -19,6 +19,8 @@ namespace VenditaInventario
 
         DataTable dt = new DataTable();
 
+        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0;
+
         public Vendita()
         {
             InitializeComponent();
@@ -82,6 +84,20 @@ namespace VenditaInventario
             }
         }
 
+        private void cancella()
+        {
+            libriTotLvl1.Text = "0.00€";
+            libriTotLvl2.Text = "0.00€";
+            libriTotLvl3.Text = "0.00€";
+            importoMax.Text = "0.00€";
+            tabellaVendita.Rows.Clear();
+
+            totIndice1 = 0;
+            totIndice2 = 0;
+            totIndice3 = 0;
+            totMax = 0;
+        }
+
         private void inserimento(String isbn)
         {
             try
@@ -107,6 +123,35 @@ namespace VenditaInventario
 
                         tabellaVendita.Rows.Add(row);
                         tabellaVendita.ClearSelection();
+
+                        //Addiziono i valori nei vari label per il prezzo
+                        if (!row[6].Equals("") && row[6] != null)
+                        {
+                            switch (Convert.ToInt32(row[6]))
+                            {
+                                case 1:
+                                    totIndice1 += Convert.ToDecimal(row[4]) * (decimal)0.1;
+                                    totMax += Convert.ToDecimal(row[4]) * (decimal)0.1;
+                                    //Imposto i valori dei label
+                                    libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
+                                    importoMax.Text = Convert.ToString(totMax) + "€";
+                                    break;
+                                case 2:
+                                    totIndice2 += Convert.ToDecimal(row[4]) * (decimal)0.2;
+                                    totMax += Convert.ToDecimal(row[4]) * (decimal)0.2;
+                                    //Imposto i valori dei label
+                                    libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
+                                    importoMax.Text = Convert.ToString(totMax) + "€";
+                                    break;
+                                case 3:
+                                    totIndice3 += Convert.ToDecimal(row[4]) * (decimal)0.3;
+                                    totMax += Convert.ToDecimal(row[4]) * (decimal)0.3;
+                                    //Imposto i valori dei label
+                                    libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
+                                    importoMax.Text = Convert.ToString(totMax) + "€";
+                                    break;
+                            }
+                        }
                     }
                     else
                     {
@@ -117,7 +162,7 @@ namespace VenditaInventario
 
                     sqlite_conn.Close();
                 }
-                else if (isbn.Length < 13)
+                else if (isbn.Length < 10)
                 {
                     sqlite_conn.Open();
 
@@ -138,6 +183,35 @@ namespace VenditaInventario
 
                         tabellaVendita.Rows.Add(row);
                         tabellaVendita.ClearSelection();
+
+                        //Addiziono i valori nei vari label per il prezzo
+                        if(!row[6].Equals("") && row[6] != null)
+                        { 
+                            switch (Convert.ToInt32(row[6]))
+                            {
+                                case 1:
+                                    totIndice1 += (Convert.ToDecimal(row[4]) * (decimal)0.1);
+                                    totMax += (Convert.ToDecimal(row[4]) * (decimal)0.1);
+                                    //Imposto i valori dei label
+                                    libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
+                                    importoMax.Text = Convert.ToString(totMax) + "€";
+                                    break;
+                                case 2:
+                                    totIndice2 += (Convert.ToDecimal(row[4]) * (decimal)0.2);
+                                    totMax += (Convert.ToDecimal(row[4]) * (decimal)0.2);
+                                    //Imposto i valori dei label
+                                    libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
+                                    importoMax.Text = Convert.ToString(totMax) + "€";
+                                    break;
+                                case 3:
+                                    totIndice3 += (Convert.ToDecimal(row[4]) * (decimal)0.3);
+                                    totMax += (Convert.ToDecimal(row[4]) * (decimal)0.3);
+                                    //Imposto i valori dei label
+                                    libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
+                                    importoMax.Text = Convert.ToString(totMax) + "€";
+                                    break;
+                            }
+                        }
                     }
                     else
                     {
@@ -211,6 +285,9 @@ namespace VenditaInventario
             tabellaRicerca.ClearSelection();
         }
 
+        //Dobbiamo usare PreviewKey in questo caso perche' per definizione il programma dopo aver registrato 
+        //il bottone invio scorre la selezione alla riga sottostante, invece in questo modo prima scorre il metodo
+        //e poi scende con il puntatore
         private void tabellaRicerca_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -227,6 +304,10 @@ namespace VenditaInventario
             }
         }
 
+        /* Usiamo un background worker su un thread separato per leggere i dati da un foglio excel:
+         * Ci aspettiamo che il foglio sia composto da soli dati e che abbia 7 colonne.
+         * Lasciamo che sia il metodo a sfogliarlo fino alla fine.
+         */
         void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             
@@ -261,6 +342,8 @@ namespace VenditaInventario
 
             sqlite_cmd.CommandText = "INSERT INTO inventario (nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice)";
 
+            //Abbiamo ora una dataTable (excelTable) che possiamo utilizzare per carpire i valori come se fosse una matrice.
+            //Usiamo due for Loops per scorrere prima le colonne (for j) e poi le righe (for i)
             for (int i = 0; i < excelTable.Rows.Count; i++)
             {
                 for (int j = 0; j < excelTable.Columns.Count; j++)
@@ -312,10 +395,55 @@ namespace VenditaInventario
             
         }
 
+        private void chiudiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void btnNuovoCliente_Click(object sender, EventArgs e)
+        {
+            cancella();
+        }
+
+        private void btnCancella_Click(object sender, EventArgs e)
+        {
+            //Poiche rimuovo la riga dalla tabella allora scompare anche dalle righe selezionate
+            //per riuscire a continuare il loop sul resto delle righe il mio for deve partire 'dall'alto'
+            for (int i = tabellaVendita.SelectedRows.Count -1; i >= 0; i--)
+            {
+                
+               //Controllo che indice sto cancellando cosi rimuovo il libro dal totale
+               //bisogna usare lo switch prima poiche' altrimenti cancellerei i dati prima di usarli
+                switch (Convert.ToInt32(tabellaVendita.SelectedRows[i].Cells[6].Value.ToString()))
+                {
+                    case 1:
+                        totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                        totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                        //Imposto i valori dei label
+                        libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
+                        importoMax.Text = Convert.ToString(totMax) + "€";
+                        break;
+                    case 2:
+                        totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                        totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                        //Imposto i valori dei label
+                        libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
+                        importoMax.Text = Convert.ToString(totMax) + "€";
+                        break;
+                    case 3:
+                        totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                        totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                        //Imposto i valori dei label
+                        libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
+                        importoMax.Text = Convert.ToString(totMax) + "€";
+                        break;
+                }
+                tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
+            }
+        }
+
         private void importaInventarioxlsmToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
-
             OpenFileDialog file = new OpenFileDialog();
             file.Filter = "Excel Files( .xls, .xlsx)|*.xls; *.xlsx";
             file.ShowDialog();
@@ -328,12 +456,10 @@ namespace VenditaInventario
 
                 //Faccio partiore il Worker
                 backgroundWorker1.RunWorkerAsync(filePath);
-
-               
             }
         }
 
-        
+        //Questo metodo segnala il progresso del backgroundWorker cosi possiamo usare la progressBar
         void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             labelProgressbar.Text = "Importo..: " + Convert.ToString(e.ProgressPercentage) + "%";
@@ -341,6 +467,7 @@ namespace VenditaInventario
             progressBar1.Value = e.ProgressPercentage;
         }
 
+        //Questo metodo viene chiamato alla fine del backgroundWorker
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             MessageBox.Show("Foglio Excel importato!", "Importato", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -31,6 +31,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
+            this.btnNuovoCliente = new System.Windows.Forms.Button();
+            this.labelProgressbar = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnCancella = new System.Windows.Forms.Button();
             this.importoMax = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -62,8 +65,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.labelProgressbar = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -101,6 +102,7 @@
             this.backgroundVendita.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.backgroundVendita.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
+            this.backgroundVendita.Controls.Add(this.btnNuovoCliente);
             this.backgroundVendita.Controls.Add(this.labelProgressbar);
             this.backgroundVendita.Controls.Add(this.progressBar1);
             this.backgroundVendita.Controls.Add(this.btnCancella);
@@ -121,6 +123,40 @@
             this.backgroundVendita.Size = new System.Drawing.Size(430, 716);
             this.backgroundVendita.TabIndex = 5;
             // 
+            // btnNuovoCliente
+            // 
+            this.btnNuovoCliente.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnNuovoCliente.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
+            this.btnNuovoCliente.FlatAppearance.BorderSize = 0;
+            this.btnNuovoCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuovoCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNuovoCliente.ForeColor = System.Drawing.Color.White;
+            this.btnNuovoCliente.Location = new System.Drawing.Point(116, 214);
+            this.btnNuovoCliente.Name = "btnNuovoCliente";
+            this.btnNuovoCliente.Size = new System.Drawing.Size(163, 62);
+            this.btnNuovoCliente.TabIndex = 16;
+            this.btnNuovoCliente.Text = "Nuovo Cliente";
+            this.btnNuovoCliente.UseVisualStyleBackColor = false;
+            this.btnNuovoCliente.Click += new System.EventHandler(this.btnNuovoCliente_Click);
+            // 
+            // labelProgressbar
+            // 
+            this.labelProgressbar.AutoSize = true;
+            this.labelProgressbar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProgressbar.ForeColor = System.Drawing.Color.White;
+            this.labelProgressbar.Location = new System.Drawing.Point(127, 624);
+            this.labelProgressbar.Name = "labelProgressbar";
+            this.labelProgressbar.Size = new System.Drawing.Size(0, 24);
+            this.labelProgressbar.TabIndex = 15;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(28, 651);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(347, 23);
+            this.progressBar1.TabIndex = 14;
+            this.progressBar1.Visible = false;
+            // 
             // btnCancella
             // 
             this.btnCancella.BackColor = System.Drawing.Color.DarkRed;
@@ -135,23 +171,25 @@
             this.btnCancella.TabIndex = 13;
             this.btnCancella.Text = "Cancella";
             this.btnCancella.UseVisualStyleBackColor = false;
+            this.btnCancella.Click += new System.EventHandler(this.btnCancella_Click);
             // 
             // importoMax
             // 
             this.importoMax.AutoSize = true;
             this.importoMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.importoMax.ForeColor = System.Drawing.Color.Red;
-            this.importoMax.Location = new System.Drawing.Point(90, 552);
+            this.importoMax.Location = new System.Drawing.Point(83, 559);
             this.importoMax.Name = "importoMax";
-            this.importoMax.Size = new System.Drawing.Size(0, 25);
+            this.importoMax.Size = new System.Drawing.Size(71, 25);
             this.importoMax.TabIndex = 12;
+            this.importoMax.Text = "0.00€";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(13, 491);
+            this.label4.Location = new System.Drawing.Point(10, 525);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(269, 24);
             this.label4.TabIndex = 11;
@@ -162,17 +200,18 @@
             this.libriTotLvl3.AutoSize = true;
             this.libriTotLvl3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.libriTotLvl3.ForeColor = System.Drawing.Color.Lime;
-            this.libriTotLvl3.Location = new System.Drawing.Point(128, 433);
+            this.libriTotLvl3.Location = new System.Drawing.Point(125, 467);
             this.libriTotLvl3.Name = "libriTotLvl3";
-            this.libriTotLvl3.Size = new System.Drawing.Size(0, 18);
+            this.libriTotLvl3.Size = new System.Drawing.Size(49, 18);
             this.libriTotLvl3.TabIndex = 10;
+            this.libriTotLvl3.Text = "0.00€";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(14, 433);
+            this.label7.Location = new System.Drawing.Point(11, 467);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(75, 18);
             this.label7.TabIndex = 9;
@@ -183,17 +222,18 @@
             this.libriTotLvl2.AutoSize = true;
             this.libriTotLvl2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.libriTotLvl2.ForeColor = System.Drawing.Color.Gold;
-            this.libriTotLvl2.Location = new System.Drawing.Point(128, 372);
+            this.libriTotLvl2.Location = new System.Drawing.Point(125, 406);
             this.libriTotLvl2.Name = "libriTotLvl2";
-            this.libriTotLvl2.Size = new System.Drawing.Size(0, 18);
+            this.libriTotLvl2.Size = new System.Drawing.Size(49, 18);
             this.libriTotLvl2.TabIndex = 8;
+            this.libriTotLvl2.Text = "0.00€";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(15, 372);
+            this.label5.Location = new System.Drawing.Point(12, 406);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(75, 18);
             this.label5.TabIndex = 7;
@@ -204,17 +244,18 @@
             this.libriTotLvl1.AutoSize = true;
             this.libriTotLvl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.libriTotLvl1.ForeColor = System.Drawing.Color.OrangeRed;
-            this.libriTotLvl1.Location = new System.Drawing.Point(127, 312);
+            this.libriTotLvl1.Location = new System.Drawing.Point(124, 346);
             this.libriTotLvl1.Name = "libriTotLvl1";
-            this.libriTotLvl1.Size = new System.Drawing.Size(0, 18);
+            this.libriTotLvl1.Size = new System.Drawing.Size(49, 18);
             this.libriTotLvl1.TabIndex = 6;
+            this.libriTotLvl1.Text = "0.00€";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(14, 312);
+            this.label3.Location = new System.Drawing.Point(11, 346);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 18);
             this.label3.TabIndex = 5;
@@ -261,7 +302,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(14, 258);
+            this.label2.Location = new System.Drawing.Point(11, 292);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(167, 24);
             this.label2.TabIndex = 3;
@@ -270,6 +311,7 @@
             // tabellaVendita
             // 
             this.tabellaVendita.AllowUserToAddRows = false;
+            this.tabellaVendita.AllowUserToDeleteRows = false;
             this.tabellaVendita.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -283,9 +325,9 @@
             this.prezzo,
             this.anno,
             this.indice});
+            this.tabellaVendita.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.tabellaVendita.Location = new System.Drawing.Point(423, 0);
             this.tabellaVendita.Name = "tabellaVendita";
-            this.tabellaVendita.ReadOnly = true;
             this.tabellaVendita.RowHeadersVisible = false;
             this.tabellaVendita.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tabellaVendita.Size = new System.Drawing.Size(986, 716);
@@ -419,29 +461,12 @@
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
             this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
+            this.chiudiToolStripMenuItem.Click += new System.EventHandler(this.chiudiToolStripMenuItem_Click);
             // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(28, 651);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(347, 23);
-            this.progressBar1.TabIndex = 14;
-            this.progressBar1.Visible = false;
-            // 
-            // labelProgressbar
-            // 
-            this.labelProgressbar.AutoSize = true;
-            this.labelProgressbar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelProgressbar.ForeColor = System.Drawing.Color.White;
-            this.labelProgressbar.Location = new System.Drawing.Point(127, 624);
-            this.labelProgressbar.Name = "labelProgressbar";
-            this.labelProgressbar.Size = new System.Drawing.Size(0, 24);
-            this.labelProgressbar.TabIndex = 15;
             // 
             // Vendita
             // 
@@ -506,6 +531,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Label labelProgressbar;
+        private System.Windows.Forms.Button btnNuovoCliente;
     }
 }
 
