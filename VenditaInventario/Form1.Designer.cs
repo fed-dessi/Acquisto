@@ -61,6 +61,9 @@
             this.importaInventarioxlsmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.labelProgressbar = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -98,6 +101,8 @@
             this.backgroundVendita.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.backgroundVendita.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
+            this.backgroundVendita.Controls.Add(this.labelProgressbar);
+            this.backgroundVendita.Controls.Add(this.progressBar1);
             this.backgroundVendita.Controls.Add(this.btnCancella);
             this.backgroundVendita.Controls.Add(this.importoMax);
             this.backgroundVendita.Controls.Add(this.label4);
@@ -359,13 +364,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabellaRicerca.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.tabellaRicerca.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tabellaRicerca.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.tabellaRicerca.Location = new System.Drawing.Point(0, 110);
             this.tabellaRicerca.Name = "tabellaRicerca";
-            this.tabellaRicerca.ReadOnly = true;
             this.tabellaRicerca.RowHeadersVisible = false;
             this.tabellaRicerca.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tabellaRicerca.Size = new System.Drawing.Size(1377, 586);
             this.tabellaRicerca.TabIndex = 1;
+            this.tabellaRicerca.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tabellaRicerca_CellDoubleClick);
+            this.tabellaRicerca.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.tabellaRicerca_PreviewKeyDown);
             // 
             // textboxRicerca
             // 
@@ -400,6 +407,7 @@
             this.importaInventarioxlsmToolStripMenuItem.Name = "importaInventarioxlsmToolStripMenuItem";
             this.importaInventarioxlsmToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.importaInventarioxlsmToolStripMenuItem.Text = "Importa inventario (.xlsm)";
+            this.importaInventarioxlsmToolStripMenuItem.Click += new System.EventHandler(this.importaInventarioxlsmToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -411,6 +419,29 @@
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
             this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(28, 651);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(347, 23);
+            this.progressBar1.TabIndex = 14;
+            this.progressBar1.Visible = false;
+            // 
+            // labelProgressbar
+            // 
+            this.labelProgressbar.AutoSize = true;
+            this.labelProgressbar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProgressbar.ForeColor = System.Drawing.Color.White;
+            this.labelProgressbar.Location = new System.Drawing.Point(127, 624);
+            this.labelProgressbar.Name = "labelProgressbar";
+            this.labelProgressbar.Size = new System.Drawing.Size(0, 24);
+            this.labelProgressbar.TabIndex = 15;
             // 
             // Vendita
             // 
@@ -472,6 +503,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView tabellaRicerca;
         private System.Windows.Forms.TextBox textboxRicerca;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Label labelProgressbar;
     }
 }
 
