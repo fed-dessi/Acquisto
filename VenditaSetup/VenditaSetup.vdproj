@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3051635F48A84C22A8BD2C8050AB8C08"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4C0CCD2A0B25D35F88A6027D2A1F1126"
         "OwnerKey" = "8:_DE694B4C593F457CA017CC0FE2FBCFF7"
         "MsmSig" = "8:_UNDEFINED"
@@ -106,12 +112,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E98E602ACC3125FD344E56F2821CB938"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DE694B4C593F457CA017CC0FE2FBCFF7"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -157,6 +157,12 @@
         "OwnerKey" = "8:_E5958F23E4FE0460BB4FCF3E99D0C30A"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E98E602ACC3125FD344E56F2821CB938"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -175,6 +181,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -191,6 +205,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -249,6 +279,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3051635F48A84C22A8BD2C8050AB8C08"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Downloads\\buy.ico"
+            "TargetName" = "8:buy.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_66E4E731BBB04BC2B023081BAD2E779E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4C0CCD2A0B25D35F88A6027D2A1F1126"
@@ -525,7 +575,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:VenditaSetup"
         "ProductCode" = "8:{10D94F24-0937-48D3-8387-C40CFE07699F}"
-        "PackageCode" = "8:{FE7BFFFE-D774-46A0-9B15-0E0E27F78A34}"
+        "PackageCode" = "8:{37B559FE-A631-40B7-A2CB-4C0BE0E6EDAB}"
         "UpgradeCode" = "8:{88049FE7-33C2-4B82-AB86-C2D5EAC4AF01}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -542,7 +592,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_3051635F48A84C22A8BD2C8050AB8C08"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -656,7 +706,7 @@
             "Target" = "8:_DE694B4C593F457CA017CC0FE2FBCFF7"
             "Folder" = "8:_A2394F139027466FB6CCDFFC811CAA48"
             "WorkingFolder" = "8:_66E4E731BBB04BC2B023081BAD2E779E"
-            "Icon" = "8:"
+            "Icon" = "8:_3051635F48A84C22A8BD2C8050AB8C08"
             "Feature" = "8:"
             }
         }
@@ -1060,7 +1110,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DE694B4C593F457CA017CC0FE2FBCFF7"
             {
-            "SourcePath" = "8:..\\VenditaInventario\\obj\\Debug\\VenditaInventario.exe"
+            "SourcePath" = "8:..\\VenditaInventario\\obj\\Release\\VenditaInventario.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_66E4E731BBB04BC2B023081BAD2E779E"

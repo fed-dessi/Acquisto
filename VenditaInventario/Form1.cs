@@ -1,13 +1,11 @@
 ﻿using ExcelDataReader;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -382,8 +380,9 @@ namespace VenditaInventario
                 sqlite_cmd.Parameters.AddWithValue("@Indice", indice);
 
                 sqlite_cmd.ExecuteNonQuery();
-                
 
+                GC.Collect();
+                
                 backgroundWorker1.ReportProgress((int)Math.Round((double)(i * 100) / excelTable.Rows.Count));
             }
 
@@ -411,35 +410,57 @@ namespace VenditaInventario
             //per riuscire a continuare il loop sul resto delle righe il mio for deve partire 'dall'alto'
             for (int i = tabellaVendita.SelectedRows.Count -1; i >= 0; i--)
             {
-                
-               //Controllo che indice sto cancellando cosi rimuovo il libro dal totale
-               //bisogna usare lo switch prima poiche' altrimenti cancellerei i dati prima di usarli
-                switch (Convert.ToInt32(tabellaVendita.SelectedRows[i].Cells[6].Value.ToString()))
-                {
-                    case 1:
-                        totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
-                        totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
-                        //Imposto i valori dei label
-                        libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
-                        importoMax.Text = Convert.ToString(totMax) + "€";
-                        break;
-                    case 2:
-                        totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
-                        totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
-                        //Imposto i valori dei label
-                        libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
-                        importoMax.Text = Convert.ToString(totMax) + "€";
-                        break;
-                    case 3:
-                        totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
-                        totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
-                        //Imposto i valori dei label
-                        libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
-                        importoMax.Text = Convert.ToString(totMax) + "€";
-                        break;
+                if (!tabellaVendita.SelectedRows[i].Cells[6].Value.ToString().Equals("") && tabellaVendita.SelectedRows[i].Cells[6].Value.ToString() != null)
+                { 
+                    //Controllo che indice sto cancellando cosi rimuovo il libro dal totale
+                    //bisogna usare lo switch prima poiche' altrimenti cancellerei i dati prima di usarli
+                    switch (Convert.ToInt32(tabellaVendita.SelectedRows[i].Cells[6].Value.ToString()))
+                    {
+                        case 1:
+                            totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                            //Imposto i valori dei label
+                            libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
+                            importoMax.Text = Convert.ToString(totMax) + "€";
+                            break;
+                        case 2:
+                            totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                            //Imposto i valori dei label
+                            libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
+                            importoMax.Text = Convert.ToString(totMax) + "€";
+                            break;
+                        case 3:
+                            totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                            //Imposto i valori dei label
+                            libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
+                            importoMax.Text = Convert.ToString(totMax) + "€";
+                            break;
+                    }
                 }
                 tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
             }
+        }
+
+        private void tabellaVendita_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            if(!tabellaVendita.Rows[e.RowIndex].Cells[6].Value.ToString().Equals("") && tabellaVendita.Rows[e.RowIndex].Cells[6].Value != null)
+            { 
+                switch (Convert.ToInt32(tabellaVendita.Rows[e.RowIndex].Cells[6].Value.ToString()))
+                {
+                    case 1:
+                        tabellaVendita.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.OrangeRed;
+                        break;
+                    case 2:
+                        tabellaVendita.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Gold;
+                        break;
+                    case 3:
+                        tabellaVendita.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Lime;
+                        break;
+                }
+            }
+
         }
 
         private void importaInventarioxlsmToolStripMenuItem_Click(object sender, EventArgs e)
@@ -456,6 +477,7 @@ namespace VenditaInventario
 
                 //Faccio partiore il Worker
                 backgroundWorker1.RunWorkerAsync(filePath);
+                
             }
         }
 
