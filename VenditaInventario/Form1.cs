@@ -17,7 +17,7 @@ namespace VenditaInventario
 
         DataTable dt = new DataTable();
 
-        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0;
+        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo =0;
 
         public Vendita()
         {
@@ -88,12 +88,14 @@ namespace VenditaInventario
             libriTotLvl2.Text = "0.00€";
             libriTotLvl3.Text = "0.00€";
             importoMax.Text = "0.00€";
+            importoLordo.Text = "0.00€";
             tabellaVendita.Rows.Clear();
 
             totIndice1 = 0;
             totIndice2 = 0;
             totIndice3 = 0;
             totMax = 0;
+            totLordo = 0;
         }
 
         private void inserimento(String isbn)
@@ -149,6 +151,8 @@ namespace VenditaInventario
                                     importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                             }
+                            totLordo += Convert.ToDecimal(row[4]);
+                            importoLordo.Text = Convert.ToString(totLordo) + "€";
                         }
                     }
                     else
@@ -209,6 +213,9 @@ namespace VenditaInventario
                                     importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                             }
+
+                            totLordo += Convert.ToDecimal(row[4]);
+                            importoLordo.Text = Convert.ToString(totLordo) + "€";
                         }
                     }
                     else
@@ -439,6 +446,8 @@ namespace VenditaInventario
                             break;
                     }
                 }
+                totLordo -= Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString());
+                importoLordo.Text = Convert.ToString(totLordo) + "€";
                 tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
             }
         }
