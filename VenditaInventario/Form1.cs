@@ -19,8 +19,11 @@ namespace VenditaInventario
 
         decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo =0;
 
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public Vendita()
         {
+            
             InitializeComponent();
 
             // This event will be raised on the worker thread when the worker starts
@@ -35,6 +38,7 @@ namespace VenditaInventario
 
             directory += "\\inventario.sqlite";
 
+            log.Info("Program StartUp");
 
             if (!File.Exists(directory))
             {
@@ -57,6 +61,7 @@ namespace VenditaInventario
                 {
                     MessageBox.Show("Vendita_load Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Debug.WriteLine(ex.StackTrace);
+                    log.Error(ex.StackTrace);
                 }
             }
 
@@ -79,6 +84,7 @@ namespace VenditaInventario
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
+                log.Error(ex.StackTrace);
             }
         }
 
@@ -235,6 +241,7 @@ namespace VenditaInventario
             catch (SQLiteException ex)
             {
                 Debug.WriteLine(ex.StackTrace);
+                log.Error(ex.StackTrace);
             }
         }
 
@@ -315,87 +322,95 @@ namespace VenditaInventario
          */
         void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            
 
-            DataTable excelTable = new DataTable();
+            log.Info("Inizio Importo");
 
-            string filePath = (string)e.Argument;
-
-            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            try
             {
+                DataTable excelTable = new DataTable();
 
-                // Auto-detect format, supports:
-                //  - Binary Excel files (2.0-2003 format; *.xls)
-                //  - OpenXml Excel files (2007 format; *.xlsx)
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                string filePath = (string)e.Argument;
+
+                using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    DataSet result = reader.AsDataSet();
-                    excelTable = result.Tables[0];
-                }
 
-            }
-
-            String nome = null, autore = null, casa = null, codice = null, prezzo = null, anno = null, indice = null;
-
-            sqlite_conn.Open();
-
-            SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
-
-            sqlite_cmd.CommandText = "DELETE FROM inventario";
-
-            sqlite_cmd.ExecuteNonQuery();
-
-            sqlite_cmd.CommandText = "INSERT INTO inventario (nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice)";
-
-            //Abbiamo ora una dataTable (excelTable) che possiamo utilizzare per carpire i valori come se fosse una matrice.
-            //Usiamo due for Loops per scorrere prima le colonne (for j) e poi le righe (for i)
-            for (int i = 0; i < excelTable.Rows.Count; i++)
-            {
-                for (int j = 0; j < excelTable.Columns.Count; j++)
-                {
-                    switch (j)
+                    // Auto-detect format, supports:
+                    //  - Binary Excel files (2.0-2003 format; *.xls)
+                    //  - OpenXml Excel files (2007 format; *.xlsx)
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
                     {
-                        case 0:
-                            nome = excelTable.Rows[i][j].ToString();
-                            break;
-                        case 1:
-                            autore = excelTable.Rows[i][j].ToString();
-                            break;
-                        case 2:
-                            casa = excelTable.Rows[i][j].ToString();
-                            break;
-                        case 3:
-                            codice = excelTable.Rows[i][j].ToString();
-                            break;
-                        case 4:
-                            prezzo = excelTable.Rows[i][j].ToString();
-                            break;
-                        case 5:
-                            anno = excelTable.Rows[i][j].ToString();
-                            break;
-                        case 6:
-                            indice = excelTable.Rows[i][j].ToString();
-                            break;
+                        DataSet result = reader.AsDataSet();
+                        excelTable = result.Tables[0];
                     }
+
                 }
-                sqlite_cmd.Parameters.AddWithValue("@Nome", nome);
-                sqlite_cmd.Parameters.AddWithValue("@Autore", autore);
-                sqlite_cmd.Parameters.AddWithValue("@Casa", casa);
-                sqlite_cmd.Parameters.AddWithValue("@Codice", codice);
-                sqlite_cmd.Parameters.AddWithValue("@Prezzo", prezzo);
-                sqlite_cmd.Parameters.AddWithValue("@Anno", anno);
-                sqlite_cmd.Parameters.AddWithValue("@Indice", indice);
+
+                String nome = null, autore = null, casa = null, codice = null, prezzo = null, anno = null, indice = null;
+
+                sqlite_conn.Open();
+
+                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+
+                sqlite_cmd.CommandText = "DELETE FROM inventario";
 
                 sqlite_cmd.ExecuteNonQuery();
 
-                GC.Collect();
-                
-                backgroundWorker1.ReportProgress((int)Math.Round((double)(i * 100) / excelTable.Rows.Count));
+                sqlite_cmd.CommandText = "INSERT INTO inventario (nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice)";
+
+                //Abbiamo ora una dataTable (excelTable) che possiamo utilizzare per carpire i valori come se fosse una matrice.
+                //Usiamo due for Loops per scorrere prima le colonne (for j) e poi le righe (for i)
+                for (int i = 0; i < excelTable.Rows.Count; i++)
+                {
+                    for (int j = 0; j < excelTable.Columns.Count; j++)
+                    {
+                        switch (j)
+                        {
+                            case 0:
+                                nome = excelTable.Rows[i][j].ToString();
+                                break;
+                            case 1:
+                                autore = excelTable.Rows[i][j].ToString();
+                                break;
+                            case 2:
+                                casa = excelTable.Rows[i][j].ToString();
+                                break;
+                            case 3:
+                                codice = excelTable.Rows[i][j].ToString();
+                                break;
+                            case 4:
+                                prezzo = excelTable.Rows[i][j].ToString();
+                                break;
+                            case 5:
+                                anno = excelTable.Rows[i][j].ToString();
+                                break;
+                            case 6:
+                                indice = excelTable.Rows[i][j].ToString();
+                                break;
+                        }
+                    }
+                    sqlite_cmd.Parameters.AddWithValue("@Nome", nome);
+                    sqlite_cmd.Parameters.AddWithValue("@Autore", autore);
+                    sqlite_cmd.Parameters.AddWithValue("@Casa", casa);
+                    sqlite_cmd.Parameters.AddWithValue("@Codice", codice);
+                    sqlite_cmd.Parameters.AddWithValue("@Prezzo", prezzo);
+                    sqlite_cmd.Parameters.AddWithValue("@Anno", anno);
+                    sqlite_cmd.Parameters.AddWithValue("@Indice", indice);
+
+                    sqlite_cmd.ExecuteNonQuery();
+
+                    GC.Collect();
+
+                    backgroundWorker1.ReportProgress((int)Math.Round((double)(i * 100) / excelTable.Rows.Count));
+                }
+
+                sqlite_conn.Close();
+
+                populateTable();
+
+            } catch(Exception ex)
+            {
+                log.Error(ex.StackTrace);
             }
-
-            sqlite_conn.Close();
-
-            populateTable();
             
 
             
@@ -506,6 +521,8 @@ namespace VenditaInventario
             progressBar1.Visible = false;
 
             labelProgressbar.ResetText();
+
+            log.Info("Fine Importo");
         }
     }
 }
