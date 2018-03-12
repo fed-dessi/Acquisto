@@ -169,6 +169,8 @@ namespace VenditaInventario
                     sqlite_dataReader.Close();
 
                     sqlite_conn.Close();
+
+                    isbnVendita.ResetText();
                 }
                 else if (isbn.Length < 10)
                 {
@@ -232,6 +234,8 @@ namespace VenditaInventario
                     sqlite_dataReader.Close();
 
                     sqlite_conn.Close();
+
+                    isbnVendita.ResetText();
                 }
                 else
                 {
