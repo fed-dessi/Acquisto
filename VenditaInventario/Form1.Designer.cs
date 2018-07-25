@@ -34,6 +34,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.importoLordo = new System.Windows.Forms.Label();
             this.btnNuovoCliente = new System.Windows.Forms.Button();
             this.labelProgressbar = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -59,6 +61,7 @@
             this.anno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.indice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ricercaTab = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.tabellaRicerca = new System.Windows.Forms.DataGridView();
             this.textboxRicerca = new System.Windows.Forms.TextBox();
@@ -68,8 +71,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.importoLordo = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.btnAggiornaRicerca = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -129,6 +131,28 @@
             this.backgroundVendita.Name = "backgroundVendita";
             this.backgroundVendita.Size = new System.Drawing.Size(430, 716);
             this.backgroundVendita.TabIndex = 5;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(319, 525);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(64, 24);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Lordo";
+            // 
+            // importoLordo
+            // 
+            this.importoLordo.AutoSize = true;
+            this.importoLordo.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.importoLordo.ForeColor = System.Drawing.Color.Red;
+            this.importoLordo.Location = new System.Drawing.Point(318, 559);
+            this.importoLordo.Name = "importoLordo";
+            this.importoLordo.Size = new System.Drawing.Size(71, 25);
+            this.importoLordo.TabIndex = 17;
+            this.importoLordo.Text = "0.00€";
             // 
             // btnNuovoCliente
             // 
@@ -402,6 +426,8 @@
             // ricercaTab
             // 
             this.ricercaTab.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ricercaTab.Controls.Add(this.btnAggiornaRicerca);
+            this.ricercaTab.Controls.Add(this.button1);
             this.ricercaTab.Controls.Add(this.label6);
             this.ricercaTab.Controls.Add(this.tabellaRicerca);
             this.ricercaTab.Controls.Add(this.textboxRicerca);
@@ -411,6 +437,22 @@
             this.ricercaTab.Size = new System.Drawing.Size(1373, 692);
             this.ricercaTab.TabIndex = 1;
             this.ricercaTab.Text = "Ricerca";
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Goldenrod;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(809, 25);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(163, 62);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Modifica Riga";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label6
             // 
@@ -492,27 +534,21 @@
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // importoLordo
+            // btnAggiornaRicerca
             // 
-            this.importoLordo.AutoSize = true;
-            this.importoLordo.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.importoLordo.ForeColor = System.Drawing.Color.Red;
-            this.importoLordo.Location = new System.Drawing.Point(318, 559);
-            this.importoLordo.Name = "importoLordo";
-            this.importoLordo.Size = new System.Drawing.Size(71, 25);
-            this.importoLordo.TabIndex = 17;
-            this.importoLordo.Text = "0.00€";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(319, 525);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(64, 24);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Lordo";
+            this.btnAggiornaRicerca.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnAggiornaRicerca.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
+            this.btnAggiornaRicerca.FlatAppearance.BorderSize = 0;
+            this.btnAggiornaRicerca.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAggiornaRicerca.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAggiornaRicerca.ForeColor = System.Drawing.Color.White;
+            this.btnAggiornaRicerca.Location = new System.Drawing.Point(1017, 25);
+            this.btnAggiornaRicerca.Name = "btnAggiornaRicerca";
+            this.btnAggiornaRicerca.Size = new System.Drawing.Size(163, 62);
+            this.btnAggiornaRicerca.TabIndex = 18;
+            this.btnAggiornaRicerca.Text = "Aggiorna Tabella";
+            this.btnAggiornaRicerca.UseVisualStyleBackColor = false;
+            this.btnAggiornaRicerca.Click += new System.EventHandler(this.btnAggiornaRicerca_Click);
             // 
             // Vendita
             // 
@@ -581,6 +617,8 @@
         private System.Windows.Forms.Button btnNuovoCliente;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label importoLordo;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnAggiornaRicerca;
     }
 }
 

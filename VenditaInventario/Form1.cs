@@ -68,17 +68,78 @@ namespace VenditaInventario
             populateTable();
         }
 
+        private void apriModifica()
+        {
+            string isbn = tabellaRicerca.CurrentRow.Cells[4].Value.ToString();
+
+
+            try
+            {
+
+                Modifica frm = new Modifica();
+
+                using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;Version= 3;"))
+                {
+
+                    sqlite_conn.Open();
+
+                    using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
+                    {
+                        sqlite_cmd.CommandText = "SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario WHERE codice='" + isbn + "'";
+                        sqlite_cmd.ExecuteNonQuery();
+
+                        SQLiteDataReader sqlite_dataReader = sqlite_cmd.ExecuteReader();
+
+                        
+
+                        if (sqlite_dataReader.Read())
+                        {
+                            
+                            frm.SetId = Convert.ToString(sqlite_dataReader[0]);
+                            frm.modificaTitoloTextbox.Text = (String)sqlite_dataReader[1];
+                            frm.modificaAutoreTextbox.Text = (String)sqlite_dataReader[2];
+                            frm.modificaCasaTextbox.Text = (String)sqlite_dataReader[3];
+                            frm.modificaIsbnTextbox.Text = (String)sqlite_dataReader[4];
+                            frm.modificaPrezzoTextbox.Text = (String)sqlite_dataReader[5];
+                            frm.modificaAnnoTextbox.Text = (String)sqlite_dataReader[6];
+                            frm.modificaIndiceCombo.Text = (String)sqlite_dataReader[7];
+
+
+                        }
+                        sqlite_dataReader.Close();
+                        sqlite_conn.Close();
+
+                        
+                    }
+                }
+
+                frm.ShowDialog();
+
+            }
+
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show("Vendita_load Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine(ex.StackTrace);
+                log.Error(ex.StackTrace);
+            }
+        }
+
         public void populateTable()
         {
             try
             {
-
                 SQLiteDataAdapter sqlite_adapter = new SQLiteDataAdapter("SELECT * FROM inventario", sqlite_conn);
+
+                dt.Clear();
+
                 DataTable sqlite_table = new DataTable();
                 sqlite_adapter.Fill(dt);
 
                 tabellaRicerca.DataSource = dt;
                 tabellaRicerca.ClearSelection();
+
+                GC.Collect();
 
             }
             catch (Exception ex)
@@ -469,6 +530,16 @@ namespace VenditaInventario
                 importoLordo.Text = Convert.ToString(totLordo) + "€";
                 tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            apriModifica();
+        }
+
+        private void btnAggiornaRicerca_Click(object sender, EventArgs e)
+        {
+            populateTable();
         }
 
         private void tabellaVendita_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
