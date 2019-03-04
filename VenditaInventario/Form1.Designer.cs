@@ -31,7 +31,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Vendita));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPages = new System.Windows.Forms.TabControl();
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
@@ -61,6 +61,7 @@
             this.anno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.indice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ricercaTab = new System.Windows.Forms.TabPage();
+            this.btnAggiornaRicerca = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.tabellaRicerca = new System.Windows.Forms.DataGridView();
@@ -71,26 +72,38 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.btnAggiornaRicerca = new System.Windows.Forms.Button();
-            this.tabControl1.SuspendLayout();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.dataInizialePicker = new System.Windows.Forms.DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.dataFinalePicker = new System.Windows.Forms.DateTimePicker();
+            this.label12 = new System.Windows.Forms.Label();
+            this.ricercaStatistiche = new System.Windows.Forms.Button();
+            this.quantitaLabel = new System.Windows.Forms.Label();
+            this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaVendita)).BeginInit();
             this.ricercaTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaRicerca)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabPages
             // 
-            this.tabControl1.Controls.Add(this.venditaTab);
-            this.tabControl1.Controls.Add(this.ricercaTab);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 24);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1381, 718);
-            this.tabControl1.TabIndex = 0;
+            this.tabPages.Controls.Add(this.venditaTab);
+            this.tabPages.Controls.Add(this.ricercaTab);
+            this.tabPages.Controls.Add(this.tabPage1);
+            this.tabPages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPages.Location = new System.Drawing.Point(0, 24);
+            this.tabPages.Name = "tabPages";
+            this.tabPages.SelectedIndex = 0;
+            this.tabPages.Size = new System.Drawing.Size(1381, 718);
+            this.tabPages.TabIndex = 0;
             // 
             // venditaTab
             // 
@@ -438,6 +451,22 @@
             this.ricercaTab.TabIndex = 1;
             this.ricercaTab.Text = "Ricerca";
             // 
+            // btnAggiornaRicerca
+            // 
+            this.btnAggiornaRicerca.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnAggiornaRicerca.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
+            this.btnAggiornaRicerca.FlatAppearance.BorderSize = 0;
+            this.btnAggiornaRicerca.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAggiornaRicerca.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAggiornaRicerca.ForeColor = System.Drawing.Color.White;
+            this.btnAggiornaRicerca.Location = new System.Drawing.Point(1017, 25);
+            this.btnAggiornaRicerca.Name = "btnAggiornaRicerca";
+            this.btnAggiornaRicerca.Size = new System.Drawing.Size(163, 62);
+            this.btnAggiornaRicerca.TabIndex = 18;
+            this.btnAggiornaRicerca.Text = "Aggiorna Tabella";
+            this.btnAggiornaRicerca.UseVisualStyleBackColor = false;
+            this.btnAggiornaRicerca.Click += new System.EventHandler(this.btnAggiornaRicerca_Click);
+            // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Goldenrod;
@@ -534,34 +563,125 @@
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // btnAggiornaRicerca
+            // tabPage1
             // 
-            this.btnAggiornaRicerca.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnAggiornaRicerca.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
-            this.btnAggiornaRicerca.FlatAppearance.BorderSize = 0;
-            this.btnAggiornaRicerca.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAggiornaRicerca.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAggiornaRicerca.ForeColor = System.Drawing.Color.White;
-            this.btnAggiornaRicerca.Location = new System.Drawing.Point(1017, 25);
-            this.btnAggiornaRicerca.Name = "btnAggiornaRicerca";
-            this.btnAggiornaRicerca.Size = new System.Drawing.Size(163, 62);
-            this.btnAggiornaRicerca.TabIndex = 18;
-            this.btnAggiornaRicerca.Text = "Aggiorna Tabella";
-            this.btnAggiornaRicerca.UseVisualStyleBackColor = false;
-            this.btnAggiornaRicerca.Click += new System.EventHandler(this.btnAggiornaRicerca_Click);
+            this.tabPage1.Controls.Add(this.panel1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1373, 692);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Statistiche";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.quantitaLabel);
+            this.panel1.Controls.Add(this.ricercaStatistiche);
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.dataFinalePicker);
+            this.panel1.Controls.Add(this.label10);
+            this.panel1.Controls.Add(this.dataInizialePicker);
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1372, 695);
+            this.panel1.TabIndex = 0;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(67, 166);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(111, 20);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Libri venduti:";
+            // 
+            // dataInizialePicker
+            // 
+            this.dataInizialePicker.CustomFormat = "dd/MM/yyyy";
+            this.dataInizialePicker.Location = new System.Drawing.Point(130, 79);
+            this.dataInizialePicker.Name = "dataInizialePicker";
+            this.dataInizialePicker.Size = new System.Drawing.Size(200, 20);
+            this.dataInizialePicker.TabIndex = 1;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(67, 80);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(57, 20);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Inizio:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(395, 79);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(49, 20);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Fine:";
+            // 
+            // dataFinalePicker
+            // 
+            this.dataFinalePicker.CustomFormat = "dd/MM/yyyy";
+            this.dataFinalePicker.Location = new System.Drawing.Point(458, 78);
+            this.dataFinalePicker.Name = "dataFinalePicker";
+            this.dataFinalePicker.Size = new System.Drawing.Size(200, 20);
+            this.dataFinalePicker.TabIndex = 3;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(66, 27);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(340, 25);
+            this.label12.TabIndex = 5;
+            this.label12.Text = "Seleziona le date di riferimento";
+            // 
+            // ricercaStatistiche
+            // 
+            this.ricercaStatistiche.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ricercaStatistiche.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ricercaStatistiche.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
+            this.ricercaStatistiche.ForeColor = System.Drawing.Color.White;
+            this.ricercaStatistiche.Location = new System.Drawing.Point(724, 51);
+            this.ricercaStatistiche.Name = "ricercaStatistiche";
+            this.ricercaStatistiche.Size = new System.Drawing.Size(229, 78);
+            this.ricercaStatistiche.TabIndex = 6;
+            this.ricercaStatistiche.Text = "Ricerca";
+            this.ricercaStatistiche.UseVisualStyleBackColor = false;
+            this.ricercaStatistiche.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // quantitaLabel
+            // 
+            this.quantitaLabel.AutoSize = true;
+            this.quantitaLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quantitaLabel.ForeColor = System.Drawing.Color.Red;
+            this.quantitaLabel.Location = new System.Drawing.Point(197, 163);
+            this.quantitaLabel.Name = "quantitaLabel";
+            this.quantitaLabel.Size = new System.Drawing.Size(0, 24);
+            this.quantitaLabel.TabIndex = 7;
             // 
             // Vendita
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1381, 742);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabPages);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Vendita";
             this.Text = "Vendita";
             this.Load += new System.EventHandler(this.Vendita_Load);
-            this.tabControl1.ResumeLayout(false);
+            this.tabPages.ResumeLayout(false);
             this.venditaTab.ResumeLayout(false);
             this.backgroundVendita.ResumeLayout(false);
             this.backgroundVendita.PerformLayout();
@@ -571,6 +691,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.tabellaRicerca)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -578,7 +701,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabPages;
         private System.Windows.Forms.TabPage venditaTab;
         private System.Windows.Forms.TabPage ricercaTab;
         private System.Windows.Forms.Panel backgroundVendita;
@@ -619,6 +742,16 @@
         private System.Windows.Forms.Label importoLordo;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnAggiornaRicerca;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button ricercaStatistiche;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.DateTimePicker dataFinalePicker;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.DateTimePicker dataInizialePicker;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label quantitaLabel;
     }
 }
 

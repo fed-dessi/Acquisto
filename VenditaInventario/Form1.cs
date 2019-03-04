@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -49,6 +50,9 @@ namespace VenditaInventario
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
                     sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50), prezzo varchar(50), anno varchar(50), indice varchar(4));";
+                    sqlite_cmd.ExecuteNonQuery();
+
+                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, data varchar(50), quantita integer);";
                     sqlite_cmd.ExecuteNonQuery();
 
                     sqlite_conn.Close();
@@ -355,8 +359,8 @@ namespace VenditaInventario
 
             inserimento(idRicerca);
 
-            tabControl1.TabPages[0].Show();
-            tabControl1.SelectedIndex = 0;
+            tabPages.TabPages[0].Show();
+            tabPages.SelectedIndex = 0;
 
             isbnVendita.Focus();
             tabellaRicerca.ClearSelection();
@@ -373,8 +377,8 @@ namespace VenditaInventario
 
                 inserimento(idRicerca);
 
-                tabControl1.TabPages[0].Show();
-                tabControl1.SelectedIndex = 0;
+                tabPages.TabPages[0].Show();
+                tabPages.SelectedIndex = 0;
 
                 isbnVendita.Focus();
                 tabellaRicerca.ClearSelection();
@@ -488,6 +492,61 @@ namespace VenditaInventario
 
         private void btnNuovoCliente_Click(object sender, EventArgs e)
         {
+            DialogResult dialogResult = MessageBox.Show("Registrare i libri?", "Nuova vendita", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                try { 
+                    String data = null;
+                    int quantita = 0;
+
+                    sqlite_conn.Open();
+
+                    SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+
+                    SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
+
+                    //Controlliamo se abbiamo gia' inserito altre quantita' oggi
+
+                    data = DateTime.Now.ToString("dd/MM/yyyy");
+
+                    sqlite_cmd.CommandText = "SELECT quantita FROM statistiche WHERE data='" + data + "'";
+
+                    SQLiteDataReader r = sqlite_cmd.ExecuteReader();
+                    //se il DataReader contiene dati allora gia' ho inserito delle quantita
+                    if (r.Read())
+                    {
+                        quantita = r.GetInt32(0);
+
+                        quantita += tabellaVendita.Rows.Count;
+
+                        sqlite_cmd2.CommandText = "UPDATE statistiche set quantita = '"+ quantita + "' WHERE data='" + data + "'";
+                    }
+                    else //Altrimenti non ho inserito nessuna quantita' e devo inserire il record per la prima volta
+                    {
+                        sqlite_cmd2.CommandText = "INSERT INTO [statistiche] (data, quantita) Values (@Data, @Quantita)";
+
+                        quantita += tabellaVendita.Rows.Count;
+
+                        sqlite_cmd2.Parameters.AddWithValue("@Data", data);
+                        sqlite_cmd2.Parameters.AddWithValue("@Quantita", quantita);
+                    }
+
+                    r.Close();
+
+                    sqlite_cmd2.ExecuteNonQuery();
+
+                    sqlite_conn.Close();
+
+                    MessageBox.Show("Registrati!", "Registro statistiche", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                } catch(Exception ex)
+                {
+                    log.Error(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(ex);
+                    Debug.WriteLine(ex.Message);
+                }
+
+            }
             cancella();
         }
 
@@ -540,6 +599,53 @@ namespace VenditaInventario
         private void btnAggiornaRicerca_Click(object sender, EventArgs e)
         {
             populateTable();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int quantita = 0;
+
+                sqlite_conn.Open();
+
+                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+
+                DateTime dataIniziale = DateTime.ParseExact(dataInizialePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                DateTime dataFinale = DateTime.ParseExact(dataFinalePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                //Controlliamo che la data scelta sia minore uguale alla data finale oppure ad oggi
+                while (dataIniziale.Ticks <= dataFinale.Ticks || dataIniziale.Ticks <= DateTime.Now.Ticks)
+                {
+
+                    sqlite_cmd.CommandText = "SELECT quantita FROM statistiche WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
+
+                    SQLiteDataReader r = sqlite_cmd.ExecuteReader();
+                    //se il DataReader contiene dati allora esistono delle quantita' in quella data
+                    while (r.Read())
+                    {
+                        quantita += r.GetInt32(0);
+                    }
+
+                    //Aggiorniamo la data in modo da aggiungere un giorno
+                    dataIniziale = dataIniziale.AddDays(1);
+
+                    r.Close();
+                    GC.Collect();
+                }
+
+                quantitaLabel.Text = Convert.ToString(quantita);
+
+                sqlite_conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message + ex.StackTrace);
+                Debug.WriteLine(ex);
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         private void tabellaVendita_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)

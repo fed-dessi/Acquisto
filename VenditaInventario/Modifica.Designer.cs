@@ -104,6 +104,7 @@
             // 
             this.modificaIndiceCombo.FormattingEnabled = true;
             this.modificaIndiceCombo.Items.AddRange(new object[] {
+            "",
             "1",
             "2",
             "3"});
