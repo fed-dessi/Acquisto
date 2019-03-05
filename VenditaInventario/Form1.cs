@@ -616,7 +616,7 @@ namespace VenditaInventario
                 DateTime dataFinale = DateTime.ParseExact(dataFinalePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
                 //Controlliamo che la data scelta sia minore uguale alla data finale oppure ad oggi
-                while (dataIniziale.Ticks <= dataFinale.Ticks || dataIniziale.Ticks <= DateTime.Now.Ticks)
+                while (dataIniziale.Ticks <= dataFinale.Ticks && dataIniziale.Ticks <= DateTime.Now.Ticks)
                 {
 
                     sqlite_cmd.CommandText = "SELECT quantita FROM statistiche WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
