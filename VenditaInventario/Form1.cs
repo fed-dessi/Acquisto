@@ -228,7 +228,7 @@ namespace VenditaInventario
                     }
                     else
                     {
-                        MessageBox.Show("Libro non trovato/da non comprare!", "Libro non Trovato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("ISBN [" + isbnVendita.Text + "] non trovato/da non comprare!", "Libro non Trovato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                     sqlite_dataReader.Close();
@@ -293,7 +293,7 @@ namespace VenditaInventario
                     }
                     else
                     {
-                        MessageBox.Show("Libro non trovato/da non comprare!", "Libro non Trovato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("ISBN ["+ isbnVendita.Text +"] non trovato/da non comprare!", "Libro non Trovato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                     sqlite_dataReader.Close();
@@ -314,9 +314,15 @@ namespace VenditaInventario
             }
         }
 
+        /* Duplice funzione: Osserviamo se abbiamo premuto invio, in questo caso avvio inserimento() con quello che ho inserito,
+         * nel frattempo osserva se raggiungo le 13 cifre di un ISBN standard, in quel caso avvio inserimento() con il valore di isbnVendita
+         */
         private void isbnVendita_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if(isbnVendita.Text.Length == 13)
+            {
+                inserimento(isbnVendita.Text.Trim());
+            } else if (e.KeyCode == Keys.Enter)
             {
                 inserimento(isbnVendita.Text.Trim());
             }
@@ -348,11 +354,13 @@ namespace VenditaInventario
 
         }
 
+        //Filtro la tabella della ricerca per cercare in ogni colonna il contenuto di textboxRicerca
         private void textboxRicerca_TextChanged(object sender, EventArgs e)
         {
             ricerca(textboxRicerca.Text);
         }
 
+        //Aggiungiamo un libro alla lista con un doppio click sulla tabella della ricerca
         private void tabellaRicerca_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             string idRicerca = tabellaRicerca.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -517,7 +525,13 @@ namespace VenditaInventario
                     {
                         quantita = r.GetInt32(0);
 
-                        quantita += tabellaVendita.Rows.Count;
+                        foreach(DataGridViewRow row in tabellaVendita.Rows)
+                        {
+                            if (!row.Cells[6].Value.Equals(""))
+                            {
+                                quantita += 1;
+                            }
+                        }
 
                         sqlite_cmd2.CommandText = "UPDATE statistiche set quantita = '"+ quantita + "' WHERE data='" + data + "'";
                     }
@@ -525,7 +539,13 @@ namespace VenditaInventario
                     {
                         sqlite_cmd2.CommandText = "INSERT INTO [statistiche] (data, quantita) Values (@Data, @Quantita)";
 
-                        quantita += tabellaVendita.Rows.Count;
+                        foreach (DataGridViewRow row in tabellaVendita.Rows)
+                        {
+                            if (!row.Cells[6].Value.Equals(""))
+                            {
+                                quantita += 1;
+                            }
+                        }
 
                         sqlite_cmd2.Parameters.AddWithValue("@Data", data);
                         sqlite_cmd2.Parameters.AddWithValue("@Quantita", quantita);

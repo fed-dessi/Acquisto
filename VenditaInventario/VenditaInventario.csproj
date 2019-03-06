@@ -50,6 +50,9 @@
   <PropertyGroup>
     <ApplicationIcon>buy.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net40\EntityFramework.dll</HintPath>
@@ -124,6 +127,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="log4.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
