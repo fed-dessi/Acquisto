@@ -339,7 +339,7 @@
             this.isbnVendita.Name = "isbnVendita";
             this.isbnVendita.Size = new System.Drawing.Size(264, 20);
             this.isbnVendita.TabIndex = 2;
-            this.isbnVendita.KeyDown += new System.Windows.Forms.KeyEventHandler(this.isbnVendita_KeyDown);
+            this.isbnVendita.KeyUp += new System.Windows.Forms.KeyEventHandler(this.IsbnVendita_KeyUp);
             // 
             // label2
             // 

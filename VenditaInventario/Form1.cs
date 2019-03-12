@@ -317,9 +317,9 @@ namespace VenditaInventario
         /* Duplice funzione: Osserviamo se abbiamo premuto invio, in questo caso avvio inserimento() con quello che ho inserito,
          * nel frattempo osserva se raggiungo le 13 cifre di un ISBN standard, in quel caso avvio inserimento() con il valore di isbnVendita
          */
-        private void isbnVendita_KeyDown(object sender, KeyEventArgs e)
+        private void IsbnVendita_KeyUp(object sender, KeyEventArgs e)
         {
-            if(isbnVendita.Text.Length == 13)
+            if (isbnVendita.Text.Length == 13)
             {
                 inserimento(isbnVendita.Text.Trim());
             } else if (e.KeyCode == Keys.Enter)
@@ -486,11 +486,31 @@ namespace VenditaInventario
 
             } catch(Exception ex)
             {
-                log.Error(ex.StackTrace);
+                log.Error(ex.Message + " " + ex.StackTrace);
             }
             
 
             
+        }
+
+        //Questo metodo segnala il progresso del backgroundWorker cosi possiamo usare la progressBar
+        void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            labelProgressbar.Text = "Importo..: " + Convert.ToString(e.ProgressPercentage) + "%";
+            //La percentuale e' una proprieta di e
+            progressBar1.Value = e.ProgressPercentage;
+        }
+
+        //Questo metodo viene chiamato alla fine del backgroundWorker
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("Foglio Excel importato!", "Importato", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            progressBar1.Visible = false;
+
+            labelProgressbar.ResetText();
+
+            log.Info("Fine Importo");
         }
 
         private void chiudiToolStripMenuItem_Click(object sender, EventArgs e)
@@ -706,24 +726,6 @@ namespace VenditaInventario
             }
         }
 
-        //Questo metodo segnala il progresso del backgroundWorker cosi possiamo usare la progressBar
-        void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            labelProgressbar.Text = "Importo..: " + Convert.ToString(e.ProgressPercentage) + "%";
-            //La percentuale e' una proprieta di e
-            progressBar1.Value = e.ProgressPercentage;
-        }
-
-        //Questo metodo viene chiamato alla fine del backgroundWorker
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            MessageBox.Show("Foglio Excel importato!", "Importato", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            progressBar1.Visible = false;
-
-            labelProgressbar.ResetText();
-
-            log.Info("Fine Importo");
-        }
+        
     }
 }
