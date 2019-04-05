@@ -324,7 +324,10 @@ namespace VenditaInventario
                 inserimento(isbnVendita.Text.Trim());
             } else if (e.KeyCode == Keys.Enter)
             {
-                inserimento(isbnVendita.Text.Trim());
+                if (isbnVendita.Text.Length >= 10)
+                {
+                    inserimento(isbnVendita.Text.Trim());
+                }
             }
         }
 
