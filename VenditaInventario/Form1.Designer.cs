@@ -30,10 +30,13 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Vendita));
             this.tabPages = new System.Windows.Forms.TabControl();
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
+            this.cbBuono = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.importoLordo = new System.Windows.Forms.Label();
             this.btnNuovoCliente = new System.Windows.Forms.Button();
@@ -68,7 +71,13 @@
             this.textboxRicerca = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.quantitaLabel = new System.Windows.Forms.Label();
+            this.costoTotaleBuoniLabel = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.quantitaBuoniLabel = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.costoTotaleContantiLabel = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.quantitaContantiLabel = new System.Windows.Forms.Label();
             this.ricercaStatistiche = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -82,6 +91,13 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.tabellaStatistiche = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -91,6 +107,7 @@
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabellaStatistiche)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPages
@@ -122,6 +139,7 @@
             this.backgroundVendita.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.backgroundVendita.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
+            this.backgroundVendita.Controls.Add(this.cbBuono);
             this.backgroundVendita.Controls.Add(this.label8);
             this.backgroundVendita.Controls.Add(this.importoLordo);
             this.backgroundVendita.Controls.Add(this.btnNuovoCliente);
@@ -144,6 +162,20 @@
             this.backgroundVendita.Name = "backgroundVendita";
             this.backgroundVendita.Size = new System.Drawing.Size(430, 716);
             this.backgroundVendita.TabIndex = 5;
+            // 
+            // cbBuono
+            // 
+            this.cbBuono.AutoSize = true;
+            this.cbBuono.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBuono.ForeColor = System.Drawing.Color.White;
+            this.cbBuono.Location = new System.Drawing.Point(47, 604);
+            this.cbBuono.Name = "cbBuono";
+            this.cbBuono.Size = new System.Drawing.Size(236, 20);
+            this.cbBuono.TabIndex = 19;
+            this.cbBuono.Text = "Buono libreria? (aggiunge 5%)";
+            this.cbBuono.UseVisualStyleBackColor = true;
+            this.cbBuono.Visible = false;
+            this.cbBuono.CheckedChanged += new System.EventHandler(this.cbBuono_CheckedChanged);
             // 
             // label8
             // 
@@ -393,6 +425,7 @@
             this.tabellaVendita.Size = new System.Drawing.Size(954, 696);
             this.tabellaVendita.TabIndex = 0;
             this.tabellaVendita.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tabellaVendita_RowsAdded);
+            this.tabellaVendita.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tabellaVendita_KeyUp);
             // 
             // nome
             // 
@@ -532,8 +565,15 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel1.Controls.Add(this.quantitaLabel);
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
+            this.panel1.Controls.Add(this.tabellaStatistiche);
+            this.panel1.Controls.Add(this.costoTotaleBuoniLabel);
+            this.panel1.Controls.Add(this.label15);
+            this.panel1.Controls.Add(this.quantitaBuoniLabel);
+            this.panel1.Controls.Add(this.label14);
+            this.panel1.Controls.Add(this.costoTotaleContantiLabel);
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.quantitaContantiLabel);
             this.panel1.Controls.Add(this.ricercaStatistiche);
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.label11);
@@ -546,23 +586,87 @@
             this.panel1.Size = new System.Drawing.Size(1372, 695);
             this.panel1.TabIndex = 0;
             // 
-            // quantitaLabel
+            // costoTotaleBuoniLabel
             // 
-            this.quantitaLabel.AutoSize = true;
-            this.quantitaLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.quantitaLabel.ForeColor = System.Drawing.Color.Red;
-            this.quantitaLabel.Location = new System.Drawing.Point(197, 163);
-            this.quantitaLabel.Name = "quantitaLabel";
-            this.quantitaLabel.Size = new System.Drawing.Size(0, 24);
-            this.quantitaLabel.TabIndex = 7;
+            this.costoTotaleBuoniLabel.AutoSize = true;
+            this.costoTotaleBuoniLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.5F, System.Drawing.FontStyle.Bold);
+            this.costoTotaleBuoniLabel.ForeColor = System.Drawing.Color.Red;
+            this.costoTotaleBuoniLabel.Location = new System.Drawing.Point(229, 259);
+            this.costoTotaleBuoniLabel.Name = "costoTotaleBuoniLabel";
+            this.costoTotaleBuoniLabel.Size = new System.Drawing.Size(0, 25);
+            this.costoTotaleBuoniLabel.TabIndex = 13;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(9, 264);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(161, 20);
+            this.label15.TabIndex = 12;
+            this.label15.Text = "Costo totale buoni:";
+            // 
+            // quantitaBuoniLabel
+            // 
+            this.quantitaBuoniLabel.AutoSize = true;
+            this.quantitaBuoniLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quantitaBuoniLabel.ForeColor = System.Drawing.Color.Red;
+            this.quantitaBuoniLabel.Location = new System.Drawing.Point(230, 194);
+            this.quantitaBuoniLabel.Name = "quantitaBuoniLabel";
+            this.quantitaBuoniLabel.Size = new System.Drawing.Size(0, 24);
+            this.quantitaBuoniLabel.TabIndex = 11;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(9, 197);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(200, 20);
+            this.label14.TabIndex = 10;
+            this.label14.Text = "Libri venduti con buono:";
+            // 
+            // costoTotaleContantiLabel
+            // 
+            this.costoTotaleContantiLabel.AutoSize = true;
+            this.costoTotaleContantiLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.5F, System.Drawing.FontStyle.Bold);
+            this.costoTotaleContantiLabel.ForeColor = System.Drawing.Color.Red;
+            this.costoTotaleContantiLabel.Location = new System.Drawing.Point(229, 227);
+            this.costoTotaleContantiLabel.Name = "costoTotaleContantiLabel";
+            this.costoTotaleContantiLabel.Size = new System.Drawing.Size(0, 25);
+            this.costoTotaleContantiLabel.TabIndex = 9;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(9, 232);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(182, 20);
+            this.label13.TabIndex = 8;
+            this.label13.Text = "Costo totale contanti:";
+            // 
+            // quantitaContantiLabel
+            // 
+            this.quantitaContantiLabel.AutoSize = true;
+            this.quantitaContantiLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quantitaContantiLabel.ForeColor = System.Drawing.Color.Red;
+            this.quantitaContantiLabel.Location = new System.Drawing.Point(230, 159);
+            this.quantitaContantiLabel.Name = "quantitaContantiLabel";
+            this.quantitaContantiLabel.Size = new System.Drawing.Size(0, 24);
+            this.quantitaContantiLabel.TabIndex = 7;
             // 
             // ricercaStatistiche
             // 
             this.ricercaStatistiche.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ricercaStatistiche.FlatAppearance.BorderSize = 0;
             this.ricercaStatistiche.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ricercaStatistiche.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
             this.ricercaStatistiche.ForeColor = System.Drawing.Color.White;
-            this.ricercaStatistiche.Location = new System.Drawing.Point(724, 51);
+            this.ricercaStatistiche.Location = new System.Drawing.Point(666, 44);
             this.ricercaStatistiche.Name = "ricercaStatistiche";
             this.ricercaStatistiche.Size = new System.Drawing.Size(229, 78);
             this.ricercaStatistiche.TabIndex = 6;
@@ -574,7 +678,8 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(66, 27);
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(8, 20);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(340, 25);
             this.label12.TabIndex = 5;
@@ -584,7 +689,8 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(395, 79);
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(337, 72);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(49, 20);
             this.label11.TabIndex = 4;
@@ -593,7 +699,7 @@
             // dataFinalePicker
             // 
             this.dataFinalePicker.CustomFormat = "dd/MM/yyyy";
-            this.dataFinalePicker.Location = new System.Drawing.Point(458, 78);
+            this.dataFinalePicker.Location = new System.Drawing.Point(400, 71);
             this.dataFinalePicker.Name = "dataFinalePicker";
             this.dataFinalePicker.Size = new System.Drawing.Size(200, 20);
             this.dataFinalePicker.TabIndex = 3;
@@ -602,7 +708,8 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(67, 80);
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(9, 73);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(57, 20);
             this.label10.TabIndex = 2;
@@ -611,7 +718,7 @@
             // dataInizialePicker
             // 
             this.dataInizialePicker.CustomFormat = "dd/MM/yyyy";
-            this.dataInizialePicker.Location = new System.Drawing.Point(130, 79);
+            this.dataInizialePicker.Location = new System.Drawing.Point(72, 72);
             this.dataInizialePicker.Name = "dataInizialePicker";
             this.dataInizialePicker.Size = new System.Drawing.Size(200, 20);
             this.dataInizialePicker.TabIndex = 1;
@@ -620,11 +727,12 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(67, 166);
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(9, 159);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(111, 20);
+            this.label9.Size = new System.Drawing.Size(215, 20);
             this.label9.TabIndex = 0;
-            this.label9.Text = "Libri venduti:";
+            this.label9.Text = "Libri venduti con contanti:";
             // 
             // menuStrip1
             // 
@@ -670,6 +778,83 @@
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // tabellaStatistiche
+            // 
+            this.tabellaStatistiche.AllowUserToAddRows = false;
+            this.tabellaStatistiche.AllowUserToDeleteRows = false;
+            this.tabellaStatistiche.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabellaStatistiche.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.tabellaStatistiche.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.tabellaStatistiche.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tabellaStatistiche.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6});
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.tabellaStatistiche.DefaultCellStyle = dataGridViewCellStyle4;
+            this.tabellaStatistiche.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.tabellaStatistiche.Location = new System.Drawing.Point(399, 166);
+            this.tabellaStatistiche.Name = "tabellaStatistiche";
+            this.tabellaStatistiche.RowHeadersVisible = false;
+            this.tabellaStatistiche.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.tabellaStatistiche.Size = new System.Drawing.Size(974, 529);
+            this.tabellaStatistiche.TabIndex = 14;
+            this.tabellaStatistiche.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tabellaStatistiche_RowsAdded);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Data";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "ISBN";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Titolo";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "Prezzo";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.HeaderText = "Metodo";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.HeaderText = "Indice";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
             // Vendita
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -694,6 +879,7 @@
             this.panel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabellaStatistiche)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -751,7 +937,21 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.DateTimePicker dataInizialePicker;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label quantitaLabel;
+        private System.Windows.Forms.Label quantitaContantiLabel;
+        private System.Windows.Forms.Label costoTotaleContantiLabel;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox cbBuono;
+        private System.Windows.Forms.Label quantitaBuoniLabel;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label costoTotaleBuoniLabel;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.DataGridView tabellaStatistiche;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
     }
 }
 

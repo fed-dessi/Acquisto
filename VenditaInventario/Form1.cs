@@ -14,13 +14,17 @@ namespace VenditaInventario
 {
     public partial class Vendita : Form
     {
-        SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;Version= 3;");
+        SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;");
 
-        DataTable dt = new DataTable();
+        DataTable dtRicerca = new DataTable();
 
-        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo =0;
+        DataTable dtStatistiche = new DataTable();
+
+        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo =0, totMaxBuono =0;
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        
 
         public Vendita()
         {
@@ -35,6 +39,10 @@ namespace VenditaInventario
 
         private void Vendita_Load(object sender, EventArgs e)
         {
+
+            //String machineName = System.Environment.MachineName;
+            //Console.WriteLine(machineName);
+
             String directory = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
 
             directory += "\\inventario.sqlite";
@@ -52,7 +60,7 @@ namespace VenditaInventario
                     sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50), prezzo varchar(50), anno varchar(50), indice varchar(4));";
                     sqlite_cmd.ExecuteNonQuery();
 
-                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, data varchar(50), quantita integer);";
+                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, data varchar(50), metodo varchar(4), libriID integer, FOREIGN KEY (libriID) REFERENCES inventario(id));";
                     sqlite_cmd.ExecuteNonQuery();
 
                     sqlite_conn.Close();
@@ -82,7 +90,7 @@ namespace VenditaInventario
 
                 Modifica frm = new Modifica();
 
-                using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;Version= 3;"))
+                using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;"))
                 {
 
                     sqlite_conn.Open();
@@ -123,7 +131,7 @@ namespace VenditaInventario
 
             catch (SQLiteException ex)
             {
-                MessageBox.Show("Vendita_load Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("apriModifica() Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Debug.WriteLine(ex.StackTrace);
                 log.Error(ex.StackTrace);
             }
@@ -135,12 +143,11 @@ namespace VenditaInventario
             {
                 SQLiteDataAdapter sqlite_adapter = new SQLiteDataAdapter("SELECT * FROM inventario", sqlite_conn);
 
-                dt.Clear();
+                dtRicerca.Clear();
+                
+                sqlite_adapter.Fill(dtRicerca);
 
-                DataTable sqlite_table = new DataTable();
-                sqlite_adapter.Fill(dt);
-
-                tabellaRicerca.DataSource = dt;
+                tabellaRicerca.DataSource = dtRicerca;
                 tabellaRicerca.ClearSelection();
 
                 GC.Collect();
@@ -149,7 +156,7 @@ namespace VenditaInventario
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
-                log.Error(ex.StackTrace);
+                log.Error(ex.Message + " - " +ex.StackTrace);
             }
         }
 
@@ -166,6 +173,7 @@ namespace VenditaInventario
             totIndice2 = 0;
             totIndice3 = 0;
             totMax = 0;
+            totMaxBuono = 0;
             totLordo = 0;
         }
 
@@ -175,6 +183,7 @@ namespace VenditaInventario
             {
                 if (isbn.Length == 13)
                 {
+
                     sqlite_conn.Open();
 
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
@@ -205,26 +214,34 @@ namespace VenditaInventario
                                     totMax += Convert.ToDecimal(row[4]) * (decimal)0.1;
                                     //Imposto i valori dei label
                                     libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
-                                    importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                                 case 2:
                                     totIndice2 += Convert.ToDecimal(row[4]) * (decimal)0.2;
                                     totMax += Convert.ToDecimal(row[4]) * (decimal)0.2;
                                     //Imposto i valori dei label
                                     libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
-                                    importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                                 case 3:
                                     totIndice3 += Convert.ToDecimal(row[4]) * (decimal)0.3;
                                     totMax += Convert.ToDecimal(row[4]) * (decimal)0.3;
                                     //Imposto i valori dei label
                                     libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
-                                    importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                             }
+                            totMaxBuono = Math.Round(totMax * (decimal)1.05, 2);
+                            if (cbBuono.Checked)
+                            {
+                                importoMax.Text = Convert.ToString(totMaxBuono) + "€";
+                            }
+                            else
+                            {
+                                importoMax.Text = Convert.ToString(totMax) + "€";
+                            }
                             totLordo += Convert.ToDecimal(row[4]);
-                            importoLordo.Text = Convert.ToString(totLordo) + "€";
+                            importoLordo.Text = Convert.ToString(Math.Round(totLordo, 2)) + "€";
                         }
+
+                        cbBuono.Visible = true;
                     }
                     else
                     {
@@ -269,27 +286,33 @@ namespace VenditaInventario
                                     totMax += (Convert.ToDecimal(row[4]) * (decimal)0.1);
                                     //Imposto i valori dei label
                                     libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
-                                    importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                                 case 2:
                                     totIndice2 += (Convert.ToDecimal(row[4]) * (decimal)0.2);
                                     totMax += (Convert.ToDecimal(row[4]) * (decimal)0.2);
                                     //Imposto i valori dei label
                                     libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
-                                    importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                                 case 3:
                                     totIndice3 += (Convert.ToDecimal(row[4]) * (decimal)0.3);
                                     totMax += (Convert.ToDecimal(row[4]) * (decimal)0.3);
                                     //Imposto i valori dei label
                                     libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
-                                    importoMax.Text = Convert.ToString(totMax) + "€";
                                     break;
                             }
-
+                            totMaxBuono = Math.Round(totMax * (decimal)1.05, 2);
+                            if (cbBuono.Checked)
+                            {
+                                importoMax.Text = Convert.ToString(totMaxBuono) + "€";
+                            }
+                            else
+                            {
+                                importoMax.Text = Convert.ToString(totMax) + "€";
+                            }
                             totLordo += Convert.ToDecimal(row[4]);
                             importoLordo.Text = Convert.ToString(totLordo) + "€";
                         }
+                        cbBuono.Visible = true;
                     }
                     else
                     {
@@ -311,6 +334,59 @@ namespace VenditaInventario
             {
                 Debug.WriteLine(ex.StackTrace);
                 log.Error(ex.StackTrace);
+            }
+        }
+
+        private void rimozioneRiga()
+        {
+            //Poiche rimuovo la riga dalla tabella allora scompare anche dalle righe selezionate
+            //per riuscire a continuare il loop sul resto delle righe il mio for deve partire 'dall'alto'
+            for (int i = tabellaVendita.SelectedRows.Count - 1; i >= 0; i--)
+            {
+                if (!tabellaVendita.SelectedRows[i].Cells[6].Value.ToString().Equals("") && tabellaVendita.SelectedRows[i].Cells[6].Value.ToString() != null)
+                {
+                    //Controllo che indice sto cancellando cosi rimuovo il libro dal totale
+                    //bisogna usare lo switch prima poiche' altrimenti cancellerei i dati prima di usarli
+                    switch (Convert.ToInt32(tabellaVendita.SelectedRows[i].Cells[6].Value.ToString()))
+                    {
+                        case 1:
+                            totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                            //Imposto i valori dei label
+                            libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
+                            break;
+                        case 2:
+                            totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                            //Imposto i valori dei label
+                            libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
+                            break;
+                        case 3:
+                            totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                            //Imposto i valori dei label
+                            libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
+                            break;
+                    }
+                }
+
+                totMaxBuono = Math.Round(totMax * (decimal)1.05, 2);
+                if (cbBuono.Checked)
+                {
+                    importoMax.Text = Convert.ToString(totMaxBuono) + "€";
+                }
+                else
+                {
+                    importoMax.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
+                }
+                totLordo -= Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString());
+                importoLordo.Text = Convert.ToString(Math.Round(totLordo, 2)) + "€";
+                tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
+            }
+            //Nascondo il comboBox se non ho libri nella tabella
+            if (tabellaVendita.Rows.Count == 0)
+            {
+                cbBuono.Hide();
             }
         }
 
@@ -342,7 +418,7 @@ namespace VenditaInventario
             //Non tutte le colonne sono del tipo String(VARCHAR) dal DB quindi le converto dentro il RowFilter automaticamente
             StringBuilder sb = new StringBuilder();
 
-            foreach (DataColumn column in dt.DefaultView.Table.Columns)
+            foreach (DataColumn column in dtRicerca.DefaultView.Table.Columns)
             {
                 sb.AppendFormat("CONVERT({0}, System.String) Like '%{1}%' OR ", column.ColumnName, query.Trim());
             }
@@ -350,9 +426,9 @@ namespace VenditaInventario
             //Rimuovo gli ultimi tre caratteri cosi rimuovo le lettere 'OR ' e il RowFilter accetta la stringa
             sb.Remove(sb.Length - 3, 3);
 
-            dt.DefaultView.RowFilter = sb.ToString();
+            dtRicerca.DefaultView.RowFilter = sb.ToString();
 
-            tabellaRicerca.DataSource = dt;
+            tabellaRicerca.DataSource = dtRicerca;
 
 
         }
@@ -528,7 +604,6 @@ namespace VenditaInventario
             {
                 try { 
                     String data = null;
-                    int quantita = 0;
 
                     sqlite_conn.Open();
 
@@ -540,44 +615,35 @@ namespace VenditaInventario
 
                     data = DateTime.Now.ToString("dd/MM/yyyy");
 
-                    sqlite_cmd.CommandText = "SELECT quantita FROM statistiche WHERE data='" + data + "'";
-
-                    SQLiteDataReader r = sqlite_cmd.ExecuteReader();
-                    //se il DataReader contiene dati allora gia' ho inserito delle quantita
-                    if (r.Read())
+                    sqlite_cmd2.CommandText = "INSERT INTO [statistiche] (data, metodo, libriID) Values (@Data, @Metodo, @LibriID)";
+                    
+                    foreach(DataGridViewRow row in tabellaVendita.Rows)
                     {
-                        quantita = r.GetInt32(0);
-
-                        foreach(DataGridViewRow row in tabellaVendita.Rows)
+                        if (!row.Cells[6].Value.Equals(""))
                         {
-                            if (!row.Cells[6].Value.Equals(""))
+                            sqlite_cmd.CommandText = "SELECT id FROM inventario WHERE codice='" + row.Cells[3].Value + "'";
+                            SQLiteDataReader r = sqlite_cmd.ExecuteReader();
+                            //seleziono il libro tramite la sua Foreign Key
+                            if (r.Read())
                             {
-                                quantita += 1;
+                                sqlite_cmd2.Parameters.AddWithValue("@Data", data);
+                                sqlite_cmd2.Parameters.AddWithValue("@LibriID", r.GetInt32(0));
+                                //Controllo se ho venduto con un buono oppure no
+                                if (cbBuono.Checked)
+                                {
+                                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "B");
+                                }
+                                else
+                                {
+                                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
+                                }
+
+                                sqlite_cmd2.ExecuteNonQuery();
                             }
+                            r.Close();
                         }
-
-                        sqlite_cmd2.CommandText = "UPDATE statistiche set quantita = '"+ quantita + "' WHERE data='" + data + "'";
                     }
-                    else //Altrimenti non ho inserito nessuna quantita' e devo inserire il record per la prima volta
-                    {
-                        sqlite_cmd2.CommandText = "INSERT INTO [statistiche] (data, quantita) Values (@Data, @Quantita)";
-
-                        foreach (DataGridViewRow row in tabellaVendita.Rows)
-                        {
-                            if (!row.Cells[6].Value.Equals(""))
-                            {
-                                quantita += 1;
-                            }
-                        }
-
-                        sqlite_cmd2.Parameters.AddWithValue("@Data", data);
-                        sqlite_cmd2.Parameters.AddWithValue("@Quantita", quantita);
-                    }
-
-                    r.Close();
-
-                    sqlite_cmd2.ExecuteNonQuery();
-
+                    
                     sqlite_conn.Close();
 
                     MessageBox.Show("Registrati!", "Registro statistiche", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -591,47 +657,12 @@ namespace VenditaInventario
 
             }
             cancella();
+            cbBuono.Hide();
         }
 
         private void btnCancella_Click(object sender, EventArgs e)
         {
-            //Poiche rimuovo la riga dalla tabella allora scompare anche dalle righe selezionate
-            //per riuscire a continuare il loop sul resto delle righe il mio for deve partire 'dall'alto'
-            for (int i = tabellaVendita.SelectedRows.Count -1; i >= 0; i--)
-            {
-                if (!tabellaVendita.SelectedRows[i].Cells[6].Value.ToString().Equals("") && tabellaVendita.SelectedRows[i].Cells[6].Value.ToString() != null)
-                { 
-                    //Controllo che indice sto cancellando cosi rimuovo il libro dal totale
-                    //bisogna usare lo switch prima poiche' altrimenti cancellerei i dati prima di usarli
-                    switch (Convert.ToInt32(tabellaVendita.SelectedRows[i].Cells[6].Value.ToString()))
-                    {
-                        case 1:
-                            totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
-                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
-                            //Imposto i valori dei label
-                            libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
-                            importoMax.Text = Convert.ToString(totMax) + "€";
-                            break;
-                        case 2:
-                            totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
-                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
-                            //Imposto i valori dei label
-                            libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
-                            importoMax.Text = Convert.ToString(totMax) + "€";
-                            break;
-                        case 3:
-                            totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
-                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
-                            //Imposto i valori dei label
-                            libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
-                            importoMax.Text = Convert.ToString(totMax) + "€";
-                            break;
-                    }
-                }
-                totLordo -= Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString());
-                importoLordo.Text = Convert.ToString(totLordo) + "€";
-                tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
-            }
+            rimozioneRiga();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -639,20 +670,60 @@ namespace VenditaInventario
             apriModifica();
         }
 
+        private void tabellaVendita_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Delete)
+            {
+                rimozioneRiga();
+            }
+        }
+
+        private void tabellaStatistiche_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+
+            if (tabellaStatistiche.Rows[e.RowIndex].Cells[4].Value.Equals("Contanti"))
+            { 
+                tabellaStatistiche.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Lime;
+            }
+            else 
+            {
+                tabellaStatistiche.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.OrangeRed;
+            }
+            
+        }
+
+        private void cbBuono_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbBuono.Checked)
+            {
+                importoMax.Text = Convert.ToString(totMaxBuono) + "€";
+            }
+            if (!cbBuono.Checked)
+            {
+                importoMax.Text = Convert.ToString(totMax) + "€";
+            }
+        }
+
         private void btnAggiornaRicerca_Click(object sender, EventArgs e)
         {
             populateTable();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)//statistiche
         {
             try
             {
-                int quantita = 0;
+                int quantitaContanti = 0, quantitaBuoni = 0;
+
+                decimal costoContanti = 0, costoBuoni = 0;
+
+                String[] row = new String[6];
 
                 sqlite_conn.Open();
 
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+
+                SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
 
                 DateTime dataIniziale = DateTime.ParseExact(dataInizialePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
@@ -662,30 +733,66 @@ namespace VenditaInventario
                 while (dataIniziale.Ticks <= dataFinale.Ticks && dataIniziale.Ticks <= DateTime.Now.Ticks)
                 {
 
-                    sqlite_cmd.CommandText = "SELECT quantita FROM statistiche WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
+                    sqlite_cmd.CommandText = "SELECT * FROM statistiche WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
 
                     SQLiteDataReader r = sqlite_cmd.ExecuteReader();
                     //se il DataReader contiene dati allora esistono delle quantita' in quella data
+
                     while (r.Read())
                     {
-                        quantita += r.GetInt32(0);
+                        sqlite_cmd2.CommandText = "SELECT * FROM inventario WHERE id='" + r.GetInt32(3) + "'";
+                        SQLiteDataReader rLibri = sqlite_cmd2.ExecuteReader();
+                        if (r.GetString(2).Equals("B"))
+                        {
+                            quantitaBuoni++;
+                            while (rLibri.Read())
+                            {
+                                costoBuoni += (rLibri.GetDecimal(5) * Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7)))) * (decimal)1.05;
+                                row[4] = "Buono"; //Metodo
+                                row[1] = rLibri.GetString(4); //ISBN
+                                row[2] = rLibri.GetString(1); //Titolo
+                                row[3] = rLibri.GetString(5); //Prezzo
+                                row[5] = rLibri.GetString(7); //Indice
+                            }
+                            
+                        } else
+                        {
+                            quantitaContanti++;
+                            while (rLibri.Read())
+                            {
+                                costoContanti += (rLibri.GetDecimal(5) * Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7))));
+                                row[4] = "Contanti"; //Metodo
+                                row[1] = rLibri.GetString(4); //ISBN
+                                row[2] = rLibri.GetString(1); //Titolo
+                                row[3] = rLibri.GetString(5); //Prezzo
+                                row[5] = rLibri.GetString(7); //Indice
+                            }
+                        }
+                        rLibri.Close();
+                        
+                        row[0] = dataIniziale.ToString("dd/MM/yyyy"); //data
                     }
 
                     //Aggiorniamo la data in modo da aggiungere un giorno
                     dataIniziale = dataIniziale.AddDays(1);
 
                     r.Close();
+
+                    tabellaStatistiche.Rows.Add(row);
                     GC.Collect();
                 }
+                quantitaContantiLabel.Text = Convert.ToString(quantitaContanti);
+                quantitaBuoniLabel.Text = Convert.ToString(quantitaBuoni);
+                costoTotaleContantiLabel.Text = Convert.ToString(Math.Round(costoContanti, 2)) + "€";
+                costoTotaleBuoniLabel.Text = Convert.ToString(Math.Round(costoBuoni, 2)) + "€";
 
-                quantitaLabel.Text = Convert.ToString(quantita);
+                tabellaStatistiche.ClearSelection();
 
                 sqlite_conn.Close();
-
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message + ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: "+ ex.StackTrace);
                 Debug.WriteLine(ex);
                 Debug.WriteLine(ex.Message);
             }
@@ -708,7 +815,6 @@ namespace VenditaInventario
                         break;
                 }
             }
-
         }
 
         private void importaInventarioxlsmToolStripMenuItem_Click(object sender, EventArgs e)
@@ -728,7 +834,5 @@ namespace VenditaInventario
                 
             }
         }
-
-        
     }
 }
