@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -30,7 +31,14 @@ namespace VenditaInventario
 
         public Vendita()
         {
-            
+            //defining the culture
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
             InitializeComponent();
 
             // This event will be raised on the worker thread when the worker starts
@@ -41,10 +49,7 @@ namespace VenditaInventario
 
         private void Vendita_Load(object sender, EventArgs e)
         {
-            //upload statistics
-            //String machineName = System.Environment.MachineName;
-            //Console.WriteLine(machineName);
-
+            
             String directory = Path.GetDirectoryName(Application.ExecutablePath);
 
             directory += "\\inventario.sqlite";
@@ -954,8 +959,8 @@ namespace VenditaInventario
                 }
                 quantitaContantiLabel.Text = Convert.ToString(quantitaContanti);
                 quantitaBuoniLabel.Text = Convert.ToString(quantitaBuoni);
-                costoTotaleContantiLabel.Text = Convert.ToString(Math.Round(costoContanti, 2)) + "€";
-                costoTotaleBuoniLabel.Text = Convert.ToString(Math.Round(costoBuoni, 2)) + "€";
+                costoTotaleContantiLabel.Text = Convert.ToString(Math.Round(costoContanti, 2).ToString().Replace(",",".")).Replace(",", ".") + "€";
+                costoTotaleBuoniLabel.Text = Convert.ToString(Math.Round(costoBuoni, 2).ToString().Replace(",", ".")).Replace(",", ".") + "€";
 
                 tabellaStatistiche.ClearSelection();
 
