@@ -7,8 +7,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace VenditaInventario
 {
@@ -18,11 +21,9 @@ namespace VenditaInventario
 
         DataTable dtRicerca = new DataTable();
 
-        DataTable dtStatistiche = new DataTable();
-
         decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo =0, totMaxBuono =0;
 
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         
 
@@ -39,11 +40,11 @@ namespace VenditaInventario
 
         private void Vendita_Load(object sender, EventArgs e)
         {
-
+            //upload statistics
             //String machineName = System.Environment.MachineName;
             //Console.WriteLine(machineName);
 
-            String directory = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            String directory = Path.GetDirectoryName(Application.ExecutablePath);
 
             directory += "\\inventario.sqlite";
 
@@ -73,11 +74,53 @@ namespace VenditaInventario
                 {
                     MessageBox.Show("Vendita_load Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Debug.WriteLine(ex.StackTrace);
-                    log.Error(ex.StackTrace);
+                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
                 }
             }
-
+            update();
             populateTable();
+        }
+
+        private void update()
+        {
+            try
+            {
+                String URLString = "https://www.libridicartaonline.it/acquistoAggiornamento.xml";
+                String downloadURL = null;
+                var currentVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                int result = 0;
+
+                //Stiamo scaricando l'xml da un sito https quindi va impostato il protocollo da usare
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                ServicePointManager.ServerCertificateValidationCallback += new System.Net.Security.RemoteCertificateValidationCallback((s, ce, ch, ssl) => true);
+              
+                XmlDocument xml = new XmlDocument();
+                
+                xml.Load(URLString);
+                XmlNodeList xnList = xml.SelectNodes("/aggiornamento/links");
+                foreach (XmlNode xn in xnList)
+                {
+                    string version = xn["version"].InnerText;
+                    downloadURL = xn["URL"].InnerText;
+                    var remoteVersion = new Version(version);
+                    result = remoteVersion.CompareTo(currentVersion);
+                }
+
+                if (result > 0) //Esiste una nuova versione
+                {
+                    log.Info("Esiste una nuova versione, inizio del download.");
+                    Updater frm = new Updater();
+                    frm.SetURL = downloadURL;
+                    frm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("update() Error", "Updater error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+            }
         }
 
         private void apriModifica()
@@ -133,7 +176,7 @@ namespace VenditaInventario
             {
                 MessageBox.Show("apriModifica() Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Debug.WriteLine(ex.StackTrace);
-                log.Error(ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
         }
 
@@ -156,7 +199,7 @@ namespace VenditaInventario
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
-                log.Error(ex.Message + " - " +ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
         }
 
@@ -333,7 +376,7 @@ namespace VenditaInventario
             catch (SQLiteException ex)
             {
                 Debug.WriteLine(ex.StackTrace);
-                log.Error(ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
         }
 
@@ -565,7 +608,7 @@ namespace VenditaInventario
 
             } catch(Exception ex)
             {
-                log.Error(ex.Message + " " + ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
             
 
@@ -650,7 +693,7 @@ namespace VenditaInventario
 
                 } catch(Exception ex)
                 {
-                    log.Error(ex.Message + ex.StackTrace);
+                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
                     Debug.WriteLine(ex);
                     Debug.WriteLine(ex.Message);
                 }

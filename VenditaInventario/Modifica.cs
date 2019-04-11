@@ -69,7 +69,7 @@ namespace VenditaInventario
             {
                 MessageBox.Show("btnModifica_Click Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Debug.WriteLine(ex.StackTrace);
-                log.Error(ex.StackTrace);
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
         }
     }
