@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -78,48 +79,160 @@ namespace VenditaInventario
                 }
             }
             update();
+            uploadStatistiche();
             populateTable();
+            
         }
 
-        private void update()
+        private async void update()
+        {
+            //Controllo se la rete e' disponibile
+            if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                try
+                {
+                    //impostazione delle variabili
+                    String URLString = "https://www.libridicartaonline.it/acquistoAggiornamento.xml";
+                    String downloadURL = null;
+                    var currentVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    var remoteVersion = new Version();
+                    int result = 0;
+
+                    //Stiamo scaricando l'xml da un sito https quindi va impostato il protocollo da usare
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                    ServicePointManager.ServerCertificateValidationCallback += new System.Net.Security.RemoteCertificateValidationCallback((s, ce, ch, ssl) => true);
+              
+                    XmlDocument xml = new XmlDocument();
+                
+                    xml.Load(URLString);
+                    XmlNodeList xnList = xml.SelectNodes("/aggiornamento/links");
+                    foreach (XmlNode xn in xnList)
+                    {
+                        string version = xn["version"].InnerText;
+                        downloadURL = xn["URL"].InnerText;
+                        remoteVersion = new Version(version);
+                        result = remoteVersion.CompareTo(currentVersion);
+                    }
+
+                    if (result > 0) //Esiste una nuova versione
+                    {
+                        DialogResult dialogResult = MessageBox.Show("È disponibile una nuova versione per il download, scaricare ora?\nVersione corrente: " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " -> Nuova versione: " + remoteVersion.ToString(), "Aggiornamento disponibile", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        { 
+                            log.Info("Esiste una nuova versione, inizio del download.");
+                            Updater frm = new Updater();
+                            frm.SetURL = downloadURL;
+                            frm.ShowDialog();
+                        }
+                    }
+                    log.Info("Nessuna nuova versione disponibile");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("update() Error", "Updater error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.StackTrace);
+                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+                }
+            } else
+            {
+                log.Info("Nessuna connessione ad internet, riprovo l'update tra 60 minuti..");
+                await Task.Delay(3600000);
+                log.Info("Fine attesa, controllo versione..");
+                update();
+            }
+        }
+        
+        private async void uploadStatistiche()
         {
             try
             {
-                String URLString = "https://www.libridicartaonline.it/acquistoAggiornamento.xml";
-                String downloadURL = null;
-                var currentVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                int result = 0;
-
-                //Stiamo scaricando l'xml da un sito https quindi va impostato il protocollo da usare
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                ServicePointManager.ServerCertificateValidationCallback += new System.Net.Security.RemoteCertificateValidationCallback((s, ce, ch, ssl) => true);
-              
-                XmlDocument xml = new XmlDocument();
-                
-                xml.Load(URLString);
-                XmlNodeList xnList = xml.SelectNodes("/aggiornamento/links");
-                foreach (XmlNode xn in xnList)
+                //Controllo se esiste una connessione ad internet
+                if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                 {
-                    string version = xn["version"].InnerText;
-                    downloadURL = xn["URL"].InnerText;
-                    var remoteVersion = new Version(version);
-                    result = remoteVersion.CompareTo(currentVersion);
-                }
+                    // Use Path class to manipulate file and directory paths.
+                    string sourceFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "inventario.sqlite");
+                    string destFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "uploadStatistiche.sqlite");
+                    //Il file delle statistiche va sempre riscritto
+                    File.Copy(sourceFile, destFile, true);
+                    
+                    log.Info("Inizio upload statistiche..");
+                    //Controllo se questo computer ha mai inviato delle statistiche
+                    if (directoryExists())
+                    { 
+                        FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.libridicartaonline.it/statistiche/"+ Environment.MachineName + "/statistiche.sqlite");
+                        request.KeepAlive = false;
+                        request.Credentials = new NetworkCredential("guest@libridicartaonline.it", "guestpassword!15");
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
 
-                if (result > 0) //Esiste una nuova versione
+                        using (Stream fileStream = File.OpenRead(Path.GetDirectoryName(Application.ExecutablePath) + "\\uploadStatistiche.sqlite"))
+                        using (Stream ftpStream = request.GetRequestStream())
+                        {
+                            fileStream.CopyTo(ftpStream);
+                        }
+                    }
+                    else
+                    {
+                        FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.libridicartaonline.it/statistiche/" + Environment.MachineName);
+                        request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                        request.KeepAlive = false;
+                        request.Credentials = new NetworkCredential("guest@libridicartaonline.it", "guestpassword!15");
+                        using (var resp = (FtpWebResponse)request.GetResponse())
+                        {
+                            log.Info("Creazione della directory per questa macchina..: " + resp.StatusCode);
+                        }
+                        uploadStatistiche();
+                    }
+                    
+                } else
                 {
-                    log.Info("Esiste una nuova versione, inizio del download.");
-                    Updater frm = new Updater();
-                    frm.SetURL = downloadURL;
-                    frm.ShowDialog();
+                    log.Info("Nessuna connessione ad internet, riprovo l'upload tra 60 minuti..");
+                    await Task.Delay(3600000);
+                    log.Info("Fine attesa, tento upload..");
+                    uploadStatistiche();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("update() Error", "Updater error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("uploadStatistiche() Error", "Uploader error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(ex.StackTrace);
                 log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+            }
+            finally
+            {
+                log.Info("Upload statistiche completato!");
+                log.Info("Prossimo upload tra 60 minuti");
+                await Task.Delay(3600000);
+                uploadStatistiche();
+            }
+        }
+
+        public bool directoryExists()
+        {
+            /* Create an FTP Request */
+            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://ftp.libridicartaonline.it/statistiche/"+ Environment.MachineName+"/");
+            /* Log in to the FTP Server with the User Name and Password Provided */
+            ftpRequest.Credentials = new NetworkCredential("guest@libridicartaonline.it", "guestpassword!15");
+            /* Specify the Type of FTP Request */
+            ftpRequest.KeepAlive = false;
+            ftpRequest.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            try
+            {
+                using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            /* Resource Cleanup */
+            finally
+            {
+                ftpRequest = null;
             }
         }
 
