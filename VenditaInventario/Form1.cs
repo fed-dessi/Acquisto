@@ -142,7 +142,7 @@ namespace VenditaInventario
                 update();
             }
         }
-        
+
         private async void uploadStatistiche()
         {
             try
@@ -233,6 +233,20 @@ namespace VenditaInventario
             finally
             {
                 ftpRequest = null;
+            }
+        }
+
+        //Upload delle statistiche prima della chiusura
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.TaskManagerClosing)
+            {
+                return;
+            }
+            else
+            {
+                uploadStatistiche();
+                return;
             }
         }
 
