@@ -883,12 +883,10 @@ namespace VenditaInventario
         {
             try
             {
+                String ISBN = null, data= null, titolo=null, prezzo=null, metodo=null, indiceString=null;
                 int quantitaContanti = 0, quantitaBuoni = 0;
 
                 decimal costoContanti = 0, costoBuoni = 0;
-
-                String[] row = new String[6];
-
                 sqlite_conn.Open();
 
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
@@ -902,7 +900,7 @@ namespace VenditaInventario
                 //Controlliamo che la data scelta sia minore uguale alla data finale oppure ad oggi
                 while (dataIniziale.Ticks <= dataFinale.Ticks && dataIniziale.Ticks <= DateTime.Now.Ticks)
                 {
-
+                    
                     sqlite_cmd.CommandText = "SELECT * FROM statistiche WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
 
                     SQLiteDataReader r = sqlite_cmd.ExecuteReader();
@@ -917,12 +915,14 @@ namespace VenditaInventario
                             quantitaBuoni++;
                             while (rLibri.Read())
                             {
-                                costoBuoni += (rLibri.GetDecimal(5) * Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7)))) * (decimal)1.05;
-                                row[4] = "Buono"; //Metodo
-                                row[1] = rLibri.GetString(4); //ISBN
-                                row[2] = rLibri.GetString(1); //Titolo
-                                row[3] = rLibri.GetString(5); //Prezzo
-                                row[5] = rLibri.GetString(7); //Indice
+                                decimal costoIniziale = Convert.ToDecimal(rLibri.GetString(5).Replace(",","."));
+                                decimal indice = Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7)));
+                                costoBuoni += (costoIniziale * indice * (decimal)1.05);
+                                metodo = "Buono"; //Metodo
+                                ISBN = rLibri.GetString(4); //ISBN
+                                titolo = rLibri.GetString(1); //Titolo
+                                prezzo = rLibri.GetString(5); //Prezzo
+                                indiceString = rLibri.GetString(7); //Indice
                             }
                             
                         } else
@@ -930,26 +930,27 @@ namespace VenditaInventario
                             quantitaContanti++;
                             while (rLibri.Read())
                             {
-                                costoContanti += (rLibri.GetDecimal(5) * Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7))));
-                                row[4] = "Contanti"; //Metodo
-                                row[1] = rLibri.GetString(4); //ISBN
-                                row[2] = rLibri.GetString(1); //Titolo
-                                row[3] = rLibri.GetString(5); //Prezzo
-                                row[5] = rLibri.GetString(7); //Indice
+                                decimal costoIniziale = Convert.ToDecimal(rLibri.GetString(5).Replace(",", "."));
+                                decimal indice = Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7)));
+                                costoContanti += (costoIniziale * indice);
+                                metodo = "Contanti"; //Metodo
+                                ISBN = rLibri.GetString(4); //ISBN
+                                titolo = rLibri.GetString(1); //Titolo
+                                prezzo = rLibri.GetString(5); //Prezzo
+                                indiceString = rLibri.GetString(7); //Indice
                             }
                         }
                         rLibri.Close();
                         
-                        row[0] = dataIniziale.ToString("dd/MM/yyyy"); //data
+                        data = dataIniziale.ToString("dd/MM/yyyy"); //data
+
+                        tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
                     }
 
                     //Aggiorniamo la data in modo da aggiungere un giorno
                     dataIniziale = dataIniziale.AddDays(1);
 
                     r.Close();
-
-                    tabellaStatistiche.Rows.Add(row);
-                    GC.Collect();
                 }
                 quantitaContantiLabel.Text = Convert.ToString(quantitaContanti);
                 quantitaBuoniLabel.Text = Convert.ToString(quantitaBuoni);
@@ -962,6 +963,7 @@ namespace VenditaInventario
             }
             catch (Exception ex)
             {
+                log.Error("Errore in Statistiche");
                 log.Error("Messaggio: " + ex.Message + " Stacktrace: "+ ex.StackTrace);
                 Debug.WriteLine(ex);
                 Debug.WriteLine(ex.Message);
