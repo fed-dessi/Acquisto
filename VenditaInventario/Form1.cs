@@ -23,7 +23,7 @@ namespace VenditaInventario
 
         DataTable dtRicerca = new DataTable();
 
-        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo =0, totMaxBuono =0;
+        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo = 0, totMaxBuono = 0, costoOriginale = 0;
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -67,7 +67,9 @@ namespace VenditaInventario
                     sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50), prezzo varchar(50), anno varchar(50), indice varchar(4));";
                     sqlite_cmd.ExecuteNonQuery();
 
-                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, data varchar(50), metodo varchar(4), libriID integer, FOREIGN KEY (libriID) REFERENCES inventario(id));";
+                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, libriID integer, venditaID integer, FOREIGN KEY (libriID) REFERENCES inventario(id), FOREIGN KEY (venditaID) REFERENCES vendita(id));";
+                    sqlite_cmd.ExecuteNonQuery();
+                    sqlite_cmd.CommandText = "CREATE TABLE vendita (id integer primary key autoincrement, data varchar(50), metodo varchar(4), costo decimal(50));";
                     sqlite_cmd.ExecuteNonQuery();
 
                     sqlite_conn.Close();
@@ -340,8 +342,10 @@ namespace VenditaInventario
             libriTotLvl1.Text = "0.00€";
             libriTotLvl2.Text = "0.00€";
             libriTotLvl3.Text = "0.00€";
-            importoMax.Text = "0.00€";
+            importoMaxBuono.Text = "0.00€";
+            costoTextbox.Text = "0.00€";
             importoLordo.Text = "0.00€";
+            costoOriginaleLabel.Text = "0.00€";
             tabellaVendita.Rows.Clear();
 
             totIndice1 = 0;
@@ -350,6 +354,14 @@ namespace VenditaInventario
             totMax = 0;
             totMaxBuono = 0;
             totLordo = 0;
+            costoOriginale = 0;
+
+            importoMaxBuono.Visible = false;
+            label17.Visible = false;
+            buonoPanel.Visible = false;
+            cbBuono.Checked = false;
+            cbBuono.Visible = false;
+            costoTextbox.Enabled = false;
         }
 
         private void inserimento(String isbn)
@@ -385,38 +397,38 @@ namespace VenditaInventario
                             switch (Convert.ToInt32(row[6]))
                             {
                                 case 1:
-                                    totIndice1 += Convert.ToDecimal(row[4]) * (decimal)0.1;
-                                    totMax += Convert.ToDecimal(row[4]) * (decimal)0.1;
+                                    totIndice1 += Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.1;
+                                    totMax += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.1);
+                                    costoOriginale += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.1);
                                     //Imposto i valori dei label
                                     libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
                                     break;
                                 case 2:
-                                    totIndice2 += Convert.ToDecimal(row[4]) * (decimal)0.2;
-                                    totMax += Convert.ToDecimal(row[4]) * (decimal)0.2;
+                                    totIndice2 += Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.2;
+                                    totMax += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.2);
+                                    costoOriginale += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.2);
                                     //Imposto i valori dei label
                                     libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
                                     break;
                                 case 3:
-                                    totIndice3 += Convert.ToDecimal(row[4]) * (decimal)0.3;
-                                    totMax += Convert.ToDecimal(row[4]) * (decimal)0.3;
+                                    totIndice3 += Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.3;
+                                    totMax += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.3);
+                                    costoOriginale += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.3);
                                     //Imposto i valori dei label
                                     libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
                                     break;
                             }
-                            totMaxBuono = Math.Round(totMax * (decimal)1.05, 2);
-                            if (cbBuono.Checked)
-                            {
-                                importoMax.Text = Convert.ToString(totMaxBuono) + "€";
-                            }
-                            else
-                            {
-                                importoMax.Text = Convert.ToString(totMax) + "€";
-                            }
-                            totLordo += Convert.ToDecimal(row[4]);
+                            totMaxBuono = Math.Round(totMax * (decimal)1.1, 2);
+
+                            costoTextbox.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
+                            importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                            totLordo += Convert.ToDecimal(row[4].Replace(",", "."));
                             importoLordo.Text = Convert.ToString(Math.Round(totLordo, 2)) + "€";
+                            costoOriginaleLabel.Text = Convert.ToString(Math.Round(costoOriginale, 2)) + "€";
                         }
 
                         cbBuono.Visible = true;
+                        costoTextbox.Enabled = true;
                     }
                     else
                     {
@@ -457,37 +469,38 @@ namespace VenditaInventario
                             switch (Convert.ToInt32(row[6]))
                             {
                                 case 1:
-                                    totIndice1 += (Convert.ToDecimal(row[4]) * (decimal)0.1);
-                                    totMax += (Convert.ToDecimal(row[4]) * (decimal)0.1);
+                                    totIndice1 += (Convert.ToDecimal(row[4].Replace(",",".")) * (decimal)0.1);
+                                    totMax += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.1);
+                                    costoOriginale += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.1);
                                     //Imposto i valori dei label
                                     libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
                                     break;
                                 case 2:
-                                    totIndice2 += (Convert.ToDecimal(row[4]) * (decimal)0.2);
-                                    totMax += (Convert.ToDecimal(row[4]) * (decimal)0.2);
+                                    totIndice2 += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.2);
+                                    totMax += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.2);
+                                    costoOriginale += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.2);
                                     //Imposto i valori dei label
                                     libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
                                     break;
                                 case 3:
-                                    totIndice3 += (Convert.ToDecimal(row[4]) * (decimal)0.3);
-                                    totMax += (Convert.ToDecimal(row[4]) * (decimal)0.3);
+                                    totIndice3 += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.3);
+                                    totMax += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.3);
+                                    costoOriginale += (Convert.ToDecimal(row[4].Replace(",", ".")) * (decimal)0.3);
                                     //Imposto i valori dei label
                                     libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
                                     break;
                             }
-                            totMaxBuono = Math.Round(totMax * (decimal)1.05, 2);
-                            if (cbBuono.Checked)
-                            {
-                                importoMax.Text = Convert.ToString(totMaxBuono) + "€";
-                            }
-                            else
-                            {
-                                importoMax.Text = Convert.ToString(totMax) + "€";
-                            }
-                            totLordo += Convert.ToDecimal(row[4]);
+                            totMaxBuono = Math.Round(totMax * (decimal)1.1, 2);
+                            //Imposto i label
+                            costoTextbox.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
+                            importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                            totLordo += Convert.ToDecimal(row[4].Replace(",", "."));
                             importoLordo.Text = Convert.ToString(totLordo) + "€";
+                            costoOriginaleLabel.Text = Convert.ToString(Math.Round(costoOriginale, 2)) + "€";
                         }
                         cbBuono.Visible = true;
+                        costoTextbox.Enabled = true;
+                        
                     }
                     else
                     {
@@ -525,43 +538,63 @@ namespace VenditaInventario
                     switch (Convert.ToInt32(tabellaVendita.SelectedRows[i].Cells[6].Value.ToString()))
                     {
                         case 1:
-                            totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
-                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.1);
+                            totIndice1 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.1);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.1);
+                            if (costoOriginale > 0 && (costoOriginale - (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.1)) > 0)
+                            {
+                                costoOriginale -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.1);
+                            }
+                            else
+                            {
+                                costoOriginale = totMax;
+                            }
                             //Imposto i valori dei label
                             libriTotLvl1.Text = Convert.ToString(totIndice1) + "€";
                             break;
                         case 2:
-                            totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
-                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.2);
+                            totIndice2 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.2);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.2);
+                            if (costoOriginale > 0 && (costoOriginale - (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.2)) > 0)
+                            {
+                                costoOriginale -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.2);
+                            }
+                            else
+                            {
+                                costoOriginale = totMax;
+                            }
                             //Imposto i valori dei label
                             libriTotLvl2.Text = Convert.ToString(totIndice2) + "€";
                             break;
                         case 3:
-                            totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
-                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString()) * (decimal)0.3);
+                            totIndice3 -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.3);
+                            totMax -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.3);
+                            if (costoOriginale > 0 && (costoOriginale - (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.3)) > 0)
+                            {
+                                costoOriginale -= (Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", ".")) * (decimal)0.3);
+                            }
+                            else
+                            {
+                                costoOriginale = totMax;
+                            }
                             //Imposto i valori dei label
                             libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
                             break;
                     }
                 }
-
-                totMaxBuono = Math.Round(totMax * (decimal)1.05, 2);
-                if (cbBuono.Checked)
-                {
-                    importoMax.Text = Convert.ToString(totMaxBuono) + "€";
-                }
-                else
-                {
-                    importoMax.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
-                }
-                totLordo -= Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString());
+                totMaxBuono = Math.Round(totMax * (decimal)1.1, 2);
+                //Imposto i label
+                costoTextbox.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
+                importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                totLordo -= Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", "."));
                 importoLordo.Text = Convert.ToString(Math.Round(totLordo, 2)) + "€";
+                costoOriginaleLabel.Text = Convert.ToString(Math.Round(costoOriginale, 2)) + "€";
+                //Rimozione della riga dalla tabella
                 tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
             }
             //Nascondo il comboBox se non ho libri nella tabella
             if (tabellaVendita.Rows.Count == 0)
             {
-                cbBuono.Hide();
+                cancella();
             }
         }
 
@@ -789,36 +822,53 @@ namespace VenditaInventario
                     //Controlliamo se abbiamo gia' inserito altre quantita' oggi
 
                     data = DateTime.Now.ToString("dd/MM/yyyy");
+                    long rowID = 0;
 
-                    sqlite_cmd2.CommandText = "INSERT INTO [statistiche] (data, metodo, libriID) Values (@Data, @Metodo, @LibriID)";
+                    SQLiteTransaction transaction = null;
+                    transaction = sqlite_conn.BeginTransaction();
+
+                    sqlite_cmd2.CommandText = "INSERT INTO [vendita] (data, costo, metodo) Values (@Data, @Costo, @Metodo); SELECT last_insert_rowid();";
+                    sqlite_cmd2.Parameters.AddWithValue("@Data", data);
+
+                    if (cbBuono.Checked)
+                    {
+                        sqlite_cmd2.Parameters.AddWithValue("@Metodo", "B");
+                        sqlite_cmd2.Parameters.AddWithValue("@Costo", totMaxBuono);
+                    }
+                    else
+                    {
+                        sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
+                        sqlite_cmd2.Parameters.AddWithValue("@Costo", totMax);
+                    }
                     
-                    foreach(DataGridViewRow row in tabellaVendita.Rows)
+                    rowID = (long)sqlite_cmd2.ExecuteScalar();
+                    foreach (DataGridViewRow row in tabellaVendita.Rows)
                     {
                         if (!row.Cells[6].Value.Equals(""))
                         {
-                            sqlite_cmd.CommandText = "SELECT id FROM inventario WHERE codice='" + row.Cells[3].Value + "'";
-                            SQLiteDataReader r = sqlite_cmd.ExecuteReader();
-                            //seleziono il libro tramite la sua Foreign Key
+                            long libriID = 0;
+                            
+
+                            SQLiteCommand sqlite_cmd3 = sqlite_conn.CreateCommand();
+                            sqlite_cmd3.CommandText = "SELECT id FROM inventario WHERE codice='" + row.Cells[3].Value + "'";
+                            SQLiteDataReader r = sqlite_cmd3.ExecuteReader();
                             if (r.Read())
                             {
-                                sqlite_cmd2.Parameters.AddWithValue("@Data", data);
-                                sqlite_cmd2.Parameters.AddWithValue("@LibriID", r.GetInt32(0));
-                                //Controllo se ho venduto con un buono oppure no
-                                if (cbBuono.Checked)
-                                {
-                                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "B");
-                                }
-                                else
-                                {
-                                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
-                                }
-
-                                sqlite_cmd2.ExecuteNonQuery();
+                                libriID = (long)r[0];
                             }
                             r.Close();
+
+                            sqlite_cmd.CommandText = "INSERT INTO [statistiche] (libriID, venditaID) Values (@Libro, @Vendita)";
+                            sqlite_cmd.Parameters.AddWithValue("@Libro", libriID);
+                            sqlite_cmd.Parameters.AddWithValue("@Vendita", rowID);
+
+                            sqlite_cmd.ExecuteNonQuery();
                         }
                     }
-                    
+                    transaction.Commit();
+                    transaction.Dispose();
+
+
                     sqlite_conn.Close();
 
                     MessageBox.Show("Registrati!", "Registro statistiche", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -832,7 +882,6 @@ namespace VenditaInventario
 
             }
             cancella();
-            cbBuono.Hide();
         }
 
         private void btnCancella_Click(object sender, EventArgs e)
@@ -867,15 +916,49 @@ namespace VenditaInventario
             
         }
 
+        private void costoTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    if (costoOriginale == 0)
+                    {
+                        costoOriginale = totMax;
+                    }
+                    totMax = Convert.ToDecimal(costoTextbox.Text.Replace("€", string.Empty).Replace(",", "."));
+                    totMaxBuono = totMax * (decimal)1.1;
+
+                    importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                    costoOriginaleLabel.Text = Convert.ToString(costoOriginale) + "€";
+                    costoTextbox.Text = costoTextbox.Text + "€";
+                    buonoPanel.Visible = true;
+                    importoOriginaleLabel.Visible = true;
+                    costoOriginaleLabel.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Errore in costoTextbox_KeyPress");
+                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+                    Debug.WriteLine(ex);
+                    Debug.WriteLine(ex.Message);
+                }
+            }
+        }
+        
         private void cbBuono_CheckedChanged(object sender, EventArgs e)
         {
             if (cbBuono.Checked)
             {
-                importoMax.Text = Convert.ToString(totMaxBuono) + "€";
+                importoMaxBuono.Visible = true;
+                label17.Visible = true;
+                buonoPanel.Visible = true;
             }
             if (!cbBuono.Checked)
             {
-                importoMax.Text = Convert.ToString(totMax) + "€";
+                importoMaxBuono.Visible = false;
+                label17.Visible = false;
+                buonoPanel.Visible = false;
             }
         }
 
@@ -888,6 +971,7 @@ namespace VenditaInventario
         {
             try
             {
+                tabellaStatistiche.Rows.Clear();
                 String ISBN = null, data= null, titolo=null, prezzo=null, metodo=null, indiceString=null;
                 int quantitaContanti = 0, quantitaBuoni = 0;
 
@@ -898,6 +982,8 @@ namespace VenditaInventario
 
                 SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
 
+                SQLiteCommand sqlite_cmd3 = sqlite_conn.CreateCommand();
+
                 DateTime dataIniziale = DateTime.ParseExact(dataInizialePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
                 DateTime dataFinale = DateTime.ParseExact(dataFinalePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -906,50 +992,60 @@ namespace VenditaInventario
                 while (dataIniziale.Ticks <= dataFinale.Ticks && dataIniziale.Ticks <= DateTime.Now.Ticks)
                 {
                     
-                    sqlite_cmd.CommandText = "SELECT * FROM statistiche WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
+                    sqlite_cmd.CommandText = "SELECT * FROM vendita WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
 
                     SQLiteDataReader r = sqlite_cmd.ExecuteReader();
                     //se il DataReader contiene dati allora esistono delle quantita' in quella data
 
-                    while (r.Read())
+                    //Recuperiamo le informazioni della data delle singole vendite
+                    while (r.Read()) //Vendita
                     {
-                        sqlite_cmd2.CommandText = "SELECT * FROM inventario WHERE id='" + r.GetInt32(3) + "'";
-                        SQLiteDataReader rLibri = sqlite_cmd2.ExecuteReader();
-                        if (r.GetString(2).Equals("B"))
+                        sqlite_cmd2.CommandText = "SELECT * FROM statistiche WHERE venditaID='" + r.GetInt32(0) + "'";
+                        SQLiteDataReader rStatistiche = sqlite_cmd2.ExecuteReader();
+                        if (r.GetString(3).Equals("B"))
                         {
-                            quantitaBuoni++;
-                            while (rLibri.Read())
+                            while (rStatistiche.Read()) //Associamo una vendita ad un libro (le ID dei libri stanno nella tabella statistiche)
                             {
-                                decimal costoIniziale = Convert.ToDecimal(rLibri.GetString(5).Replace(",","."));
-                                decimal indice = Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7)));
-                                costoBuoni += (costoIniziale * indice * (decimal)1.05);
-                                metodo = "Buono"; //Metodo
-                                ISBN = rLibri.GetString(4); //ISBN
-                                titolo = rLibri.GetString(1); //Titolo
-                                prezzo = rLibri.GetString(5); //Prezzo
-                                indiceString = rLibri.GetString(7); //Indice
+                                sqlite_cmd3.CommandText = "SELECT * FROM inventario WHERE id='" + rStatistiche.GetInt32(1) + "'";
+                                SQLiteDataReader rLibri = sqlite_cmd3.ExecuteReader();
+                                if (rLibri.Read()) //Recupero le informazioni del libro dalla tabella inventario
+                                {
+                                    quantitaBuoni++;
+                                    metodo = "Buono"; //Metodo
+                                    ISBN = rLibri.GetString(4); //ISBN
+                                    titolo = rLibri.GetString(1); //Titolo
+                                    prezzo = rLibri.GetString(5); //Prezzo
+                                    indiceString = rLibri.GetString(7); //Indice
+                                }
+                                rLibri.Close();
+                                data = dataIniziale.ToString("dd/MM/yyyy"); //data
+
+                                tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
                             }
-                            
+                            costoBuoni += r.GetDecimal(1);
                         } else
                         {
-                            quantitaContanti++;
-                            while (rLibri.Read())
+                            while (rStatistiche.Read()) //Associamo una vendita ad un libro (le ID dei libri stanno nella tabella statistiche)
                             {
-                                decimal costoIniziale = Convert.ToDecimal(rLibri.GetString(5).Replace(",", "."));
-                                decimal indice = Convert.ToDecimal(String.Concat("0.", rLibri.GetString(7)));
-                                costoContanti += (costoIniziale * indice);
-                                metodo = "Contanti"; //Metodo
-                                ISBN = rLibri.GetString(4); //ISBN
-                                titolo = rLibri.GetString(1); //Titolo
-                                prezzo = rLibri.GetString(5); //Prezzo
-                                indiceString = rLibri.GetString(7); //Indice
-                            }
-                        }
-                        rLibri.Close();
-                        
-                        data = dataIniziale.ToString("dd/MM/yyyy"); //data
+                                sqlite_cmd3.CommandText = "SELECT * FROM inventario WHERE id='" + rStatistiche.GetInt32(1) + "'";
+                                SQLiteDataReader rLibri = sqlite_cmd3.ExecuteReader();
+                                if (rLibri.Read()) //Recupero le informazioni del libro dalla tabella inventario
+                                {
+                                    quantitaContanti++;
+                                    metodo = "Contanti"; //Metodo
+                                    ISBN = rLibri.GetString(4); //ISBN
+                                    titolo = rLibri.GetString(1); //Titolo
+                                    prezzo = rLibri.GetString(5); //Prezzo
+                                    indiceString = rLibri.GetString(7); //Indice
+                                }
+                                rLibri.Close();
+                                data = dataIniziale.ToString("dd/MM/yyyy"); //data
 
-                        tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
+                                tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
+                            }
+                            costoContanti += r.GetDecimal(1);
+                        }
+                        rStatistiche.Close();
                     }
 
                     //Aggiorniamo la data in modo da aggiungere un giorno

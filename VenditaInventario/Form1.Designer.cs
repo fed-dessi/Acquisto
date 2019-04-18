@@ -36,25 +36,32 @@
             this.tabPages = new System.Windows.Forms.TabControl();
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
-            this.cbBuono = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.buonoPanel = new System.Windows.Forms.Panel();
+            this.costoOriginaleLabel = new System.Windows.Forms.Label();
+            this.importoOriginaleLabel = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.importoMaxBuono = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.importoLordo = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbBuono = new System.Windows.Forms.CheckBox();
+            this.costoTextbox = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.libriTotLvl1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.libriTotLvl2 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.libriTotLvl3 = new System.Windows.Forms.Label();
             this.btnNuovoCliente = new System.Windows.Forms.Button();
             this.labelProgressbar = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnCancella = new System.Windows.Forms.Button();
-            this.importoMax = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.libriTotLvl3 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.libriTotLvl2 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.libriTotLvl1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnInserisci = new System.Windows.Forms.Button();
             this.isbnVendita = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabellaVendita = new System.Windows.Forms.DataGridView();
             this.nome = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.autore = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -71,6 +78,13 @@
             this.textboxRicerca = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tabellaStatistiche = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.costoTotaleBuoniLabel = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.quantitaBuoniLabel = new System.Windows.Forms.Label();
@@ -91,23 +105,19 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.tabellaStatistiche = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
+            this.buonoPanel.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaVendita)).BeginInit();
             this.ricercaTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaRicerca)).BeginInit();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaStatistiche)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPages
@@ -139,65 +149,246 @@
             this.backgroundVendita.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.backgroundVendita.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
-            this.backgroundVendita.Controls.Add(this.cbBuono);
-            this.backgroundVendita.Controls.Add(this.label8);
-            this.backgroundVendita.Controls.Add(this.importoLordo);
+            this.backgroundVendita.Controls.Add(this.buonoPanel);
+            this.backgroundVendita.Controls.Add(this.panel3);
+            this.backgroundVendita.Controls.Add(this.panel2);
             this.backgroundVendita.Controls.Add(this.btnNuovoCliente);
             this.backgroundVendita.Controls.Add(this.labelProgressbar);
             this.backgroundVendita.Controls.Add(this.progressBar1);
             this.backgroundVendita.Controls.Add(this.btnCancella);
-            this.backgroundVendita.Controls.Add(this.importoMax);
-            this.backgroundVendita.Controls.Add(this.label4);
-            this.backgroundVendita.Controls.Add(this.libriTotLvl3);
-            this.backgroundVendita.Controls.Add(this.label7);
-            this.backgroundVendita.Controls.Add(this.libriTotLvl2);
-            this.backgroundVendita.Controls.Add(this.label5);
-            this.backgroundVendita.Controls.Add(this.libriTotLvl1);
-            this.backgroundVendita.Controls.Add(this.label3);
             this.backgroundVendita.Controls.Add(this.label1);
             this.backgroundVendita.Controls.Add(this.btnInserisci);
             this.backgroundVendita.Controls.Add(this.isbnVendita);
-            this.backgroundVendita.Controls.Add(this.label2);
             this.backgroundVendita.Location = new System.Drawing.Point(-4, 0);
             this.backgroundVendita.Name = "backgroundVendita";
-            this.backgroundVendita.Size = new System.Drawing.Size(430, 716);
+            this.backgroundVendita.Size = new System.Drawing.Size(430, 696);
             this.backgroundVendita.TabIndex = 5;
             // 
-            // cbBuono
+            // buonoPanel
             // 
-            this.cbBuono.AutoSize = true;
-            this.cbBuono.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBuono.ForeColor = System.Drawing.Color.White;
-            this.cbBuono.Location = new System.Drawing.Point(47, 604);
-            this.cbBuono.Name = "cbBuono";
-            this.cbBuono.Size = new System.Drawing.Size(236, 20);
-            this.cbBuono.TabIndex = 19;
-            this.cbBuono.Text = "Buono libreria? (aggiunge 5%)";
-            this.cbBuono.UseVisualStyleBackColor = true;
-            this.cbBuono.Visible = false;
-            this.cbBuono.CheckedChanged += new System.EventHandler(this.cbBuono_CheckedChanged);
+            this.buonoPanel.BackColor = System.Drawing.Color.Transparent;
+            this.buonoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.buonoPanel.Controls.Add(this.costoOriginaleLabel);
+            this.buonoPanel.Controls.Add(this.importoOriginaleLabel);
+            this.buonoPanel.Controls.Add(this.label17);
+            this.buonoPanel.Controls.Add(this.importoMaxBuono);
+            this.buonoPanel.Location = new System.Drawing.Point(7, 545);
+            this.buonoPanel.Name = "buonoPanel";
+            this.buonoPanel.Size = new System.Drawing.Size(420, 76);
+            this.buonoPanel.TabIndex = 25;
+            this.buonoPanel.Visible = false;
             // 
-            // label8
+            // costoOriginaleLabel
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(319, 525);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(64, 24);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Lordo";
+            this.costoOriginaleLabel.AutoSize = true;
+            this.costoOriginaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.costoOriginaleLabel.ForeColor = System.Drawing.Color.Red;
+            this.costoOriginaleLabel.Location = new System.Drawing.Point(311, 33);
+            this.costoOriginaleLabel.Name = "costoOriginaleLabel";
+            this.costoOriginaleLabel.Size = new System.Drawing.Size(71, 25);
+            this.costoOriginaleLabel.TabIndex = 24;
+            this.costoOriginaleLabel.Text = "0.00€";
+            this.costoOriginaleLabel.Visible = false;
+            // 
+            // importoOriginaleLabel
+            // 
+            this.importoOriginaleLabel.AutoSize = true;
+            this.importoOriginaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.importoOriginaleLabel.ForeColor = System.Drawing.Color.White;
+            this.importoOriginaleLabel.Location = new System.Drawing.Point(246, 0);
+            this.importoOriginaleLabel.Name = "importoOriginaleLabel";
+            this.importoOriginaleLabel.Size = new System.Drawing.Size(167, 24);
+            this.importoOriginaleLabel.TabIndex = 23;
+            this.importoOriginaleLabel.Text = "Importo originale";
+            this.importoOriginaleLabel.Visible = false;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.ForeColor = System.Drawing.Color.White;
+            this.label17.Location = new System.Drawing.Point(3, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(187, 24);
+            this.label17.TabIndex = 22;
+            this.label17.Text = "Importo con buono";
+            this.label17.Visible = false;
+            // 
+            // importoMaxBuono
+            // 
+            this.importoMaxBuono.AutoSize = true;
+            this.importoMaxBuono.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.importoMaxBuono.ForeColor = System.Drawing.Color.Red;
+            this.importoMaxBuono.Location = new System.Drawing.Point(9, 33);
+            this.importoMaxBuono.Name = "importoMaxBuono";
+            this.importoMaxBuono.Size = new System.Drawing.Size(71, 25);
+            this.importoMaxBuono.TabIndex = 12;
+            this.importoMaxBuono.Text = "0.00€";
+            this.importoMaxBuono.Visible = false;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.label4);
+            this.panel3.Controls.Add(this.importoLordo);
+            this.panel3.Controls.Add(this.label8);
+            this.panel3.Controls.Add(this.cbBuono);
+            this.panel3.Controls.Add(this.costoTextbox);
+            this.panel3.Location = new System.Drawing.Point(7, 439);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(420, 100);
+            this.panel3.TabIndex = 24;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(269, 24);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Importo Massimo da Pagare";
             // 
             // importoLordo
             // 
             this.importoLordo.AutoSize = true;
             this.importoLordo.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.importoLordo.ForeColor = System.Drawing.Color.Red;
-            this.importoLordo.Location = new System.Drawing.Point(318, 559);
+            this.importoLordo.Location = new System.Drawing.Point(311, 40);
             this.importoLordo.Name = "importoLordo";
             this.importoLordo.Size = new System.Drawing.Size(71, 25);
             this.importoLordo.TabIndex = 17;
             this.importoLordo.Text = "0.00€";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(312, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(64, 24);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Lordo";
+            // 
+            // cbBuono
+            // 
+            this.cbBuono.AutoSize = true;
+            this.cbBuono.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBuono.ForeColor = System.Drawing.Color.White;
+            this.cbBuono.Location = new System.Drawing.Point(14, 68);
+            this.cbBuono.Name = "cbBuono";
+            this.cbBuono.Size = new System.Drawing.Size(244, 20);
+            this.cbBuono.TabIndex = 19;
+            this.cbBuono.Text = "Buono libreria? (aggiunge 10%)";
+            this.cbBuono.UseVisualStyleBackColor = true;
+            this.cbBuono.Visible = false;
+            this.cbBuono.CheckedChanged += new System.EventHandler(this.cbBuono_CheckedChanged);
+            // 
+            // costoTextbox
+            // 
+            this.costoTextbox.Enabled = false;
+            this.costoTextbox.Location = new System.Drawing.Point(14, 40);
+            this.costoTextbox.Name = "costoTextbox";
+            this.costoTextbox.Size = new System.Drawing.Size(68, 20);
+            this.costoTextbox.TabIndex = 20;
+            this.costoTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.costoTextbox_KeyDown);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.libriTotLvl1);
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.libriTotLvl2);
+            this.panel2.Controls.Add(this.label7);
+            this.panel2.Controls.Add(this.libriTotLvl3);
+            this.panel2.ForeColor = System.Drawing.Color.Black;
+            this.panel2.Location = new System.Drawing.Point(7, 292);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(420, 141);
+            this.panel2.TabIndex = 23;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(218, 24);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Importo dai vari Livelli:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(3, 54);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 18);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Livello 1:";
+            // 
+            // libriTotLvl1
+            // 
+            this.libriTotLvl1.AutoSize = true;
+            this.libriTotLvl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.libriTotLvl1.ForeColor = System.Drawing.Color.OrangeRed;
+            this.libriTotLvl1.Location = new System.Drawing.Point(116, 54);
+            this.libriTotLvl1.Name = "libriTotLvl1";
+            this.libriTotLvl1.Size = new System.Drawing.Size(49, 18);
+            this.libriTotLvl1.TabIndex = 6;
+            this.libriTotLvl1.Text = "0.00€";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(4, 81);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(75, 18);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Livello 2:";
+            // 
+            // libriTotLvl2
+            // 
+            this.libriTotLvl2.AutoSize = true;
+            this.libriTotLvl2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.libriTotLvl2.ForeColor = System.Drawing.Color.Gold;
+            this.libriTotLvl2.Location = new System.Drawing.Point(117, 81);
+            this.libriTotLvl2.Name = "libriTotLvl2";
+            this.libriTotLvl2.Size = new System.Drawing.Size(49, 18);
+            this.libriTotLvl2.TabIndex = 8;
+            this.libriTotLvl2.Text = "0.00€";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(4, 108);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(75, 18);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Livello 3:";
+            // 
+            // libriTotLvl3
+            // 
+            this.libriTotLvl3.AutoSize = true;
+            this.libriTotLvl3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.libriTotLvl3.ForeColor = System.Drawing.Color.Lime;
+            this.libriTotLvl3.Location = new System.Drawing.Point(118, 108);
+            this.libriTotLvl3.Name = "libriTotLvl3";
+            this.libriTotLvl3.Size = new System.Drawing.Size(49, 18);
+            this.libriTotLvl3.TabIndex = 10;
+            this.libriTotLvl3.Text = "0.00€";
             // 
             // btnNuovoCliente
             // 
@@ -220,7 +411,7 @@
             this.labelProgressbar.AutoSize = true;
             this.labelProgressbar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelProgressbar.ForeColor = System.Drawing.Color.White;
-            this.labelProgressbar.Location = new System.Drawing.Point(127, 624);
+            this.labelProgressbar.Location = new System.Drawing.Point(126, 645);
             this.labelProgressbar.Name = "labelProgressbar";
             this.labelProgressbar.Size = new System.Drawing.Size(0, 24);
             this.labelProgressbar.TabIndex = 15;
@@ -248,94 +439,6 @@
             this.btnCancella.Text = "Cancella";
             this.btnCancella.UseVisualStyleBackColor = false;
             this.btnCancella.Click += new System.EventHandler(this.btnCancella_Click);
-            // 
-            // importoMax
-            // 
-            this.importoMax.AutoSize = true;
-            this.importoMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.importoMax.ForeColor = System.Drawing.Color.Red;
-            this.importoMax.Location = new System.Drawing.Point(83, 559);
-            this.importoMax.Name = "importoMax";
-            this.importoMax.Size = new System.Drawing.Size(71, 25);
-            this.importoMax.TabIndex = 12;
-            this.importoMax.Text = "0.00€";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(10, 525);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(269, 24);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Importo Massimo da Pagare";
-            // 
-            // libriTotLvl3
-            // 
-            this.libriTotLvl3.AutoSize = true;
-            this.libriTotLvl3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.libriTotLvl3.ForeColor = System.Drawing.Color.Lime;
-            this.libriTotLvl3.Location = new System.Drawing.Point(125, 467);
-            this.libriTotLvl3.Name = "libriTotLvl3";
-            this.libriTotLvl3.Size = new System.Drawing.Size(49, 18);
-            this.libriTotLvl3.TabIndex = 10;
-            this.libriTotLvl3.Text = "0.00€";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(11, 467);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 18);
-            this.label7.TabIndex = 9;
-            this.label7.Text = "Livello 3:";
-            // 
-            // libriTotLvl2
-            // 
-            this.libriTotLvl2.AutoSize = true;
-            this.libriTotLvl2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.libriTotLvl2.ForeColor = System.Drawing.Color.Gold;
-            this.libriTotLvl2.Location = new System.Drawing.Point(125, 406);
-            this.libriTotLvl2.Name = "libriTotLvl2";
-            this.libriTotLvl2.Size = new System.Drawing.Size(49, 18);
-            this.libriTotLvl2.TabIndex = 8;
-            this.libriTotLvl2.Text = "0.00€";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(12, 406);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(75, 18);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Livello 2:";
-            // 
-            // libriTotLvl1
-            // 
-            this.libriTotLvl1.AutoSize = true;
-            this.libriTotLvl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.libriTotLvl1.ForeColor = System.Drawing.Color.OrangeRed;
-            this.libriTotLvl1.Location = new System.Drawing.Point(124, 346);
-            this.libriTotLvl1.Name = "libriTotLvl1";
-            this.libriTotLvl1.Size = new System.Drawing.Size(49, 18);
-            this.libriTotLvl1.TabIndex = 6;
-            this.libriTotLvl1.Text = "0.00€";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(11, 346);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 18);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Livello 1:";
             // 
             // label1
             // 
@@ -372,17 +475,6 @@
             this.isbnVendita.Size = new System.Drawing.Size(264, 20);
             this.isbnVendita.TabIndex = 2;
             this.isbnVendita.KeyUp += new System.Windows.Forms.KeyEventHandler(this.IsbnVendita_KeyUp);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(11, 292);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(218, 24);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Importo dai vari Livelli:";
             // 
             // tabellaVendita
             // 
@@ -586,6 +678,83 @@
             this.panel1.Size = new System.Drawing.Size(1372, 695);
             this.panel1.TabIndex = 0;
             // 
+            // tabellaStatistiche
+            // 
+            this.tabellaStatistiche.AllowUserToAddRows = false;
+            this.tabellaStatistiche.AllowUserToDeleteRows = false;
+            this.tabellaStatistiche.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabellaStatistiche.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.tabellaStatistiche.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.tabellaStatistiche.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tabellaStatistiche.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6});
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.tabellaStatistiche.DefaultCellStyle = dataGridViewCellStyle4;
+            this.tabellaStatistiche.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.tabellaStatistiche.Location = new System.Drawing.Point(399, 166);
+            this.tabellaStatistiche.Name = "tabellaStatistiche";
+            this.tabellaStatistiche.RowHeadersVisible = false;
+            this.tabellaStatistiche.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.tabellaStatistiche.Size = new System.Drawing.Size(974, 529);
+            this.tabellaStatistiche.TabIndex = 14;
+            this.tabellaStatistiche.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tabellaStatistiche_RowsAdded);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Data";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "ISBN";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Titolo";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "Prezzo";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.HeaderText = "Metodo";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.HeaderText = "Indice";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
             // costoTotaleBuoniLabel
             // 
             this.costoTotaleBuoniLabel.AutoSize = true;
@@ -778,83 +947,6 @@
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // tabellaStatistiche
-            // 
-            this.tabellaStatistiche.AllowUserToAddRows = false;
-            this.tabellaStatistiche.AllowUserToDeleteRows = false;
-            this.tabellaStatistiche.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabellaStatistiche.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.tabellaStatistiche.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.tabellaStatistiche.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabellaStatistiche.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.tabellaStatistiche.DefaultCellStyle = dataGridViewCellStyle4;
-            this.tabellaStatistiche.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.tabellaStatistiche.Location = new System.Drawing.Point(399, 166);
-            this.tabellaStatistiche.Name = "tabellaStatistiche";
-            this.tabellaStatistiche.RowHeadersVisible = false;
-            this.tabellaStatistiche.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tabellaStatistiche.Size = new System.Drawing.Size(974, 529);
-            this.tabellaStatistiche.TabIndex = 14;
-            this.tabellaStatistiche.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tabellaStatistiche_RowsAdded);
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "Data";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "ISBN";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Titolo";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "Prezzo";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "Metodo";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.HeaderText = "Indice";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.ReadOnly = true;
-            // 
             // Vendita
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -870,6 +962,12 @@
             this.venditaTab.ResumeLayout(false);
             this.backgroundVendita.ResumeLayout(false);
             this.backgroundVendita.PerformLayout();
+            this.buonoPanel.ResumeLayout(false);
+            this.buonoPanel.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaVendita)).EndInit();
             this.ricercaTab.ResumeLayout(false);
             this.ricercaTab.PerformLayout();
@@ -877,9 +975,9 @@
             this.tabPage1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabellaStatistiche)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tabellaStatistiche)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -892,7 +990,7 @@
         private System.Windows.Forms.TabPage ricercaTab;
         private System.Windows.Forms.Panel backgroundVendita;
         private System.Windows.Forms.Button btnCancella;
-        private System.Windows.Forms.Label importoMax;
+        private System.Windows.Forms.Label importoMaxBuono;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label libriTotLvl3;
         private System.Windows.Forms.Label label7;
@@ -952,6 +1050,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.TextBox costoTextbox;
+        private System.Windows.Forms.Panel buonoPanel;
+        private System.Windows.Forms.Label costoOriginaleLabel;
+        private System.Windows.Forms.Label importoOriginaleLabel;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 
