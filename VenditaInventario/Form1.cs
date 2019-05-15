@@ -160,7 +160,6 @@ namespace VenditaInventario
                     // Use Path class to manipulate file and directory paths.
                     string sourceFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "inventario.sqlite");
                     string destFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "uploadStatistiche.sqlite");
-                    //Il file delle statistiche va sempre riscritto
                     File.Copy(sourceFile, destFile, true);
                     
                     log.Info("Inizio upload statistiche..");
@@ -974,15 +973,12 @@ namespace VenditaInventario
                 tabellaStatistiche.Rows.Clear();
                 String ISBN = null, data= null, titolo=null, prezzo=null, metodo=null, indiceString=null;
                 int quantitaContanti = 0, quantitaBuoni = 0;
+                int? lastVenditaID = null;
 
                 decimal costoContanti = 0, costoBuoni = 0;
                 sqlite_conn.Open();
 
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
-
-                SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
-
-                SQLiteCommand sqlite_cmd3 = sqlite_conn.CreateCommand();
 
                 DateTime dataIniziale = DateTime.ParseExact(dataInizialePicker.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
@@ -992,66 +988,47 @@ namespace VenditaInventario
                 while (dataIniziale.Ticks <= dataFinale.Ticks && dataIniziale.Ticks <= DateTime.Now.Ticks)
                 {
                     
-                    sqlite_cmd.CommandText = "SELECT * FROM vendita WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "'";
-
+                    sqlite_cmd.CommandText = "SELECT * FROM vendita, statistiche, inventario WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "' AND vendita.id = statistiche.venditaID AND inventario.id = statistiche.libriID";
                     SQLiteDataReader r = sqlite_cmd.ExecuteReader();
-                    //se il DataReader contiene dati allora esistono delle quantita' in quella data
-
-                    //Recuperiamo le informazioni della data delle singole vendite
-                    while (r.Read()) //Vendita
+                    while (r.Read())
                     {
-                        sqlite_cmd2.CommandText = "SELECT * FROM statistiche WHERE venditaID='" + r.GetInt32(0) + "'";
-                        SQLiteDataReader rStatistiche = sqlite_cmd2.ExecuteReader();
+                        
                         if (r.GetString(3).Equals("B"))
                         {
-                            while (rStatistiche.Read()) //Associamo una vendita ad un libro (le ID dei libri stanno nella tabella statistiche)
+                            quantitaBuoni++;
+                            metodo = "Buono"; //Metodo
+                            ISBN = r.GetString(11); //ISBN
+                            titolo = r.GetString(8); //Titolo
+                            prezzo = r.GetString(12); //Prezzo
+                            indiceString = r.GetString(14); //Indice
+                            if(!(r.GetInt32(0) == lastVenditaID))
                             {
-                                sqlite_cmd3.CommandText = "SELECT * FROM inventario WHERE id='" + rStatistiche.GetInt32(1) + "'";
-                                SQLiteDataReader rLibri = sqlite_cmd3.ExecuteReader();
-                                if (rLibri.Read()) //Recupero le informazioni del libro dalla tabella inventario
-                                {
-                                    quantitaBuoni++;
-                                    metodo = "Buono"; //Metodo
-                                    ISBN = rLibri.GetString(4); //ISBN
-                                    titolo = rLibri.GetString(1); //Titolo
-                                    prezzo = rLibri.GetString(5); //Prezzo
-                                    indiceString = rLibri.GetString(7); //Indice
-                                }
-                                rLibri.Close();
-                                data = dataIniziale.ToString("dd/MM/yyyy"); //data
-
-                                tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
+                                costoBuoni += r.GetDecimal(1);
+                                lastVenditaID= r.GetInt32(0);
                             }
-                            costoBuoni += r.GetDecimal(1);
-                        } else
-                        {
-                            while (rStatistiche.Read()) //Associamo una vendita ad un libro (le ID dei libri stanno nella tabella statistiche)
-                            {
-                                sqlite_cmd3.CommandText = "SELECT * FROM inventario WHERE id='" + rStatistiche.GetInt32(1) + "'";
-                                SQLiteDataReader rLibri = sqlite_cmd3.ExecuteReader();
-                                if (rLibri.Read()) //Recupero le informazioni del libro dalla tabella inventario
-                                {
-                                    quantitaContanti++;
-                                    metodo = "Contanti"; //Metodo
-                                    ISBN = rLibri.GetString(4); //ISBN
-                                    titolo = rLibri.GetString(1); //Titolo
-                                    prezzo = rLibri.GetString(5); //Prezzo
-                                    indiceString = rLibri.GetString(7); //Indice
-                                }
-                                rLibri.Close();
-                                data = dataIniziale.ToString("dd/MM/yyyy"); //data
-
-                                tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
-                            }
-                            costoContanti += r.GetDecimal(1);
                         }
-                        rStatistiche.Close();
+                        else
+                        {
+                            quantitaContanti++;
+                            metodo = "Contanti"; //Metodo
+                            ISBN = r.GetString(11); //ISBN
+                            titolo = r.GetString(8); //Titolo
+                            prezzo = r.GetString(12); //Prezzo
+                            indiceString = r.GetString(14); //Indice
+                            if (!(r.GetInt32(0) == lastVenditaID))
+                            {
+                                costoContanti += r.GetDecimal(1);
+                                lastVenditaID = r.GetInt32(0);
+                            }
+                        }
+                        data = dataIniziale.ToString("dd/MM/yyyy"); //data
+
+                        tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
                     }
+                    r.Close();
 
                     //Aggiorniamo la data in modo da aggiungere un giorno
                     dataIniziale = dataIniziale.AddDays(1);
-
-                    r.Close();
                 }
                 quantitaContantiLabel.Text = Convert.ToString(quantitaContanti);
                 quantitaBuoniLabel.Text = Convert.ToString(quantitaBuoni);
