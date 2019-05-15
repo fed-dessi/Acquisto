@@ -988,19 +988,15 @@ namespace VenditaInventario
                 while (dataIniziale.Ticks <= dataFinale.Ticks && dataIniziale.Ticks <= DateTime.Now.Ticks)
                 {
                     
-                    sqlite_cmd.CommandText = "SELECT * FROM vendita, statistiche, inventario WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "' AND vendita.id = statistiche.venditaID AND inventario.id = statistiche.libriID";
+                    sqlite_cmd.CommandText = "SELECT vendita.id, vendita.costo, vendita.metodo, inventario.nome, inventario.codice, inventario.prezzo, inventario.indice FROM vendita, statistiche, inventario WHERE data='" + dataIniziale.ToString("dd/MM/yyyy") + "' AND vendita.id = statistiche.venditaID AND inventario.id = statistiche.libriID";
                     SQLiteDataReader r = sqlite_cmd.ExecuteReader();
                     while (r.Read())
                     {
                         
-                        if (r.GetString(3).Equals("B"))
+                        if (r.GetString(2).Equals("B"))
                         {
                             quantitaBuoni++;
                             metodo = "Buono"; //Metodo
-                            ISBN = r.GetString(11); //ISBN
-                            titolo = r.GetString(8); //Titolo
-                            prezzo = r.GetString(12); //Prezzo
-                            indiceString = r.GetString(14); //Indice
                             if(!(r.GetInt32(0) == lastVenditaID))
                             {
                                 costoBuoni += r.GetDecimal(1);
@@ -1011,16 +1007,18 @@ namespace VenditaInventario
                         {
                             quantitaContanti++;
                             metodo = "Contanti"; //Metodo
-                            ISBN = r.GetString(11); //ISBN
-                            titolo = r.GetString(8); //Titolo
-                            prezzo = r.GetString(12); //Prezzo
-                            indiceString = r.GetString(14); //Indice
                             if (!(r.GetInt32(0) == lastVenditaID))
                             {
                                 costoContanti += r.GetDecimal(1);
                                 lastVenditaID = r.GetInt32(0);
                             }
                         }
+
+                        ISBN = r.GetString(4); //ISBN
+                        titolo = r.GetString(3); //Titolo
+                        prezzo = r.GetString(5); //Prezzo
+                        indiceString = r.GetString(6); //Indice
+
                         data = dataIniziale.ToString("dd/MM/yyyy"); //data
 
                         tabellaStatistiche.Rows.Add(data, ISBN, titolo, prezzo, metodo, indiceString);
