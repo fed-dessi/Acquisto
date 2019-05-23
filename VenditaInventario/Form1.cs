@@ -45,8 +45,13 @@ namespace VenditaInventario
             backgroundWorker1.DoWork += backgroundWorker1_DoWork;
             // This event will be raised when we call ReportProgress
             backgroundWorker1.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
-        }
 
+
+            backgroundWorker2.DoWork += backgroundWorker2_DoWork;
+            backgroundWorker2.RunWorkerCompleted += backgroundWorker2_WorkCompleted;
+            backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+        }
+        
         private void Vendita_Load(object sender, EventArgs e)
         {
             
@@ -913,6 +918,87 @@ namespace VenditaInventario
                 tabellaStatistiche.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.OrangeRed;
             }
             
+        }
+
+        private void importaModificheInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog importFile = new OpenFileDialog();
+            
+            importFile.Filter = "Database file (*.sqlite)|*.sqlite;";
+            importFile.FilterIndex = 0;
+            importFile.RestoreDirectory = true;
+
+            if (importFile.ShowDialog() == DialogResult.OK)
+            {
+                labelImporto.Visible = true;
+                progressBar1.Visible = true;
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                progressBar1.MarqueeAnimationSpeed = 30;
+
+                backgroundWorker2.RunWorkerAsync(importFile.FileName);
+            }
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            try
+            {
+                string selectedFileName = (string)e.Argument;
+
+                sqlite_conn.Open();
+
+                SQLiteTransaction transaction = null;
+                transaction = sqlite_conn.BeginTransaction();
+
+                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+                sqlite_cmd.CommandText = "ATTACH DATABASE '" + selectedFileName + "' AS import;";
+                sqlite_cmd.ExecuteNonQuery();
+
+                SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
+                sqlite_cmd2.CommandText = "CREATE TABLE IF NOT EXISTS temp_inv AS SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM import.inventario;";
+                sqlite_cmd2.ExecuteNonQuery();
+
+                SQLiteCommand sqlite_cmd3 = sqlite_conn.CreateCommand();
+                sqlite_cmd3.CommandText = "UPDATE inventario SET nome = (SELECT nome FROM temp_inv WHERE temp_inv.id = inventario.id)," +
+                                                            "autore = (SELECT autore FROM temp_inv WHERE temp_inv.id = inventario.id)," +
+                                                            "casa = (SELECT casa FROM temp_inv WHERE temp_inv.id = inventario.id)," +
+                                                            "codice = (SELECT codice FROM temp_inv WHERE temp_inv.id = inventario.id)," +
+                                                            "prezzo = (SELECT prezzo FROM temp_inv WHERE temp_inv.id = inventario.id)," +
+                                                            "anno = (SELECT anno FROM temp_inv WHERE temp_inv.id = inventario.id)," +
+                                                            "indice = (SELECT indice FROM temp_inv WHERE temp_inv.id = inventario.id);";
+                sqlite_cmd3.ExecuteNonQuery();
+
+                SQLiteCommand sqlite_cmd4 = sqlite_conn.CreateCommand();
+                sqlite_cmd4.CommandText = "DROP TABLE IF EXISTS temp_inv;";
+                sqlite_cmd4.ExecuteNonQuery();
+
+                transaction.Commit();
+                transaction.Dispose();
+
+                sqlite_conn.Close();
+
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + " - " + ex.StackTrace);
+                log.Error("Error in importaModificheInventarioToolStripMenuItem_Click - " + ex);
+            }
+        }
+
+        private void backgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void backgroundWorker2_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.Visible = false;
+            labelImporto.Visible = false;
+
+            MessageBox.Show("Modifiche Importate!", "Modifiche Importate", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void costoTextbox_KeyDown(object sender, KeyEventArgs e)

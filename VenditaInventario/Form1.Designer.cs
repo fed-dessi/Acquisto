@@ -105,6 +105,9 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.importaModificheInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.labelImporto = new System.Windows.Forms.Label();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -149,6 +152,7 @@
             this.backgroundVendita.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.backgroundVendita.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
+            this.backgroundVendita.Controls.Add(this.labelImporto);
             this.backgroundVendita.Controls.Add(this.buonoPanel);
             this.backgroundVendita.Controls.Add(this.panel3);
             this.backgroundVendita.Controls.Add(this.panel2);
@@ -917,6 +921,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importaInventarioxlsmToolStripMenuItem,
+            this.importaModificheInventarioToolStripMenuItem,
             this.toolStripSeparator1,
             this.chiudiToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -926,19 +931,19 @@
             // importaInventarioxlsmToolStripMenuItem
             // 
             this.importaInventarioxlsmToolStripMenuItem.Name = "importaInventarioxlsmToolStripMenuItem";
-            this.importaInventarioxlsmToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.importaInventarioxlsmToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.importaInventarioxlsmToolStripMenuItem.Text = "Importa inventario (.xlsm)";
             this.importaInventarioxlsmToolStripMenuItem.Click += new System.EventHandler(this.importaInventarioxlsmToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(207, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(226, 6);
             // 
             // chiudiToolStripMenuItem
             // 
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
-            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
             this.chiudiToolStripMenuItem.Click += new System.EventHandler(this.chiudiToolStripMenuItem_Click);
             // 
@@ -946,6 +951,29 @@
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // importaModificheInventarioToolStripMenuItem
+            // 
+            this.importaModificheInventarioToolStripMenuItem.Name = "importaModificheInventarioToolStripMenuItem";
+            this.importaModificheInventarioToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.importaModificheInventarioToolStripMenuItem.Text = "Importa Modifiche Inventario";
+            this.importaModificheInventarioToolStripMenuItem.Click += new System.EventHandler(this.importaModificheInventarioToolStripMenuItem_Click);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            // 
+            // labelImporto
+            // 
+            this.labelImporto.AutoSize = true;
+            this.labelImporto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelImporto.ForeColor = System.Drawing.Color.White;
+            this.labelImporto.Location = new System.Drawing.Point(95, 624);
+            this.labelImporto.Name = "labelImporto";
+            this.labelImporto.Size = new System.Drawing.Size(173, 24);
+            this.labelImporto.TabIndex = 25;
+            this.labelImporto.Text = "Importo in corso..";
+            this.labelImporto.Visible = false;
             // 
             // Vendita
             // 
@@ -1057,6 +1085,9 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ToolStripMenuItem importaModificheInventarioToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.Label labelImporto;
     }
 }
 
