@@ -1001,6 +1001,61 @@ namespace VenditaInventario
             MessageBox.Show("Modifiche Importate!", "Modifiche Importate", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void aggiungiLibroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Aggiungi frm = new Aggiungi();
+                
+                frm.ShowDialog();
+
+            }
+
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show("aggiungiLibroToolStripMenuItem_Click Error", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine(ex.StackTrace);
+                log.Error("aggiungiLibroToolStripMenuItem_Click Error - Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+            }
+        }
+
+        private void btnRimuoviRiga_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Vuoi cancellare il libro selezionato?", "Rimozione", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                string id = tabellaRicerca.CurrentRow.Cells[0].Value.ToString();
+
+
+                try
+                {
+                
+                    using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;"))
+                    {
+
+                        sqlite_conn.Open();
+
+                        using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
+                        {
+                            sqlite_cmd.CommandText = "DELETE FROM inventario WHERE id='" + id + "'";
+                            sqlite_cmd.ExecuteNonQuery();
+
+                            sqlite_cmd.Dispose();
+                        }
+                        sqlite_conn.Close();
+                    }
+                    MessageBox.Show("Libro rimosso!", "Rimosso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show("apriModifica() Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Debug.WriteLine(ex.StackTrace);
+                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+                }
+            }
+        }
+
         private void costoTextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)

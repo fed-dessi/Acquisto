@@ -34,7 +34,7 @@ namespace VenditaInventario
         {
             try
             {
-                using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;Version= 3;"))
+                using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;"))
                 {
                     sqlite_conn.Open();
 

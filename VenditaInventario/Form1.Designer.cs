@@ -36,6 +36,7 @@
             this.tabPages = new System.Windows.Forms.TabControl();
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
+            this.labelImporto = new System.Windows.Forms.Label();
             this.buonoPanel = new System.Windows.Forms.Panel();
             this.costoOriginaleLabel = new System.Windows.Forms.Label();
             this.importoOriginaleLabel = new System.Windows.Forms.Label();
@@ -102,12 +103,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importaInventarioxlsmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importaModificheInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.importaModificheInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.labelImporto = new System.Windows.Forms.Label();
+            this.aggiungiLibroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnRimuoviRiga = new System.Windows.Forms.Button();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -167,6 +170,18 @@
             this.backgroundVendita.Name = "backgroundVendita";
             this.backgroundVendita.Size = new System.Drawing.Size(430, 696);
             this.backgroundVendita.TabIndex = 5;
+            // 
+            // labelImporto
+            // 
+            this.labelImporto.AutoSize = true;
+            this.labelImporto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelImporto.ForeColor = System.Drawing.Color.White;
+            this.labelImporto.Location = new System.Drawing.Point(95, 624);
+            this.labelImporto.Name = "labelImporto";
+            this.labelImporto.Size = new System.Drawing.Size(173, 24);
+            this.labelImporto.TabIndex = 25;
+            this.labelImporto.Text = "Importo in corso..";
+            this.labelImporto.Visible = false;
             // 
             // buonoPanel
             // 
@@ -568,6 +583,7 @@
             // ricercaTab
             // 
             this.ricercaTab.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ricercaTab.Controls.Add(this.btnRimuoviRiga);
             this.ricercaTab.Controls.Add(this.btnAggiornaRicerca);
             this.ricercaTab.Controls.Add(this.button1);
             this.ricercaTab.Controls.Add(this.label6);
@@ -588,7 +604,7 @@
             this.btnAggiornaRicerca.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAggiornaRicerca.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAggiornaRicerca.ForeColor = System.Drawing.Color.White;
-            this.btnAggiornaRicerca.Location = new System.Drawing.Point(1017, 25);
+            this.btnAggiornaRicerca.Location = new System.Drawing.Point(995, 25);
             this.btnAggiornaRicerca.Name = "btnAggiornaRicerca";
             this.btnAggiornaRicerca.Size = new System.Drawing.Size(163, 62);
             this.btnAggiornaRicerca.TabIndex = 18;
@@ -922,6 +938,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importaInventarioxlsmToolStripMenuItem,
             this.importaModificheInventarioToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.aggiungiLibroToolStripMenuItem,
             this.toolStripSeparator1,
             this.chiudiToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -934,6 +952,13 @@
             this.importaInventarioxlsmToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.importaInventarioxlsmToolStripMenuItem.Text = "Importa inventario (.xlsm)";
             this.importaInventarioxlsmToolStripMenuItem.Click += new System.EventHandler(this.importaInventarioxlsmToolStripMenuItem_Click);
+            // 
+            // importaModificheInventarioToolStripMenuItem
+            // 
+            this.importaModificheInventarioToolStripMenuItem.Name = "importaModificheInventarioToolStripMenuItem";
+            this.importaModificheInventarioToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.importaModificheInventarioToolStripMenuItem.Text = "Importa Modifiche Inventario";
+            this.importaModificheInventarioToolStripMenuItem.Click += new System.EventHandler(this.importaModificheInventarioToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -952,28 +977,37 @@
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // importaModificheInventarioToolStripMenuItem
-            // 
-            this.importaModificheInventarioToolStripMenuItem.Name = "importaModificheInventarioToolStripMenuItem";
-            this.importaModificheInventarioToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.importaModificheInventarioToolStripMenuItem.Text = "Importa Modifiche Inventario";
-            this.importaModificheInventarioToolStripMenuItem.Click += new System.EventHandler(this.importaModificheInventarioToolStripMenuItem_Click);
-            // 
             // backgroundWorker2
             // 
             this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
             // 
-            // labelImporto
+            // aggiungiLibroToolStripMenuItem
             // 
-            this.labelImporto.AutoSize = true;
-            this.labelImporto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelImporto.ForeColor = System.Drawing.Color.White;
-            this.labelImporto.Location = new System.Drawing.Point(95, 624);
-            this.labelImporto.Name = "labelImporto";
-            this.labelImporto.Size = new System.Drawing.Size(173, 24);
-            this.labelImporto.TabIndex = 25;
-            this.labelImporto.Text = "Importo in corso..";
-            this.labelImporto.Visible = false;
+            this.aggiungiLibroToolStripMenuItem.Name = "aggiungiLibroToolStripMenuItem";
+            this.aggiungiLibroToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.aggiungiLibroToolStripMenuItem.Text = "Aggiungi Libro";
+            this.aggiungiLibroToolStripMenuItem.Click += new System.EventHandler(this.aggiungiLibroToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(226, 6);
+            // 
+            // btnRimuoviRiga
+            // 
+            this.btnRimuoviRiga.BackColor = System.Drawing.Color.Red;
+            this.btnRimuoviRiga.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
+            this.btnRimuoviRiga.FlatAppearance.BorderSize = 0;
+            this.btnRimuoviRiga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRimuoviRiga.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRimuoviRiga.ForeColor = System.Drawing.Color.White;
+            this.btnRimuoviRiga.Location = new System.Drawing.Point(1180, 25);
+            this.btnRimuoviRiga.Name = "btnRimuoviRiga";
+            this.btnRimuoviRiga.Size = new System.Drawing.Size(163, 62);
+            this.btnRimuoviRiga.TabIndex = 19;
+            this.btnRimuoviRiga.Text = "Rimuovi Riga";
+            this.btnRimuoviRiga.UseVisualStyleBackColor = false;
+            this.btnRimuoviRiga.Click += new System.EventHandler(this.btnRimuoviRiga_Click);
             // 
             // Vendita
             // 
@@ -1088,6 +1122,9 @@
         private System.Windows.Forms.ToolStripMenuItem importaModificheInventarioToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.Label labelImporto;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem;
+        private System.Windows.Forms.Button btnRimuoviRiga;
     }
 }
 
