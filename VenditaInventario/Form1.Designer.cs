@@ -72,6 +72,7 @@
             this.anno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.indice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ricercaTab = new System.Windows.Forms.TabPage();
+            this.btnRimuoviRiga = new System.Windows.Forms.Button();
             this.btnAggiornaRicerca = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -104,13 +105,12 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importaInventarioxlsmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importaModificheInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.aggiungiLibroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.aggiungiLibroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnRimuoviRiga = new System.Windows.Forms.Button();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -135,7 +135,7 @@
             this.tabPages.Location = new System.Drawing.Point(0, 24);
             this.tabPages.Name = "tabPages";
             this.tabPages.SelectedIndex = 0;
-            this.tabPages.Size = new System.Drawing.Size(1381, 718);
+            this.tabPages.Size = new System.Drawing.Size(1353, 751);
             this.tabPages.TabIndex = 0;
             // 
             // venditaTab
@@ -596,6 +596,22 @@
             this.ricercaTab.TabIndex = 1;
             this.ricercaTab.Text = "Ricerca";
             // 
+            // btnRimuoviRiga
+            // 
+            this.btnRimuoviRiga.BackColor = System.Drawing.Color.Red;
+            this.btnRimuoviRiga.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
+            this.btnRimuoviRiga.FlatAppearance.BorderSize = 0;
+            this.btnRimuoviRiga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRimuoviRiga.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRimuoviRiga.ForeColor = System.Drawing.Color.White;
+            this.btnRimuoviRiga.Location = new System.Drawing.Point(1180, 25);
+            this.btnRimuoviRiga.Name = "btnRimuoviRiga";
+            this.btnRimuoviRiga.Size = new System.Drawing.Size(163, 62);
+            this.btnRimuoviRiga.TabIndex = 19;
+            this.btnRimuoviRiga.Text = "Rimuovi Riga";
+            this.btnRimuoviRiga.UseVisualStyleBackColor = false;
+            this.btnRimuoviRiga.Click += new System.EventHandler(this.btnRimuoviRiga_Click);
+            // 
             // btnAggiornaRicerca
             // 
             this.btnAggiornaRicerca.BackColor = System.Drawing.Color.ForestGreen;
@@ -670,7 +686,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1373, 692);
+            this.tabPage1.Size = new System.Drawing.Size(1345, 725);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Statistiche";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -693,9 +709,10 @@
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.dataInizialePicker);
             this.panel1.Controls.Add(this.label9);
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1372, 695);
+            this.panel1.Size = new System.Drawing.Size(1339, 719);
             this.panel1.TabIndex = 0;
             // 
             // tabellaStatistiche
@@ -735,7 +752,7 @@
             this.tabellaStatistiche.Name = "tabellaStatistiche";
             this.tabellaStatistiche.RowHeadersVisible = false;
             this.tabellaStatistiche.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tabellaStatistiche.Size = new System.Drawing.Size(974, 529);
+            this.tabellaStatistiche.Size = new System.Drawing.Size(937, 550);
             this.tabellaStatistiche.TabIndex = 14;
             this.tabellaStatistiche.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tabellaStatistiche_RowsAdded);
             // 
@@ -929,7 +946,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1381, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1353, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -960,6 +977,18 @@
             this.importaModificheInventarioToolStripMenuItem.Text = "Importa Modifiche Inventario";
             this.importaModificheInventarioToolStripMenuItem.Click += new System.EventHandler(this.importaModificheInventarioToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(226, 6);
+            // 
+            // aggiungiLibroToolStripMenuItem
+            // 
+            this.aggiungiLibroToolStripMenuItem.Name = "aggiungiLibroToolStripMenuItem";
+            this.aggiungiLibroToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.aggiungiLibroToolStripMenuItem.Text = "Aggiungi Libro";
+            this.aggiungiLibroToolStripMenuItem.Click += new System.EventHandler(this.aggiungiLibroToolStripMenuItem_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -981,39 +1010,11 @@
             // 
             this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
             // 
-            // aggiungiLibroToolStripMenuItem
-            // 
-            this.aggiungiLibroToolStripMenuItem.Name = "aggiungiLibroToolStripMenuItem";
-            this.aggiungiLibroToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.aggiungiLibroToolStripMenuItem.Text = "Aggiungi Libro";
-            this.aggiungiLibroToolStripMenuItem.Click += new System.EventHandler(this.aggiungiLibroToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(226, 6);
-            // 
-            // btnRimuoviRiga
-            // 
-            this.btnRimuoviRiga.BackColor = System.Drawing.Color.Red;
-            this.btnRimuoviRiga.FlatAppearance.BorderColor = System.Drawing.Color.DarkRed;
-            this.btnRimuoviRiga.FlatAppearance.BorderSize = 0;
-            this.btnRimuoviRiga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRimuoviRiga.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRimuoviRiga.ForeColor = System.Drawing.Color.White;
-            this.btnRimuoviRiga.Location = new System.Drawing.Point(1180, 25);
-            this.btnRimuoviRiga.Name = "btnRimuoviRiga";
-            this.btnRimuoviRiga.Size = new System.Drawing.Size(163, 62);
-            this.btnRimuoviRiga.TabIndex = 19;
-            this.btnRimuoviRiga.Text = "Rimuovi Riga";
-            this.btnRimuoviRiga.UseVisualStyleBackColor = false;
-            this.btnRimuoviRiga.Click += new System.EventHandler(this.btnRimuoviRiga_Click);
-            // 
             // Vendita
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1381, 742);
+            this.ClientSize = new System.Drawing.Size(1353, 775);
             this.Controls.Add(this.tabPages);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
