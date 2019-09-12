@@ -814,76 +814,103 @@ namespace VenditaInventario
             DialogResult dialogResult = MessageBox.Show("Registrare i libri?", "Nuova vendita", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                try { 
-                    String data = null;
-
-                    sqlite_conn.Open();
-
-                    SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
-
-                    SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
-
-                    //Controlliamo se abbiamo gia' inserito altre quantita' oggi
-
-                    data = DateTime.Now.ToString("dd/MM/yyyy");
-                    long rowID = 0;
-
-                    SQLiteTransaction transaction = null;
-                    transaction = sqlite_conn.BeginTransaction();
-
-                    sqlite_cmd2.CommandText = "INSERT INTO [vendita] (data, costo, metodo) Values (@Data, @Costo, @Metodo); SELECT last_insert_rowid();";
-                    sqlite_cmd2.Parameters.AddWithValue("@Data", data);
-
-                    if (cbBuono.Checked)
+                if (cbBuono.Checked) { 
+                    if(totMaxBuono < 1000)
                     {
-                        sqlite_cmd2.Parameters.AddWithValue("@Metodo", "B");
-                        sqlite_cmd2.Parameters.AddWithValue("@Costo", totMaxBuono);
+                        registraStatistica();
                     }
                     else
                     {
-                        sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
-                        sqlite_cmd2.Parameters.AddWithValue("@Costo", totMax);
+                        MessageBox.Show("Controlla l'importo massimo dato al cliente.\n(Deve essere minore di 1000€)", "Errore!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    
-                    rowID = (long)sqlite_cmd2.ExecuteScalar();
-                    foreach (DataGridViewRow row in tabellaVendita.Rows)
-                    {
-                        if (!row.Cells[6].Value.Equals(""))
-                        {
-                            long libriID = 0;
-                            
-
-                            SQLiteCommand sqlite_cmd3 = sqlite_conn.CreateCommand();
-                            sqlite_cmd3.CommandText = "SELECT id FROM inventario WHERE codice='" + row.Cells[3].Value + "'";
-                            SQLiteDataReader r = sqlite_cmd3.ExecuteReader();
-                            if (r.Read())
-                            {
-                                libriID = (long)r[0];
-                            }
-                            r.Close();
-
-                            sqlite_cmd.CommandText = "INSERT INTO [statistiche] (libriID, venditaID) Values (@Libro, @Vendita)";
-                            sqlite_cmd.Parameters.AddWithValue("@Libro", libriID);
-                            sqlite_cmd.Parameters.AddWithValue("@Vendita", rowID);
-
-                            sqlite_cmd.ExecuteNonQuery();
-                        }
-                    }
-                    transaction.Commit();
-                    transaction.Dispose();
-
-
-                    sqlite_conn.Close();
-
-                    MessageBox.Show("Registrati!", "Registro statistiche", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                } catch(Exception ex)
+                } else if(!cbBuono.Checked)
                 {
-                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
-                    Debug.WriteLine(ex);
-                    Debug.WriteLine(ex.Message);
+                    if (totMax < 1000)
+                    {
+                        registraStatistica();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Controlla l'importo massimo dato al cliente.\n(Deve essere minore di 1000€)", "Errore!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                
+            }
+            
+        }
+
+        private void registraStatistica()
+        {
+            try
+            {
+                String data = null;
+
+                sqlite_conn.Open();
+
+                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+
+                SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
+
+                //Controlliamo se abbiamo gia' inserito altre quantita' oggi
+
+                data = DateTime.Now.ToString("dd/MM/yyyy");
+                long rowID = 0;
+
+                SQLiteTransaction transaction = null;
+                transaction = sqlite_conn.BeginTransaction();
+
+                sqlite_cmd2.CommandText = "INSERT INTO [vendita] (data, costo, metodo) Values (@Data, @Costo, @Metodo); SELECT last_insert_rowid();";
+                sqlite_cmd2.Parameters.AddWithValue("@Data", data);
+
+                if (cbBuono.Checked)
+                {
+                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "B");
+                    sqlite_cmd2.Parameters.AddWithValue("@Costo", totMaxBuono);
+                }
+                else
+                {
+                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
+                    sqlite_cmd2.Parameters.AddWithValue("@Costo", totMax);
                 }
 
+                rowID = (long)sqlite_cmd2.ExecuteScalar();
+                foreach (DataGridViewRow row in tabellaVendita.Rows)
+                {
+                    if (!row.Cells[6].Value.Equals(""))
+                    {
+                        long libriID = 0;
+
+
+                        SQLiteCommand sqlite_cmd3 = sqlite_conn.CreateCommand();
+                        sqlite_cmd3.CommandText = "SELECT id FROM inventario WHERE codice='" + row.Cells[3].Value + "'";
+                        SQLiteDataReader r = sqlite_cmd3.ExecuteReader();
+                        if (r.Read())
+                        {
+                            libriID = (long)r[0];
+                        }
+                        r.Close();
+
+                        sqlite_cmd.CommandText = "INSERT INTO [statistiche] (libriID, venditaID) Values (@Libro, @Vendita)";
+                        sqlite_cmd.Parameters.AddWithValue("@Libro", libriID);
+                        sqlite_cmd.Parameters.AddWithValue("@Vendita", rowID);
+
+                        sqlite_cmd.ExecuteNonQuery();
+                    }
+                }
+                transaction.Commit();
+                transaction.Dispose();
+
+
+                sqlite_conn.Close();
+
+                MessageBox.Show("Registrati!", "Registro statistiche", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+                Debug.WriteLine(ex);
+                Debug.WriteLine(ex.Message);
             }
             cancella();
         }
@@ -1026,7 +1053,6 @@ namespace VenditaInventario
             {
                 string id = tabellaRicerca.CurrentRow.Cells[0].Value.ToString();
 
-
                 try
                 {
                 
@@ -1035,22 +1061,39 @@ namespace VenditaInventario
 
                         sqlite_conn.Open();
 
-                        using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
+                        using (SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand())
                         {
-                            sqlite_cmd.CommandText = "DELETE FROM inventario WHERE id='" + id + "'";
-                            sqlite_cmd.ExecuteNonQuery();
+                            sqlite_cmd2.CommandText = "SELECT libriID FROM statistiche WHERE libriID='" + id + "'";
+                            SQLiteDataReader sqlite_dataReader = sqlite_cmd2.ExecuteReader();
+                            if (sqlite_dataReader.Read())
+                            {
+                                MessageBox.Show("Impossibile rimuovere il libro selezionato poiche' e' presente in una o piu' vendite.\nPer non comparlo piu' usare la modifica e impostare l'indice a VUOTO!", "Impossibile rimuovere libro!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
+                                {
+                                    sqlite_cmd.CommandText = "DELETE FROM inventario WHERE id='" + id + "'";
+                                    sqlite_cmd.ExecuteNonQuery();
 
-                            sqlite_cmd.Dispose();
+                                    sqlite_cmd.Dispose();
+                                }
+                                MessageBox.Show("Libro rimosso!", "Rimosso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            sqlite_cmd2.Dispose();
                         }
+
+                        
                         sqlite_conn.Close();
                     }
-                    MessageBox.Show("Libro rimosso!", "Rimosso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
                 }
 
                 catch (SQLiteException ex)
                 {
-                    MessageBox.Show("apriModifica() Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Debug.WriteLine(ex.StackTrace);
+                    MessageBox.Show("btnRimuoviRiga Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
                     log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
                 }
             }
