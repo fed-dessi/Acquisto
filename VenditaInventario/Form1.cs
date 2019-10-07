@@ -14,6 +14,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using OfficeOpenXml;
+using OfficeOpenXml.Table;
 
 namespace VenditaInventario
 {
@@ -50,6 +52,16 @@ namespace VenditaInventario
             backgroundWorker2.DoWork += backgroundWorker2_DoWork;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_WorkCompleted;
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
+
+            //Export Inventario
+            backgroundWorker3.DoWork += backgroundWorker3_DoWork;
+            backgroundWorker3.RunWorkerCompleted += backgroundWorker3_WorkCompleted;
+            backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
+
+            //Aggiungi libri da Excel
+            backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+            backgroundWorker4.RunWorkerCompleted += backgroundWorker4_WorkCompleted;
+            backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
         }
         
         private void Vendita_Load(object sender, EventArgs e)
@@ -713,7 +725,7 @@ namespace VenditaInventario
 
                 }
 
-                String nome = null, autore = null, casa = null, codice = null, prezzo = null, anno = null, indice = null;
+                string nome = null, autore = null, casa = null, codice = null, prezzo = null, anno = null, indice = null;
 
                 sqlite_conn.Open();
 
@@ -1099,6 +1111,82 @@ namespace VenditaInventario
             }
         }
 
+        private void ImportaInventarioxlsxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog file = new OpenFileDialog();
+            file.Filter = "Excel Files( .xls, .xlsx)|*.xls; *.xlsx";
+            file.ShowDialog();
+
+            string filePath = file.FileName;
+
+            if (filePath != null && !filePath.Equals(""))
+            {
+                progressBar1.Visible = true;
+
+                //Faccio partiore il Worker
+                backgroundWorker1.RunWorkerAsync(filePath);
+
+            }
+        }
+
+        private void ImportaModificheDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog importFile = new OpenFileDialog();
+
+            importFile.Filter = "Database file (*.sqlite)|*.sqlite;";
+            importFile.FilterIndex = 0;
+            importFile.RestoreDirectory = true;
+
+            if (importFile.ShowDialog() == DialogResult.OK)
+            {
+                labelImporto.Visible = true;
+                progressBar1.Visible = true;
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                progressBar1.MarqueeAnimationSpeed = 30;
+
+                backgroundWorker2.RunWorkerAsync(importFile.FileName);
+            }
+        }
+
+        private void ExportInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            using (var savefile = new SaveFileDialog())
+            {
+                savefile.FileName = "exportInventario.xlsx";
+                savefile.Filter = "File Excel(*.xlsx)|*.xlsx";
+                DialogResult result = savefile.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    labelImporto.Visible = true;
+                    progressBar1.Visible = true;
+                    progressBar1.Style = ProgressBarStyle.Marquee;
+                    progressBar1.MarqueeAnimationSpeed = 30;
+
+                    backgroundWorker3.RunWorkerAsync(savefile.FileName);
+                }
+            }
+        }
+
+        private void AggiungiLibroToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Aggiungi frm = new Aggiungi();
+
+                frm.ShowDialog();
+
+            }
+
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show("aggiungiLibroToolStripMenuItem_Click Error", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine(ex.StackTrace);
+                log.Error("aggiungiLibroToolStripMenuItem_Click Error - Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+            }
+        }
+
         private void costoTextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
@@ -1249,22 +1337,78 @@ namespace VenditaInventario
             }
         }
 
-        private void importaInventarioxlsmToolStripMenuItem_Click(object sender, EventArgs e)
+        //Inventario export
+        private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
         {
-            OpenFileDialog file = new OpenFileDialog();
-            file.Filter = "Excel Files( .xls, .xlsx)|*.xls; *.xlsx";
-            file.ShowDialog();
 
-            string filePath = file.FileName;
-
-            if (filePath != null && !filePath.Equals(""))
+            try
             {
-                progressBar1.Visible = true;
+                //Get the desired export name and path
+                string selectedPath = (string)e.Argument;
 
-                //Faccio partiore il Worker
-                backgroundWorker1.RunWorkerAsync(filePath);
-                
+                //We create a new excelPackage with using so we can dispose of it when we're done working with it
+                using (var package = new ExcelPackage(new FileInfo(@selectedPath)))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Inventario");
+                    //We grab all the data from the dtRicerca DataTable and we load it in the worksheet
+                    worksheet.Cells["A1"].LoadFromDataTable(dtRicerca, false, TableStyles.None);
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                    //Finally since we've already defined a filename earlier we just save the ExcelPackage
+                    package.Save();
+                }
+
+
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + " - " + ex.StackTrace);
+                log.Error("Error in backgroundWorker3_DoWork - " + ex);
+            }
+        }
+
+        private void backgroundWorker3_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void backgroundWorker3_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.Visible = false;
+            labelImporto.Visible = false;
+
+            MessageBox.Show("Inventario Esportato!", "Export inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        //Add new books from Excel file
+        private void backgroundWorker4_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            try
+            {
+                
+
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + " - " + ex.StackTrace);
+                log.Error("Error in backgroundWorker4_DoWork - " + ex);
+            }
+        }
+
+        private void backgroundWorker4_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void backgroundWorker4_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.Visible = false;
+            labelImporto.Visible = false;
+
+            MessageBox.Show("Inventario Esportato!", "Export inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

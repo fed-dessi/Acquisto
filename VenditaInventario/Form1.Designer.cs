@@ -103,14 +103,19 @@
             this.label9 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importaInventarioxlsmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importaModificheInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.aggiungiLibroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.chiudiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.strumentiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.importaInventarioxlsxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importaModificheDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.aggiungiLibroToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.aggiungiLibriDaCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -146,7 +151,7 @@
             this.venditaTab.Location = new System.Drawing.Point(4, 22);
             this.venditaTab.Name = "venditaTab";
             this.venditaTab.Padding = new System.Windows.Forms.Padding(3);
-            this.venditaTab.Size = new System.Drawing.Size(1373, 692);
+            this.venditaTab.Size = new System.Drawing.Size(1345, 725);
             this.venditaTab.TabIndex = 0;
             this.venditaTab.Text = "Vendita";
             // 
@@ -166,9 +171,9 @@
             this.backgroundVendita.Controls.Add(this.label1);
             this.backgroundVendita.Controls.Add(this.btnInserisci);
             this.backgroundVendita.Controls.Add(this.isbnVendita);
-            this.backgroundVendita.Location = new System.Drawing.Point(-4, 0);
+            this.backgroundVendita.Location = new System.Drawing.Point(0, 0);
             this.backgroundVendita.Name = "backgroundVendita";
-            this.backgroundVendita.Size = new System.Drawing.Size(430, 696);
+            this.backgroundVendita.Size = new System.Drawing.Size(431, 725);
             this.backgroundVendita.TabIndex = 5;
             // 
             // labelImporto
@@ -176,7 +181,7 @@
             this.labelImporto.AutoSize = true;
             this.labelImporto.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelImporto.ForeColor = System.Drawing.Color.White;
-            this.labelImporto.Location = new System.Drawing.Point(95, 624);
+            this.labelImporto.Location = new System.Drawing.Point(112, 624);
             this.labelImporto.Name = "labelImporto";
             this.labelImporto.Size = new System.Drawing.Size(173, 24);
             this.labelImporto.TabIndex = 25;
@@ -529,11 +534,11 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.tabellaVendita.DefaultCellStyle = dataGridViewCellStyle2;
             this.tabellaVendita.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.tabellaVendita.Location = new System.Drawing.Point(423, 0);
+            this.tabellaVendita.Location = new System.Drawing.Point(433, 0);
             this.tabellaVendita.Name = "tabellaVendita";
             this.tabellaVendita.RowHeadersVisible = false;
             this.tabellaVendita.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tabellaVendita.Size = new System.Drawing.Size(954, 696);
+            this.tabellaVendita.Size = new System.Drawing.Size(912, 725);
             this.tabellaVendita.TabIndex = 0;
             this.tabellaVendita.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tabellaVendita_RowsAdded);
             this.tabellaVendita.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tabellaVendita_KeyUp);
@@ -592,7 +597,7 @@
             this.ricercaTab.Location = new System.Drawing.Point(4, 22);
             this.ricercaTab.Name = "ricercaTab";
             this.ricercaTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ricercaTab.Size = new System.Drawing.Size(1373, 692);
+            this.ricercaTab.Size = new System.Drawing.Size(1345, 725);
             this.ricercaTab.TabIndex = 1;
             this.ricercaTab.Text = "Ricerca";
             // 
@@ -943,7 +948,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.strumentiToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1353, 24);
@@ -953,53 +959,75 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importaInventarioxlsmToolStripMenuItem,
-            this.importaModificheInventarioToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.aggiungiLibroToolStripMenuItem,
-            this.toolStripSeparator1,
             this.chiudiToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // importaInventarioxlsmToolStripMenuItem
-            // 
-            this.importaInventarioxlsmToolStripMenuItem.Name = "importaInventarioxlsmToolStripMenuItem";
-            this.importaInventarioxlsmToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.importaInventarioxlsmToolStripMenuItem.Text = "Importa inventario (.xlsm)";
-            this.importaInventarioxlsmToolStripMenuItem.Click += new System.EventHandler(this.importaInventarioxlsmToolStripMenuItem_Click);
-            // 
-            // importaModificheInventarioToolStripMenuItem
-            // 
-            this.importaModificheInventarioToolStripMenuItem.Name = "importaModificheInventarioToolStripMenuItem";
-            this.importaModificheInventarioToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.importaModificheInventarioToolStripMenuItem.Text = "Importa Modifiche Inventario";
-            this.importaModificheInventarioToolStripMenuItem.Click += new System.EventHandler(this.importaModificheInventarioToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(226, 6);
-            // 
-            // aggiungiLibroToolStripMenuItem
-            // 
-            this.aggiungiLibroToolStripMenuItem.Name = "aggiungiLibroToolStripMenuItem";
-            this.aggiungiLibroToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.aggiungiLibroToolStripMenuItem.Text = "Aggiungi Libro";
-            this.aggiungiLibroToolStripMenuItem.Click += new System.EventHandler(this.aggiungiLibroToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(226, 6);
-            // 
             // chiudiToolStripMenuItem
             // 
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
-            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
             this.chiudiToolStripMenuItem.Click += new System.EventHandler(this.chiudiToolStripMenuItem_Click);
+            // 
+            // strumentiToolStripMenuItem
+            // 
+            this.strumentiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportInventarioToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.importaInventarioxlsxToolStripMenuItem,
+            this.importaModificheDatabaseToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.aggiungiLibroToolStripMenuItem1,
+            this.aggiungiLibriDaCSVToolStripMenuItem});
+            this.strumentiToolStripMenuItem.Name = "strumentiToolStripMenuItem";
+            this.strumentiToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.strumentiToolStripMenuItem.Text = "Strumenti";
+            // 
+            // exportInventarioToolStripMenuItem
+            // 
+            this.exportInventarioToolStripMenuItem.Name = "exportInventarioToolStripMenuItem";
+            this.exportInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.exportInventarioToolStripMenuItem.Text = "Export inventario";
+            this.exportInventarioToolStripMenuItem.Click += new System.EventHandler(this.ExportInventarioToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(221, 6);
+            // 
+            // importaInventarioxlsxToolStripMenuItem
+            // 
+            this.importaInventarioxlsxToolStripMenuItem.Name = "importaInventarioxlsxToolStripMenuItem";
+            this.importaInventarioxlsxToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.importaInventarioxlsxToolStripMenuItem.Text = "Importa Inventario (.xlsx)";
+            this.importaInventarioxlsxToolStripMenuItem.Click += new System.EventHandler(this.ImportaInventarioxlsxToolStripMenuItem_Click);
+            // 
+            // importaModificheDatabaseToolStripMenuItem
+            // 
+            this.importaModificheDatabaseToolStripMenuItem.Name = "importaModificheDatabaseToolStripMenuItem";
+            this.importaModificheDatabaseToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.importaModificheDatabaseToolStripMenuItem.Text = "Importa Modifiche Database";
+            this.importaModificheDatabaseToolStripMenuItem.Click += new System.EventHandler(this.ImportaModificheDatabaseToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            // 
+            // aggiungiLibroToolStripMenuItem1
+            // 
+            this.aggiungiLibroToolStripMenuItem1.Name = "aggiungiLibroToolStripMenuItem1";
+            this.aggiungiLibroToolStripMenuItem1.Size = new System.Drawing.Size(224, 22);
+            this.aggiungiLibroToolStripMenuItem1.Text = "Aggiungi Libro";
+            this.aggiungiLibroToolStripMenuItem1.Click += new System.EventHandler(this.AggiungiLibroToolStripMenuItem1_Click);
+            // 
+            // aggiungiLibriDaCSVToolStripMenuItem
+            // 
+            this.aggiungiLibriDaCSVToolStripMenuItem.Name = "aggiungiLibriDaCSVToolStripMenuItem";
+            this.aggiungiLibriDaCSVToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.aggiungiLibriDaCSVToolStripMenuItem.Text = "Aggiungi libri da Excel";
             // 
             // backgroundWorker1
             // 
@@ -1009,6 +1037,14 @@
             // backgroundWorker2
             // 
             this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            // 
+            // backgroundWorker3
+            // 
+            this.backgroundWorker3.WorkerReportsProgress = true;
+            // 
+            // backgroundWorker4
+            // 
+            this.backgroundWorker4.WorkerReportsProgress = true;
             // 
             // Vendita
             // 
@@ -1068,8 +1104,6 @@
         private System.Windows.Forms.DataGridView tabellaVendita;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importaInventarioxlsmToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem chiudiToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn nome;
         private System.Windows.Forms.DataGridViewTextBoxColumn autore;
@@ -1120,12 +1154,19 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ToolStripMenuItem importaModificheInventarioToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.Label labelImporto;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem;
         private System.Windows.Forms.Button btnRimuoviRiga;
+        private System.Windows.Forms.ToolStripMenuItem strumentiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportInventarioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importaInventarioxlsxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem importaModificheDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem aggiungiLibriDaCSVToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker3;
+        private System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }
 
