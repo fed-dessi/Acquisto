@@ -1337,10 +1337,27 @@ namespace VenditaInventario
             }
         }
 
+        private void AggiungiLibriDaCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog addFile = new OpenFileDialog();
+
+            addFile.Filter = "File Excel (*.xlsx)|*.xlsx|File Excel (*.xls)|*.xls;";
+            addFile.FilterIndex = 0;
+            addFile.RestoreDirectory = true;
+
+            if (addFile.ShowDialog() == DialogResult.OK)
+            {
+                labelImporto.Visible = true;
+                progressBar1.Visible = true;
+
+                backgroundWorker4.RunWorkerAsync(addFile.FileName);
+            }
+        }
+        
         //Inventario export
         private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
         {
-
+            log.Info("Inizio Export");
             try
             {
                 //Get the desired export name and path
@@ -1357,7 +1374,7 @@ namespace VenditaInventario
                     package.Save();
                 }
 
-
+                log.Info("Fine Export. File salvato: " + selectedPath);
             }
             catch (Exception ex)
             {
@@ -1383,12 +1400,61 @@ namespace VenditaInventario
         //Add new books from Excel file
         private void backgroundWorker4_DoWork(object sender, DoWorkEventArgs e)
         {
-
+            log.Info("Inizio Aggiunta libri al database.");
             try
             {
-                
 
+                //Get the desired import file name and path
+                string selectedPath = (string)e.Argument;
 
+                //We create a new excelPackage with using so we can dispose of it when we're done working with it
+                using (var package = new ExcelPackage(new FileInfo(@selectedPath)))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+
+                    int rowCount = worksheet.Dimension.Rows;
+                    //We need to get the last true row, so we need to check if the cells may have been formatted wrongly and have empty rows
+                    while (rowCount > 1)
+                    {
+                        if(!string.IsNullOrEmpty((string)worksheet.Cells[rowCount, 1].Value))
+                        {
+                            break;
+                        }
+                        rowCount--;
+                    }
+
+                    sqlite_conn.Open();
+
+                    SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
+
+                    for(int i = 1; i < rowCount+1; i++)
+                    {
+                        using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
+                        {
+                            sqlite_cmd.CommandText = "INSERT INTO inventario (nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice)";
+
+                            sqlite_cmd.Parameters.AddWithValue("@Nome", worksheet.Cells[i, 1].Value);//nome
+                            sqlite_cmd.Parameters.AddWithValue("@Autore", worksheet.Cells[i, 2].Value);//autore
+                            sqlite_cmd.Parameters.AddWithValue("@Casa", worksheet.Cells[i, 3].Value);//casa
+                            sqlite_cmd.Parameters.AddWithValue("@Codice", worksheet.Cells[i, 4].Value);//codice
+                            sqlite_cmd.Parameters.AddWithValue("@Prezzo", worksheet.Cells[i, 5].Value);//prezzo
+                            sqlite_cmd.Parameters.AddWithValue("@Anno", worksheet.Cells[i, 6].Value);//anno
+                            sqlite_cmd.Parameters.AddWithValue("@Indice", worksheet.Cells[i, 7].Value);//indice
+
+                            sqlite_cmd.ExecuteNonQuery();
+                        }
+
+                        backgroundWorker4.ReportProgress((int)Math.Round((double)(i * 100) / rowCount));
+
+                    }
+
+                    transaction.Commit();
+                    transaction.Dispose();
+
+                    sqlite_conn.Close();
+                }
+                log.Info("Fine Aggiunta libri al database.");
+                populateTable();
             }
             catch (Exception ex)
             {
@@ -1399,7 +1465,9 @@ namespace VenditaInventario
 
         private void backgroundWorker4_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            labelProgressbar.Text = "Aggiunta..: " + Convert.ToString(e.ProgressPercentage) + "%";
+            //La percentuale e' una proprieta di e
+            progressBar1.Value = e.ProgressPercentage;
         }
 
         private void backgroundWorker4_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1408,7 +1476,7 @@ namespace VenditaInventario
             progressBar1.Visible = false;
             labelImporto.Visible = false;
 
-            MessageBox.Show("Inventario Esportato!", "Export inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Nuovi libri aggiunti al database!", "Import inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

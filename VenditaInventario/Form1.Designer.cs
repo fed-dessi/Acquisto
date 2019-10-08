@@ -672,7 +672,7 @@
             this.tabellaRicerca.Name = "tabellaRicerca";
             this.tabellaRicerca.RowHeadersVisible = false;
             this.tabellaRicerca.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tabellaRicerca.Size = new System.Drawing.Size(1377, 586);
+            this.tabellaRicerca.Size = new System.Drawing.Size(1345, 615);
             this.tabellaRicerca.TabIndex = 1;
             this.tabellaRicerca.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tabellaRicerca_CellDoubleClick);
             this.tabellaRicerca.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.tabellaRicerca_PreviewKeyDown);
@@ -967,7 +967,7 @@
             // chiudiToolStripMenuItem
             // 
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
-            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
             this.chiudiToolStripMenuItem.Click += new System.EventHandler(this.chiudiToolStripMenuItem_Click);
             // 
@@ -1027,7 +1027,8 @@
             // 
             this.aggiungiLibriDaCSVToolStripMenuItem.Name = "aggiungiLibriDaCSVToolStripMenuItem";
             this.aggiungiLibriDaCSVToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.aggiungiLibriDaCSVToolStripMenuItem.Text = "Aggiungi libri da Excel";
+            this.aggiungiLibriDaCSVToolStripMenuItem.Text = "Aggiungi libri da file Excel";
+            this.aggiungiLibriDaCSVToolStripMenuItem.Click += new System.EventHandler(this.AggiungiLibriDaCSVToolStripMenuItem_Click);
             // 
             // backgroundWorker1
             // 
