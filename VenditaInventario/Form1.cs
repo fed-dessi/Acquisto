@@ -1,5 +1,4 @@
-﻿using ExcelDataReader;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
@@ -43,12 +42,11 @@ namespace VenditaInventario
 
             InitializeComponent();
 
-            // This event will be raised on the worker thread when the worker starts
+            //Importa inventario da file excel
             backgroundWorker1.DoWork += backgroundWorker1_DoWork;
-            // This event will be raised when we call ReportProgress
             backgroundWorker1.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
 
-
+            //Importa modifiche da file database
             backgroundWorker2.DoWork += backgroundWorker2_DoWork;
             backgroundWorker2.RunWorkerCompleted += backgroundWorker2_WorkCompleted;
             backgroundWorker2.ProgressChanged += backgroundWorker2_ProgressChanged;
@@ -57,19 +55,12 @@ namespace VenditaInventario
             backgroundWorker3.DoWork += backgroundWorker3_DoWork;
             backgroundWorker3.RunWorkerCompleted += backgroundWorker3_WorkCompleted;
             backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
-
-            //Aggiungi libri da Excel
-            backgroundWorker4.DoWork += backgroundWorker4_DoWork;
-            backgroundWorker4.RunWorkerCompleted += backgroundWorker4_WorkCompleted;
-            backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
         }
         
         private void Vendita_Load(object sender, EventArgs e)
         {
             
-            String directory = Path.GetDirectoryName(Application.ExecutablePath);
-
-            directory += "\\inventario.sqlite";
+            String directory = Path.GetDirectoryName(Application.ExecutablePath) + "\\inventario.sqlite";
 
             log.Info("Program StartUp");
 
@@ -81,7 +72,7 @@ namespace VenditaInventario
 
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
-                    sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50), prezzo varchar(50), anno varchar(50), indice varchar(4));";
+                    sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50) unique not null, prezzo varchar(50), anno varchar(50), indice varchar(4));";
                     sqlite_cmd.ExecuteNonQuery();
 
                     sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, libriID integer, venditaID integer, FOREIGN KEY (libriID) REFERENCES inventario(id), FOREIGN KEY (venditaID) REFERENCES vendita(id));";
@@ -102,10 +93,28 @@ namespace VenditaInventario
                     log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
                 }
             }
+            //Inizio il controllo per una nuova versione e il task di update
             update();
+
+            //Controllo se devo effettuare modifiche al database
+            String databaseUpdateFile = Path.GetDirectoryName(Application.ExecutablePath) + "\\databaseUpdate.txt";
+
+            if(File.Exists(databaseUpdateFile))
+            {
+                log.Info("Trovato un aggiornamento per il database");
+                databaseUpdate();
+                try
+                {
+                    File.Delete(databaseUpdateFile);
+                }
+                catch(Exception ex)
+                {
+                    log.Error("Errore nella cancellazione del file. " + ex.Message, ex);
+                }
+                
+            }
             uploadStatistiche();
             populateTable();
-            
         }
 
         private async void update()
@@ -149,6 +158,7 @@ namespace VenditaInventario
                             frm.ShowDialog();
                         }
                     }
+
                     log.Info("Nessuna nuova versione disponibile");
                 }
                 catch (Exception ex)
@@ -164,6 +174,54 @@ namespace VenditaInventario
                 await Task.Delay(3600000);
                 log.Info("Fine attesa, controllo versione..");
                 update();
+            }
+        }
+
+        private void databaseUpdate()
+        {
+            try
+            {
+                log.Info("Inizio modifica database");
+                sqlite_conn.Open();
+
+                SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
+
+                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+
+                sqlite_cmd.CommandText = "PRAGMA foreign_keys = 0";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "CREATE TABLE inventario_temp AS SELECT * FROM inventario";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "DROP TABLE inventario;";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "CREATE TABLE inventario (id INTEGER PRIMARY KEY, nome VARCHAR(300), autore VARCHAR(50), casa VARCHAR(50), codice VARCHAR(50) UNIQUE NOT NULL, prezzo VARCHAR(50), anno VARCHAR(50), indice VARCHAR(4))";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "INSERT OR IGNORE INTO inventario (id, nome, autore, casa, codice, prezzo, anno, indice) SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario_temp";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "DROP TABLE inventario_temp";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "PRAGMA foreign_keys = 1";
+                sqlite_cmd.ExecuteNonQuery();
+
+
+
+                transaction.Commit();
+                transaction.Dispose();
+
+                sqlite_conn.Close();
+
+                log.Info("Fine modifica database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + " - " + ex.StackTrace);
+                log.Error("Errore nella modifica del database. " + ex.Message, ex);
             }
         }
 
@@ -247,7 +305,7 @@ namespace VenditaInventario
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -707,84 +765,56 @@ namespace VenditaInventario
 
             try
             {
-                DataTable excelTable = new DataTable();
+                //Otteniamo il nome del file da utilizzare per l'inserimento
+                string selectedPath = (string)e.Argument;
 
-                string filePath = (string)e.Argument;
-
-                using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                //Creaiamo un nuovo excelPackage con using cosi che venga rimosso automaticamente
+                using (var package = new ExcelPackage(new FileInfo(@selectedPath)))
                 {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
 
-                    // Auto-detect format, supports:
-                    //  - Binary Excel files (2.0-2003 format; *.xls)
-                    //  - OpenXml Excel files (2007 format; *.xlsx)
-                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    int rowCount = worksheet.Dimension.Rows;
+                    //Bisogna ottenere l'ultima riga "vera", quella contenente dei valori, e non le righe che hanno una formattazione ma sono vuote
+                    while (rowCount > 1)
                     {
-                        DataSet result = reader.AsDataSet();
-                        excelTable = result.Tables[0];
-                    }
-
-                }
-
-                string nome = null, autore = null, casa = null, codice = null, prezzo = null, anno = null, indice = null;
-
-                sqlite_conn.Open();
-
-                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
-
-                sqlite_cmd.CommandText = "DELETE FROM inventario";
-
-                sqlite_cmd.ExecuteNonQuery();
-
-                sqlite_cmd.CommandText = "INSERT INTO inventario (nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice)";
-
-                //Abbiamo ora una dataTable (excelTable) che possiamo utilizzare per carpire i valori come se fosse una matrice.
-                //Usiamo due for Loops per scorrere prima le colonne (for j) e poi le righe (for i)
-                for (int i = 0; i < excelTable.Rows.Count; i++)
-                {
-                    for (int j = 0; j < excelTable.Columns.Count; j++)
-                    {
-                        switch (j)
+                        if (!string.IsNullOrEmpty((string)worksheet.Cells[rowCount, 1].Value))
                         {
-                            case 0:
-                                nome = excelTable.Rows[i][j].ToString();
-                                break;
-                            case 1:
-                                autore = excelTable.Rows[i][j].ToString();
-                                break;
-                            case 2:
-                                casa = excelTable.Rows[i][j].ToString();
-                                break;
-                            case 3:
-                                codice = excelTable.Rows[i][j].ToString();
-                                break;
-                            case 4:
-                                prezzo = excelTable.Rows[i][j].ToString();
-                                break;
-                            case 5:
-                                anno = excelTable.Rows[i][j].ToString();
-                                break;
-                            case 6:
-                                indice = excelTable.Rows[i][j].ToString();
-                                break;
+                            break;
                         }
+                        rowCount--;
                     }
-                    sqlite_cmd.Parameters.AddWithValue("@Nome", nome);
-                    sqlite_cmd.Parameters.AddWithValue("@Autore", autore);
-                    sqlite_cmd.Parameters.AddWithValue("@Casa", casa);
-                    sqlite_cmd.Parameters.AddWithValue("@Codice", codice);
-                    sqlite_cmd.Parameters.AddWithValue("@Prezzo", prezzo);
-                    sqlite_cmd.Parameters.AddWithValue("@Anno", anno);
-                    sqlite_cmd.Parameters.AddWithValue("@Indice", indice);
 
-                    sqlite_cmd.ExecuteNonQuery();
+                    sqlite_conn.Open();
 
-                    GC.Collect();
+                    SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
 
-                    backgroundWorker1.ReportProgress((int)Math.Round((double)(i * 100) / excelTable.Rows.Count));
+                    for (int i = 1; i < rowCount + 1; i++)
+                    {
+                        using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
+                        {
+                            sqlite_cmd.CommandText = "INSERT INTO inventario(nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice) ON CONFLICT(codice) DO UPDATE SET nome = excluded.nome, autore = excluded.autore, casa = excluded.casa, prezzo = excluded.prezzo, anno = excluded.anno, indice = excluded.indice";
+
+                            sqlite_cmd.Parameters.AddWithValue("@Nome", worksheet.Cells[i, 1].Value);//nome
+                            sqlite_cmd.Parameters.AddWithValue("@Autore", worksheet.Cells[i, 2].Value);//autore
+                            sqlite_cmd.Parameters.AddWithValue("@Casa", worksheet.Cells[i, 3].Value);//casa
+                            sqlite_cmd.Parameters.AddWithValue("@Codice", worksheet.Cells[i, 4].Value);//codice
+                            sqlite_cmd.Parameters.AddWithValue("@Prezzo", worksheet.Cells[i, 5].Value);//prezzo
+                            sqlite_cmd.Parameters.AddWithValue("@Anno", worksheet.Cells[i, 6].Value);//anno
+                            sqlite_cmd.Parameters.AddWithValue("@Indice", worksheet.Cells[i, 7].Value);//indice
+
+                            sqlite_cmd.ExecuteNonQuery();
+                        }
+
+                        backgroundWorker1.ReportProgress((int)Math.Round((double)(i * 100) / rowCount));
+
+                    }
+
+                    transaction.Commit();
+                    transaction.Dispose();
+
+                    sqlite_conn.Close();
                 }
-
-                sqlite_conn.Close();
-
+                log.Info("Fine Aggiunta libri al database.");
                 populateTable();
 
             } catch(Exception ex)
@@ -978,6 +1008,7 @@ namespace VenditaInventario
             }
         }
 
+        //Importa modifiche database
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
 
@@ -1238,7 +1269,8 @@ namespace VenditaInventario
             populateTable();
         }
 
-        private void button2_Click(object sender, EventArgs e)//statistiche
+        //statistiche
+        private void button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1337,22 +1369,6 @@ namespace VenditaInventario
             }
         }
 
-        private void AggiungiLibriDaCSVToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog addFile = new OpenFileDialog();
-
-            addFile.Filter = "File Excel (*.xlsx)|*.xlsx|File Excel (*.xls)|*.xls;";
-            addFile.FilterIndex = 0;
-            addFile.RestoreDirectory = true;
-
-            if (addFile.ShowDialog() == DialogResult.OK)
-            {
-                labelImporto.Visible = true;
-                progressBar1.Visible = true;
-
-                backgroundWorker4.RunWorkerAsync(addFile.FileName);
-            }
-        }
         
         //Inventario export
         private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
@@ -1360,17 +1376,17 @@ namespace VenditaInventario
             log.Info("Inizio Export");
             try
             {
-                //Get the desired export name and path
+                //Selezioniamo il path e nome da usare per il file di export
                 string selectedPath = (string)e.Argument;
 
-                //We create a new excelPackage with using so we can dispose of it when we're done working with it
+                //Creaiamo un nuovo excelPackage con using cosi che venga rimosso automaticamente
                 using (var package = new ExcelPackage(new FileInfo(@selectedPath)))
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Inventario");
-                    //We grab all the data from the dtRicerca DataTable and we load it in the worksheet
+                    //Prendiamo tutti i dati dalla dataTable dtRicerca e li carichiamo dentro la worksheet
                     worksheet.Cells["A1"].LoadFromDataTable(dtRicerca, false, TableStyles.None);
                     worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-                    //Finally since we've already defined a filename earlier we just save the ExcelPackage
+                    //Poiche' abbiamo gia' definito un nome per il file possiamo semplicemente chiamare save 
                     package.Save();
                 }
 
@@ -1395,88 +1411,6 @@ namespace VenditaInventario
             labelImporto.Visible = false;
 
             MessageBox.Show("Inventario Esportato!", "Export inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        //Add new books from Excel file
-        private void backgroundWorker4_DoWork(object sender, DoWorkEventArgs e)
-        {
-            log.Info("Inizio Aggiunta libri al database.");
-            try
-            {
-
-                //Get the desired import file name and path
-                string selectedPath = (string)e.Argument;
-
-                //We create a new excelPackage with using so we can dispose of it when we're done working with it
-                using (var package = new ExcelPackage(new FileInfo(@selectedPath)))
-                {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-
-                    int rowCount = worksheet.Dimension.Rows;
-                    //We need to get the last true row, so we need to check if the cells may have been formatted wrongly and have empty rows
-                    while (rowCount > 1)
-                    {
-                        if(!string.IsNullOrEmpty((string)worksheet.Cells[rowCount, 1].Value))
-                        {
-                            break;
-                        }
-                        rowCount--;
-                    }
-
-                    sqlite_conn.Open();
-
-                    SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
-
-                    for(int i = 1; i < rowCount+1; i++)
-                    {
-                        using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
-                        {
-                            sqlite_cmd.CommandText = "INSERT INTO inventario (nome, autore, casa, codice, prezzo, anno, indice) Values (@Nome, @Autore, @Casa, @Codice, @Prezzo, @Anno, @Indice)";
-
-                            sqlite_cmd.Parameters.AddWithValue("@Nome", worksheet.Cells[i, 1].Value);//nome
-                            sqlite_cmd.Parameters.AddWithValue("@Autore", worksheet.Cells[i, 2].Value);//autore
-                            sqlite_cmd.Parameters.AddWithValue("@Casa", worksheet.Cells[i, 3].Value);//casa
-                            sqlite_cmd.Parameters.AddWithValue("@Codice", worksheet.Cells[i, 4].Value);//codice
-                            sqlite_cmd.Parameters.AddWithValue("@Prezzo", worksheet.Cells[i, 5].Value);//prezzo
-                            sqlite_cmd.Parameters.AddWithValue("@Anno", worksheet.Cells[i, 6].Value);//anno
-                            sqlite_cmd.Parameters.AddWithValue("@Indice", worksheet.Cells[i, 7].Value);//indice
-
-                            sqlite_cmd.ExecuteNonQuery();
-                        }
-
-                        backgroundWorker4.ReportProgress((int)Math.Round((double)(i * 100) / rowCount));
-
-                    }
-
-                    transaction.Commit();
-                    transaction.Dispose();
-
-                    sqlite_conn.Close();
-                }
-                log.Info("Fine Aggiunta libri al database.");
-                populateTable();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message + " - " + ex.StackTrace);
-                log.Error("Error in backgroundWorker4_DoWork - " + ex);
-            }
-        }
-
-        private void backgroundWorker4_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            labelProgressbar.Text = "Aggiunta..: " + Convert.ToString(e.ProgressPercentage) + "%";
-            //La percentuale e' una proprieta di e
-            progressBar1.Value = e.ProgressPercentage;
-        }
-
-        private void backgroundWorker4_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            progressBar1.Style = ProgressBarStyle.Continuous;
-            progressBar1.Visible = false;
-            labelImporto.Visible = false;
-
-            MessageBox.Show("Nuovi libri aggiunti al database!", "Import inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

@@ -111,11 +111,9 @@
             this.importaModificheDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.aggiungiLibroToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.aggiungiLibriDaCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -967,7 +965,7 @@
             // chiudiToolStripMenuItem
             // 
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
-            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
             this.chiudiToolStripMenuItem.Click += new System.EventHandler(this.chiudiToolStripMenuItem_Click);
             // 
@@ -979,8 +977,7 @@
             this.importaInventarioxlsxToolStripMenuItem,
             this.importaModificheDatabaseToolStripMenuItem,
             this.toolStripSeparator4,
-            this.aggiungiLibroToolStripMenuItem1,
-            this.aggiungiLibriDaCSVToolStripMenuItem});
+            this.aggiungiLibroToolStripMenuItem1});
             this.strumentiToolStripMenuItem.Name = "strumentiToolStripMenuItem";
             this.strumentiToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.strumentiToolStripMenuItem.Text = "Strumenti";
@@ -1023,13 +1020,6 @@
             this.aggiungiLibroToolStripMenuItem1.Text = "Aggiungi Libro";
             this.aggiungiLibroToolStripMenuItem1.Click += new System.EventHandler(this.AggiungiLibroToolStripMenuItem1_Click);
             // 
-            // aggiungiLibriDaCSVToolStripMenuItem
-            // 
-            this.aggiungiLibriDaCSVToolStripMenuItem.Name = "aggiungiLibriDaCSVToolStripMenuItem";
-            this.aggiungiLibriDaCSVToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.aggiungiLibriDaCSVToolStripMenuItem.Text = "Aggiungi libri da file Excel";
-            this.aggiungiLibriDaCSVToolStripMenuItem.Click += new System.EventHandler(this.AggiungiLibriDaCSVToolStripMenuItem_Click);
-            // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
@@ -1042,10 +1032,6 @@
             // backgroundWorker3
             // 
             this.backgroundWorker3.WorkerReportsProgress = true;
-            // 
-            // backgroundWorker4
-            // 
-            this.backgroundWorker4.WorkerReportsProgress = true;
             // 
             // Vendita
             // 
@@ -1165,9 +1151,7 @@
         private System.Windows.Forms.ToolStripMenuItem importaModificheDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem aggiungiLibriDaCSVToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
-        private System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }
 

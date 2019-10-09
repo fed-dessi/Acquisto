@@ -18,7 +18,7 @@ namespace VenditaInventario
         {
             try
             {
-                if (!aggiungiIsbnTextbox.Text.Equals("") && aggiungiIsbnTextbox != null && !aggiungiPrezzoTextbox.Text.Equals("") && aggiungiPrezzoTextbox != null && !aggiungiTitoloTextbox.Text.Equals("") && aggiungiTitoloTextbox.Text != null)
+                if (!string.IsNullOrWhiteSpace(aggiungiIsbnTextbox.Text) && !string.IsNullOrEmpty(aggiungiIsbnTextbox.Text) && !string.IsNullOrWhiteSpace(aggiungiPrezzoTextbox.Text) && !string.IsNullOrEmpty(aggiungiPrezzoTextbox.Text) && !string.IsNullOrWhiteSpace(aggiungiTitoloTextbox.Text) && !string.IsNullOrEmpty(aggiungiTitoloTextbox.Text))
                 {
                     using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;"))
                     {
