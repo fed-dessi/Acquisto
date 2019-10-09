@@ -377,7 +377,7 @@ namespace VenditaInventario
                 }
 
                 frm.ShowDialog();
-
+                populateTable();
             }
 
             catch (SQLiteException ex)
@@ -398,15 +398,24 @@ namespace VenditaInventario
                 
                 sqlite_adapter.Fill(dtRicerca);
 
-                tabellaRicerca.DataSource = dtRicerca;
-                tabellaRicerca.ClearSelection();
-
+                //Poiche' il metodo viene chiamato da thread diversi da quello di UI e devo modificare degli elementi UI, bisogna invocare il delegate. Controllo con if se serve invocare il metodo da un thread diverso, 
+                //se si chiedo al thread UI di lanciare il metodo, altrimenti gia' mi trovo dentro il thread UI ed effettuo le operazioni che servono
+                if (tabellaRicerca.InvokeRequired)
+                {
+                    tabellaRicerca.Invoke(new Action(() => populateTable()));
+                }
+                else
+                {
+                    tabellaRicerca.DataSource = null;
+                    tabellaRicerca.DataSource = dtRicerca;
+                }
+                
                 GC.Collect();
 
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.StackTrace);
+                Debug.WriteLine(ex.Message + " - " + ex.StackTrace);
                 log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
         }
@@ -1130,6 +1139,7 @@ namespace VenditaInventario
                         
                         sqlite_conn.Close();
                     }
+                    populateTable();
                     
                 }
 
@@ -1207,6 +1217,7 @@ namespace VenditaInventario
                 Aggiungi frm = new Aggiungi();
 
                 frm.ShowDialog();
+                populateTable();
 
             }
 

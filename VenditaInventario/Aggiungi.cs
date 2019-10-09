@@ -46,7 +46,7 @@ namespace VenditaInventario
                     }
 
                     MessageBox.Show("Libro Aggiunto!", "Aggiunto", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    
                     Close();
                 }
                 else
