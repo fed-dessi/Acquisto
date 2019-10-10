@@ -102,16 +102,7 @@ namespace VenditaInventario
             if(File.Exists(databaseUpdateFile))
             {
                 log.Info("Trovato un aggiornamento per il database");
-                databaseUpdate();
-                try
-                {
-                    File.Delete(databaseUpdateFile);
-                }
-                catch(Exception ex)
-                {
-                    log.Error("Errore nella cancellazione del file. " + ex.Message, ex);
-                }
-                
+                databaseUpdate(databaseUpdateFile);
             }
             uploadStatistiche();
             populateTable();
@@ -177,7 +168,7 @@ namespace VenditaInventario
             }
         }
 
-        private void databaseUpdate()
+        private void databaseUpdate(string path)
         {
             try
             {
@@ -197,10 +188,25 @@ namespace VenditaInventario
                 sqlite_cmd.CommandText = "DROP TABLE inventario;";
                 sqlite_cmd.ExecuteNonQuery();
 
-                sqlite_cmd.CommandText = "CREATE TABLE inventario (id INTEGER PRIMARY KEY, nome VARCHAR(300), autore VARCHAR(50), casa VARCHAR(50), codice VARCHAR(50) UNIQUE NOT NULL, prezzo VARCHAR(50), anno VARCHAR(50), indice VARCHAR(4))";
+                sqlite_cmd.CommandText = "CREATE TABLE inventario (id INTEGER PRIMARY KEY, nome VARCHAR(300), autore VARCHAR(50), casa VARCHAR(50), codice VARCHAR(50) UNIQUE ON CONFLICT IGNORE, prezzo VARCHAR(50), anno VARCHAR(50), indice VARCHAR(4))";
                 sqlite_cmd.ExecuteNonQuery();
 
-                sqlite_cmd.CommandText = "INSERT OR IGNORE INTO inventario (id, nome, autore, casa, codice, prezzo, anno, indice) SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario_temp";
+                sqlite_cmd.CommandText = "INSERT INTO inventario (id, nome, autore, casa, codice, prezzo, anno, indice) SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario_temp";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "DROP TABLE inventario_temp";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "CREATE TABLE inventario_temp AS SELECT * FROM inventario";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "DROP TABLE inventario;";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "CREATE TABLE inventario (id INTEGER PRIMARY KEY, nome VARCHAR(300), autore VARCHAR(50), casa VARCHAR(50), codice VARCHAR(50) UNIQUE, prezzo VARCHAR(50), anno VARCHAR(50), indice VARCHAR(4))";
+                sqlite_cmd.ExecuteNonQuery();
+
+                sqlite_cmd.CommandText = "INSERT INTO inventario (id, nome, autore, casa, codice, prezzo, anno, indice) SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario_temp";
                 sqlite_cmd.ExecuteNonQuery();
 
                 sqlite_cmd.CommandText = "DROP TABLE inventario_temp";
@@ -217,6 +223,14 @@ namespace VenditaInventario
                 sqlite_conn.Close();
 
                 log.Info("Fine modifica database");
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Errore nella cancellazione del file. " + ex.Message, ex);
+                }
             }
             catch (Exception ex)
             {
