@@ -72,10 +72,10 @@ namespace VenditaInventario
 
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
-                    sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50) unique not null, prezzo varchar(50), anno varchar(50), indice varchar(4));";
+                    sqlite_cmd.CommandText = "CREATE TABLE inventario (id integer primary key autoincrement, nome varchar(300), autore varchar(50), casa varchar(50), codice varchar(50) unique, prezzo varchar(50), anno varchar(50), indice varchar(4));";
                     sqlite_cmd.ExecuteNonQuery();
 
-                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, libriID integer, venditaID integer, FOREIGN KEY (libriID) REFERENCES inventario(id), FOREIGN KEY (venditaID) REFERENCES vendita(id));";
+                    sqlite_cmd.CommandText = "CREATE TABLE statistiche (id integer primary key autoincrement, libriID integer, venditaID integer, FOREIGN KEY (libriID) REFERENCES inventario(id) ON UPDATE CASCADE, FOREIGN KEY (venditaID) REFERENCES vendita(id) ON UPDATE CASCADE);";
                     sqlite_cmd.ExecuteNonQuery();
                     sqlite_cmd.CommandText = "CREATE TABLE vendita (id integer primary key autoincrement, data varchar(50), metodo varchar(4), costo decimal(50));";
                     sqlite_cmd.ExecuteNonQuery();
@@ -175,17 +175,17 @@ namespace VenditaInventario
                 log.Info("Inizio modifica database");
                 sqlite_conn.Open();
 
-                SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
-
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
                 sqlite_cmd.CommandText = "PRAGMA foreign_keys = 0";
                 sqlite_cmd.ExecuteNonQuery();
 
+                SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
+
                 sqlite_cmd.CommandText = "CREATE TABLE inventario_temp AS SELECT * FROM inventario";
                 sqlite_cmd.ExecuteNonQuery();
 
-                sqlite_cmd.CommandText = "DROP TABLE inventario;";
+                sqlite_cmd.CommandText = "DROP TABLE inventario";
                 sqlite_cmd.ExecuteNonQuery();
 
                 sqlite_cmd.CommandText = "CREATE TABLE inventario (id INTEGER PRIMARY KEY, nome VARCHAR(300), autore VARCHAR(50), casa VARCHAR(50), codice VARCHAR(50) UNIQUE ON CONFLICT IGNORE, prezzo VARCHAR(50), anno VARCHAR(50), indice VARCHAR(4))";
@@ -200,7 +200,7 @@ namespace VenditaInventario
                 sqlite_cmd.CommandText = "CREATE TABLE inventario_temp AS SELECT * FROM inventario";
                 sqlite_cmd.ExecuteNonQuery();
 
-                sqlite_cmd.CommandText = "DROP TABLE inventario;";
+                sqlite_cmd.CommandText = "DROP TABLE inventario";
                 sqlite_cmd.ExecuteNonQuery();
 
                 sqlite_cmd.CommandText = "CREATE TABLE inventario (id INTEGER PRIMARY KEY, nome VARCHAR(300), autore VARCHAR(50), casa VARCHAR(50), codice VARCHAR(50) UNIQUE, prezzo VARCHAR(50), anno VARCHAR(50), indice VARCHAR(4))";
@@ -212,13 +212,14 @@ namespace VenditaInventario
                 sqlite_cmd.CommandText = "DROP TABLE inventario_temp";
                 sqlite_cmd.ExecuteNonQuery();
 
+                transaction.Commit();
+                transaction.Dispose();
+
+
                 sqlite_cmd.CommandText = "PRAGMA foreign_keys = 1";
                 sqlite_cmd.ExecuteNonQuery();
 
-
-
-                transaction.Commit();
-                transaction.Dispose();
+                sqlite_cmd.Dispose();
 
                 sqlite_conn.Close();
 
