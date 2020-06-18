@@ -114,6 +114,9 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            this.svuotaInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -976,8 +979,10 @@
             this.toolStripSeparator3,
             this.importaInventarioxlsxToolStripMenuItem,
             this.importaModificheDatabaseToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.aggiungiLibroToolStripMenuItem1,
             this.toolStripSeparator4,
-            this.aggiungiLibroToolStripMenuItem1});
+            this.svuotaInventarioToolStripMenuItem});
             this.strumentiToolStripMenuItem.Name = "strumentiToolStripMenuItem";
             this.strumentiToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.strumentiToolStripMenuItem.Text = "Strumenti";
@@ -1032,6 +1037,18 @@
             // backgroundWorker3
             // 
             this.backgroundWorker3.WorkerReportsProgress = true;
+            // 
+            // svuotaInventarioToolStripMenuItem
+            // 
+            this.svuotaInventarioToolStripMenuItem.Name = "svuotaInventarioToolStripMenuItem";
+            this.svuotaInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.svuotaInventarioToolStripMenuItem.Text = "Svuota Inventario";
+            this.svuotaInventarioToolStripMenuItem.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
             // 
             // Vendita
             // 
@@ -1152,6 +1169,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem1;
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem svuotaInventarioToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }
 

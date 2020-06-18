@@ -55,6 +55,11 @@ namespace VenditaInventario
             backgroundWorker3.DoWork += backgroundWorker3_DoWork;
             backgroundWorker3.RunWorkerCompleted += backgroundWorker3_WorkCompleted;
             backgroundWorker3.ProgressChanged += backgroundWorker3_ProgressChanged;
+
+            //Export Inventario
+            backgroundWorker4.DoWork += backgroundWorker4_DoWork;
+            backgroundWorker4.RunWorkerCompleted += backgroundWorker4_WorkCompleted;
+            backgroundWorker4.ProgressChanged += backgroundWorker4_ProgressChanged;
         }
         
         private void Vendita_Load(object sender, EventArgs e)
@@ -1290,6 +1295,18 @@ namespace VenditaInventario
             }
         }
 
+        private void svuotaInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Svuotare l'inventario corrente e le statistiche?\nQUESTA OPZIONE E' IRREVERSIBILE", "Svuota database", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
+            {
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                progressBar1.MarqueeAnimationSpeed = 30;
+                progressBar1.Visible = true;
+                backgroundWorker4.RunWorkerAsync();
+            }
+        }
+
         private void btnAggiornaRicerca_Click(object sender, EventArgs e)
         {
             populateTable();
@@ -1411,6 +1428,7 @@ namespace VenditaInventario
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Inventario");
                     //Prendiamo tutti i dati dalla dataTable dtRicerca e li carichiamo dentro la worksheet
                     worksheet.Cells["A1"].LoadFromDataTable(dtRicerca, false, TableStyles.None);
+                    worksheet.DeleteColumn(1);
                     worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                     //Poiche' abbiamo gia' definito un nome per il file possiamo semplicemente chiamare save 
                     package.Save();
@@ -1437,6 +1455,59 @@ namespace VenditaInventario
             labelImporto.Visible = false;
 
             MessageBox.Show("Inventario Esportato!", "Export inventario", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        //Scuota database
+        private void backgroundWorker4_DoWork(object sender, DoWorkEventArgs e)
+        {
+            log.Info("Inizio cancellazione database libri e statistiche");
+            try
+            {
+                sqlite_conn.Open();
+
+                SQLiteTransaction transaction = null;
+                transaction = sqlite_conn.BeginTransaction();
+
+                //Delete old data from the tables
+                SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand();
+                sqlite_cmd2.CommandText = "DELETE FROM statistiche;";
+                sqlite_cmd2.ExecuteNonQuery();
+
+                SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
+                sqlite_cmd.CommandText = "DELETE FROM inventario;";
+                sqlite_cmd.ExecuteNonQuery();
+
+                SQLiteCommand sqlite_cmd1 = sqlite_conn.CreateCommand();
+                sqlite_cmd1.CommandText = "DELETE FROM vendita;";
+                sqlite_cmd1.ExecuteNonQuery();
+
+                
+                transaction.Commit();
+                transaction.Dispose();
+
+                sqlite_conn.Close();
+
+                log.Info("Database svuotato");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + " - " + ex.StackTrace);
+                log.Error("Error in backgroundWorker4_DoWork - " + ex);
+            }
+        }
+
+        private void backgroundWorker4_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void backgroundWorker4_WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.Visible = false;
+            labelImporto.Visible = false;
+
+            MessageBox.Show("Inventario Svuotato!", "Svuota database", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
