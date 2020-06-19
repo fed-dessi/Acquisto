@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 using System.Xml;
 using OfficeOpenXml;
@@ -20,7 +21,7 @@ namespace VenditaInventario
 {
     public partial class Vendita : Form
     {
-        SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;");
+        SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;auto_vacuum=FULL;secure_delete=true;Version= 3;");
 
         DataTable dtRicerca = new DataTable();
 
@@ -826,10 +827,10 @@ namespace VenditaInventario
                             sqlite_cmd.Parameters.AddWithValue("@Nome", worksheet.Cells[i, 1].Value);//nome
                             sqlite_cmd.Parameters.AddWithValue("@Autore", worksheet.Cells[i, 2].Value);//autore
                             sqlite_cmd.Parameters.AddWithValue("@Casa", worksheet.Cells[i, 3].Value);//casa
-                            sqlite_cmd.Parameters.AddWithValue("@Codice", worksheet.Cells[i, 4].Value);//codice
+                            sqlite_cmd.Parameters.AddWithValue("@Codice", worksheet.Cells[i, 4].Text);//codice
                             sqlite_cmd.Parameters.AddWithValue("@Prezzo", worksheet.Cells[i, 5].Value);//prezzo
                             sqlite_cmd.Parameters.AddWithValue("@Anno", worksheet.Cells[i, 6].Value);//anno
-                            sqlite_cmd.Parameters.AddWithValue("@Indice", worksheet.Cells[i, 7].Value);//indice
+                            sqlite_cmd.Parameters.AddWithValue("@Indice", worksheet.Cells[i, 7].Text);//indice
 
                             sqlite_cmd.ExecuteNonQuery();
                         }
@@ -1396,7 +1397,7 @@ namespace VenditaInventario
         private void tabellaVendita_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             if(!tabellaVendita.Rows[e.RowIndex].Cells[6].Value.ToString().Equals("") && tabellaVendita.Rows[e.RowIndex].Cells[6].Value != null)
-            { 
+            {
                 switch (Convert.ToInt32(tabellaVendita.Rows[e.RowIndex].Cells[6].Value.ToString()))
                 {
                     case 1:
@@ -1480,10 +1481,15 @@ namespace VenditaInventario
                 SQLiteCommand sqlite_cmd1 = sqlite_conn.CreateCommand();
                 sqlite_cmd1.CommandText = "DELETE FROM vendita;";
                 sqlite_cmd1.ExecuteNonQuery();
-
                 
                 transaction.Commit();
                 transaction.Dispose();
+
+                using (SQLiteCommand command = sqlite_conn.CreateCommand())
+                {
+                    command.CommandText = "vacuum;";
+                    command.ExecuteNonQuery();
+                }
 
                 sqlite_conn.Close();
 
@@ -1506,7 +1512,8 @@ namespace VenditaInventario
             progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.Visible = false;
             labelImporto.Visible = false;
-
+            dtRicerca.Clear();
+            populateTable();
             MessageBox.Show("Inventario Svuotato!", "Svuota database", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
