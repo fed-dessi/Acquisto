@@ -489,7 +489,14 @@ namespace VenditaInventario
 
                         for (int i = 0; i < 7; i++)
                         {
-                            row[i] = (String)sqlite_dataReader[i];
+                            if (sqlite_dataReader[i].GetType() != typeof(DBNull))
+                            {
+                                row[i] = (String)sqlite_dataReader[i];
+                            }
+                            else
+                            {
+                                row[i] = string.Empty;
+                            }
                         }
 
                         tabellaVendita.Rows.Add(row);
@@ -561,7 +568,14 @@ namespace VenditaInventario
 
                         for (int i = 0; i < 7; i++)
                         {
-                            row[i] = (String)sqlite_dataReader[i];
+                            if (sqlite_dataReader[i].GetType() != typeof(DBNull))
+                            {
+                                row[i] = (String)sqlite_dataReader[i];
+                            }
+                            else
+                            {
+                                row[i] = string.Empty;
+                            }
                         }
 
                         tabellaVendita.Rows.Add(row);
