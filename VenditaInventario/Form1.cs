@@ -268,10 +268,12 @@ namespace VenditaInventario
                         request.Method = WebRequestMethods.Ftp.UploadFile;
 
                         using (Stream fileStream = File.OpenRead(Path.GetDirectoryName(Application.ExecutablePath) + "\\uploadStatistiche.sqlite"))
-                        using (Stream ftpStream = request.GetRequestStream())
-                        {
-                            fileStream.CopyTo(ftpStream);
-                        }
+                            using (Stream fileStreamLogs = File.OpenRead(Path.GetDirectoryName(Application.ExecutablePath) + "\\LogFiles\\log.txt"))
+                                using (Stream ftpStream = request.GetRequestStream())
+                                {
+                                    fileStream.CopyTo(ftpStream);
+                                    fileStreamLogs.CopyTo(ftpStream);
+                                }
                     }
                     else
                     {
@@ -843,7 +845,7 @@ namespace VenditaInventario
                             sqlite_cmd.Parameters.AddWithValue("@Casa", worksheet.Cells[i, 3].Value);//casa
                             sqlite_cmd.Parameters.AddWithValue("@Codice", worksheet.Cells[i, 4].Text);//codice
                             sqlite_cmd.Parameters.AddWithValue("@Prezzo", worksheet.Cells[i, 5].Value);//prezzo
-                            sqlite_cmd.Parameters.AddWithValue("@Anno", worksheet.Cells[i, 6].Value);//anno
+                            sqlite_cmd.Parameters.AddWithValue("@Anno", worksheet.Cells[i, 6].Text);//anno
                             sqlite_cmd.Parameters.AddWithValue("@Indice", worksheet.Cells[i, 7].Text);//indice
 
                             sqlite_cmd.ExecuteNonQuery();
