@@ -257,7 +257,11 @@ namespace VenditaInventario
                     string sourceFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "inventario.sqlite");
                     string destFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "uploadStatistiche.sqlite");
                     File.Copy(sourceFile, destFile, true);
-                    
+
+                    string sourceFileLog = Path.GetDirectoryName(Application.ExecutablePath) + "\\LogFiles\\log.txt";
+                    string destFileLog = Path.GetDirectoryName(Application.ExecutablePath) + "\\LogFiles\\logUpload.txt";
+                    File.Copy(sourceFileLog, destFileLog, true);
+
                     log.Info("Inizio upload statistiche..");
                     //Controllo se questo computer ha mai inviato delle statistiche
                     if (directoryExists())
@@ -267,13 +271,24 @@ namespace VenditaInventario
                         request.Credentials = new NetworkCredential("guest@libridicartaonline.it", "guestpassword!15");
                         request.Method = WebRequestMethods.Ftp.UploadFile;
 
+                        FtpWebRequest logRequest = (FtpWebRequest)WebRequest.Create("ftp://ftp.libridicartaonline.it/statistiche/" + Environment.MachineName + "/log.txt");
+                        logRequest.KeepAlive = false;
+                        logRequest.Credentials = new NetworkCredential("guest@libridicartaonline.it", "guestpassword!15");
+                        logRequest.Method = WebRequestMethods.Ftp.UploadFile;
+
                         using (Stream fileStream = File.OpenRead(Path.GetDirectoryName(Application.ExecutablePath) + "\\uploadStatistiche.sqlite"))
-                            using (Stream fileStreamLogs = File.OpenRead(Path.GetDirectoryName(Application.ExecutablePath) + "\\LogFiles\\log.txt"))
-                                using (Stream ftpStream = request.GetRequestStream())
+                            using (Stream ftpStream = request.GetRequestStream())
+                            {
+                                fileStream.CopyTo(ftpStream);
+                            }
+                        
+                        using (Stream fileStreamLogs = File.OpenRead(Path.GetDirectoryName(Application.ExecutablePath) + "\\LogFiles\\logUpload.txt"))
+                            using (Stream ftpStream = logRequest.GetRequestStream())
                                 {
-                                    fileStream.CopyTo(ftpStream);
                                     fileStreamLogs.CopyTo(ftpStream);
                                 }
+                            
+                                
                     }
                     else
                     {
