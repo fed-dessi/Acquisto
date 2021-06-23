@@ -25,7 +25,7 @@ namespace VenditaInventario
 
         DataTable dtRicerca = new DataTable();
 
-        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo = 0, totMaxBuono = 0, costoOriginale = 0;
+        decimal totIndice1 = 0, totIndice2 = 0, totIndice3 = 0, totMax = 0, totLordo = 0, costoOriginale = 0;
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -464,26 +464,17 @@ namespace VenditaInventario
             libriTotLvl1.Text = "0.00€";
             libriTotLvl2.Text = "0.00€";
             libriTotLvl3.Text = "0.00€";
-            importoMaxBuono.Text = "0.00€";
-            costoTextbox.Text = "0.00€";
+            costoLabel.Text = "0.00€";
             importoLordo.Text = "0.00€";
-            costoOriginaleLabel.Text = "0.00€";
             tabellaVendita.Rows.Clear();
 
             totIndice1 = 0;
             totIndice2 = 0;
             totIndice3 = 0;
             totMax = 0;
-            totMaxBuono = 0;
             totLordo = 0;
             costoOriginale = 0;
 
-            importoMaxBuono.Visible = false;
-            label17.Visible = false;
-            buonoPanel.Visible = false;
-            cbBuono.Checked = false;
-            cbBuono.Visible = false;
-            costoTextbox.Enabled = false;
         }
 
         private void inserimento(String isbn)
@@ -547,17 +538,13 @@ namespace VenditaInventario
                                     libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
                                     break;
                             }
-                            totMaxBuono = Math.Round(totMax * (decimal)1.1, 2);
 
-                            costoTextbox.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
-                            importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                            costoLabel.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
                             totLordo += Convert.ToDecimal(row[4].Replace(",", "."));
                             importoLordo.Text = Convert.ToString(Math.Round(totLordo, 2)) + "€";
-                            costoOriginaleLabel.Text = Convert.ToString(Math.Round(costoOriginale, 2)) + "€";
                         }
 
-                        cbBuono.Visible = true;
-                        costoTextbox.Enabled = true;
+                        costoLabel.Enabled = true;
                     }
                     else
                     {
@@ -626,16 +613,12 @@ namespace VenditaInventario
                                     libriTotLvl3.Text = Convert.ToString(totIndice3) + "€";
                                     break;
                             }
-                            totMaxBuono = Math.Round(totMax * (decimal)1.1, 2);
                             //Imposto i label
-                            costoTextbox.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
-                            importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                            costoLabel.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
                             totLordo += Convert.ToDecimal(row[4].Replace(",", "."));
                             importoLordo.Text = Convert.ToString(totLordo) + "€";
-                            costoOriginaleLabel.Text = Convert.ToString(Math.Round(costoOriginale, 2)) + "€";
                         }
-                        cbBuono.Visible = true;
-                        costoTextbox.Enabled = true;
+                        costoLabel.Enabled = true;
                         
                     }
                     else
@@ -717,13 +700,10 @@ namespace VenditaInventario
                             break;
                     }
                 }
-                totMaxBuono = Math.Round(totMax * (decimal)1.1, 2);
                 //Imposto i label
-                costoTextbox.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
-                importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
+                costoLabel.Text = Convert.ToString(Math.Round(totMax, 2)) + "€";
                 totLordo -= Convert.ToDecimal(tabellaVendita.SelectedRows[i].Cells[4].Value.ToString().Replace(",", "."));
                 importoLordo.Text = Convert.ToString(Math.Round(totLordo, 2)) + "€";
-                costoOriginaleLabel.Text = Convert.ToString(Math.Round(costoOriginale, 2)) + "€";
                 //Rimozione della riga dalla tabella
                 tabellaVendita.Rows.RemoveAt(tabellaVendita.SelectedRows[i].Index);
             }
@@ -918,26 +898,16 @@ namespace VenditaInventario
             DialogResult dialogResult = MessageBox.Show("Registrare i libri?", "Nuova vendita", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                if (cbBuono.Checked) { 
-                    if(totMaxBuono < 1000)
-                    {
-                        registraStatistica();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Controlla l'importo massimo dato al cliente.\n(Deve essere minore di 1000€)", "Errore!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                } else if(!cbBuono.Checked)
+
+                if (totMax < 1000)
                 {
-                    if (totMax < 1000)
-                    {
-                        registraStatistica();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Controlla l'importo massimo dato al cliente.\n(Deve essere minore di 1000€)", "Errore!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    registraStatistica();
                 }
+                else
+                {
+                    MessageBox.Show("Controlla l'importo massimo dato al cliente.\n(Deve essere minore di 1000€)", "Errore!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
                 
             }
             
@@ -966,16 +936,9 @@ namespace VenditaInventario
                 sqlite_cmd2.CommandText = "INSERT INTO [vendita] (data, costo, metodo) Values (@Data, @Costo, @Metodo); SELECT last_insert_rowid();";
                 sqlite_cmd2.Parameters.AddWithValue("@Data", data);
 
-                if (cbBuono.Checked)
-                {
-                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "B");
-                    sqlite_cmd2.Parameters.AddWithValue("@Costo", totMaxBuono);
-                }
-                else
-                {
-                    sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
-                    sqlite_cmd2.Parameters.AddWithValue("@Costo", totMax);
-                }
+                sqlite_cmd2.Parameters.AddWithValue("@Metodo", "C");
+                sqlite_cmd2.Parameters.AddWithValue("@Costo", totMax);
+                
 
                 rowID = (long)sqlite_cmd2.ExecuteScalar();
                 foreach (DataGridViewRow row in tabellaVendita.Rows)
@@ -1282,51 +1245,6 @@ namespace VenditaInventario
             }
         }
 
-        private void costoTextbox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.KeyCode == Keys.Enter)
-            {
-                try
-                {
-                    if (costoOriginale == 0)
-                    {
-                        costoOriginale = totMax;
-                    }
-                    totMax = Convert.ToDecimal(costoTextbox.Text.Replace("€", string.Empty).Replace(",", "."));
-                    totMaxBuono = totMax * (decimal)1.1;
-
-                    importoMaxBuono.Text = Convert.ToString(totMaxBuono) + "€";
-                    costoOriginaleLabel.Text = Convert.ToString(costoOriginale) + "€";
-                    costoTextbox.Text = costoTextbox.Text + "€";
-                    buonoPanel.Visible = true;
-                    importoOriginaleLabel.Visible = true;
-                    costoOriginaleLabel.Visible = true;
-                }
-                catch (Exception ex)
-                {
-                    log.Error("Errore in costoTextbox_KeyPress");
-                    log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
-                    Debug.WriteLine(ex);
-                    Debug.WriteLine(ex.Message);
-                }
-            }
-        }
-        
-        private void cbBuono_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbBuono.Checked)
-            {
-                importoMaxBuono.Visible = true;
-                label17.Visible = true;
-                buonoPanel.Visible = true;
-            }
-            if (!cbBuono.Checked)
-            {
-                importoMaxBuono.Visible = false;
-                label17.Visible = false;
-                buonoPanel.Visible = false;
-            }
-        }
 
         private void svuotaInventarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1409,9 +1327,7 @@ namespace VenditaInventario
                     dataIniziale = dataIniziale.AddDays(1);
                 }
                 quantitaContantiLabel.Text = Convert.ToString(quantitaContanti);
-                quantitaBuoniLabel.Text = Convert.ToString(quantitaBuoni);
                 costoTotaleContantiLabel.Text = Convert.ToString(Math.Round(costoContanti, 2).ToString().Replace(",",".")).Replace(",", ".") + "€";
-                costoTotaleBuoniLabel.Text = Convert.ToString(Math.Round(costoBuoni, 2).ToString().Replace(",", ".")).Replace(",", ".") + "€";
 
                 tabellaStatistiche.ClearSelection();
 
@@ -1445,7 +1361,7 @@ namespace VenditaInventario
             }
         }
 
-        
+
         //Inventario export
         private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
         {

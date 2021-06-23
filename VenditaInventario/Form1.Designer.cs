@@ -37,17 +37,11 @@
             this.venditaTab = new System.Windows.Forms.TabPage();
             this.backgroundVendita = new System.Windows.Forms.Panel();
             this.labelImporto = new System.Windows.Forms.Label();
-            this.buonoPanel = new System.Windows.Forms.Panel();
-            this.costoOriginaleLabel = new System.Windows.Forms.Label();
-            this.importoOriginaleLabel = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.importoMaxBuono = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.costoLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.importoLordo = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.cbBuono = new System.Windows.Forms.CheckBox();
-            this.costoTextbox = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -87,10 +81,6 @@
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.costoTotaleBuoniLabel = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.quantitaBuoniLabel = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.costoTotaleContantiLabel = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.quantitaContantiLabel = new System.Windows.Forms.Label();
@@ -109,18 +99,17 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.importaInventarioxlsxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importaModificheDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.aggiungiLibroToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.svuotaInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            this.svuotaInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
-            this.buonoPanel.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabellaVendita)).BeginInit();
@@ -162,7 +151,6 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.backgroundVendita.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
             this.backgroundVendita.Controls.Add(this.labelImporto);
-            this.backgroundVendita.Controls.Add(this.buonoPanel);
             this.backgroundVendita.Controls.Add(this.panel3);
             this.backgroundVendita.Controls.Add(this.panel2);
             this.backgroundVendita.Controls.Add(this.btnNuovoCliente);
@@ -189,81 +177,29 @@
             this.labelImporto.Text = "Importo in corso..";
             this.labelImporto.Visible = false;
             // 
-            // buonoPanel
-            // 
-            this.buonoPanel.BackColor = System.Drawing.Color.Transparent;
-            this.buonoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.buonoPanel.Controls.Add(this.costoOriginaleLabel);
-            this.buonoPanel.Controls.Add(this.importoOriginaleLabel);
-            this.buonoPanel.Controls.Add(this.label17);
-            this.buonoPanel.Controls.Add(this.importoMaxBuono);
-            this.buonoPanel.Location = new System.Drawing.Point(7, 545);
-            this.buonoPanel.Name = "buonoPanel";
-            this.buonoPanel.Size = new System.Drawing.Size(420, 76);
-            this.buonoPanel.TabIndex = 25;
-            this.buonoPanel.Visible = false;
-            // 
-            // costoOriginaleLabel
-            // 
-            this.costoOriginaleLabel.AutoSize = true;
-            this.costoOriginaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.costoOriginaleLabel.ForeColor = System.Drawing.Color.Red;
-            this.costoOriginaleLabel.Location = new System.Drawing.Point(311, 33);
-            this.costoOriginaleLabel.Name = "costoOriginaleLabel";
-            this.costoOriginaleLabel.Size = new System.Drawing.Size(71, 25);
-            this.costoOriginaleLabel.TabIndex = 24;
-            this.costoOriginaleLabel.Text = "0.00€";
-            this.costoOriginaleLabel.Visible = false;
-            // 
-            // importoOriginaleLabel
-            // 
-            this.importoOriginaleLabel.AutoSize = true;
-            this.importoOriginaleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.importoOriginaleLabel.ForeColor = System.Drawing.Color.White;
-            this.importoOriginaleLabel.Location = new System.Drawing.Point(246, 0);
-            this.importoOriginaleLabel.Name = "importoOriginaleLabel";
-            this.importoOriginaleLabel.Size = new System.Drawing.Size(167, 24);
-            this.importoOriginaleLabel.TabIndex = 23;
-            this.importoOriginaleLabel.Text = "Importo originale";
-            this.importoOriginaleLabel.Visible = false;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.ForeColor = System.Drawing.Color.White;
-            this.label17.Location = new System.Drawing.Point(3, 0);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(187, 24);
-            this.label17.TabIndex = 22;
-            this.label17.Text = "Importo con buono";
-            this.label17.Visible = false;
-            // 
-            // importoMaxBuono
-            // 
-            this.importoMaxBuono.AutoSize = true;
-            this.importoMaxBuono.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.importoMaxBuono.ForeColor = System.Drawing.Color.Red;
-            this.importoMaxBuono.Location = new System.Drawing.Point(9, 33);
-            this.importoMaxBuono.Name = "importoMaxBuono";
-            this.importoMaxBuono.Size = new System.Drawing.Size(71, 25);
-            this.importoMaxBuono.TabIndex = 12;
-            this.importoMaxBuono.Text = "0.00€";
-            this.importoMaxBuono.Visible = false;
-            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.costoLabel);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.importoLordo);
             this.panel3.Controls.Add(this.label8);
-            this.panel3.Controls.Add(this.cbBuono);
-            this.panel3.Controls.Add(this.costoTextbox);
             this.panel3.Location = new System.Drawing.Point(7, 439);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(420, 100);
             this.panel3.TabIndex = 24;
+            // 
+            // costoLabel
+            // 
+            this.costoLabel.AutoSize = true;
+            this.costoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.costoLabel.ForeColor = System.Drawing.Color.Red;
+            this.costoLabel.Location = new System.Drawing.Point(7, 40);
+            this.costoLabel.Name = "costoLabel";
+            this.costoLabel.Size = new System.Drawing.Size(71, 25);
+            this.costoLabel.TabIndex = 20;
+            this.costoLabel.Text = "0.00€";
             // 
             // label4
             // 
@@ -297,29 +233,6 @@
             this.label8.Size = new System.Drawing.Size(64, 24);
             this.label8.TabIndex = 18;
             this.label8.Text = "Lordo";
-            // 
-            // cbBuono
-            // 
-            this.cbBuono.AutoSize = true;
-            this.cbBuono.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBuono.ForeColor = System.Drawing.Color.White;
-            this.cbBuono.Location = new System.Drawing.Point(14, 68);
-            this.cbBuono.Name = "cbBuono";
-            this.cbBuono.Size = new System.Drawing.Size(244, 20);
-            this.cbBuono.TabIndex = 19;
-            this.cbBuono.Text = "Buono libreria? (aggiunge 10%)";
-            this.cbBuono.UseVisualStyleBackColor = true;
-            this.cbBuono.Visible = false;
-            this.cbBuono.CheckedChanged += new System.EventHandler(this.cbBuono_CheckedChanged);
-            // 
-            // costoTextbox
-            // 
-            this.costoTextbox.Enabled = false;
-            this.costoTextbox.Location = new System.Drawing.Point(14, 40);
-            this.costoTextbox.Name = "costoTextbox";
-            this.costoTextbox.Size = new System.Drawing.Size(68, 20);
-            this.costoTextbox.TabIndex = 20;
-            this.costoTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.costoTextbox_KeyDown);
             // 
             // panel2
             // 
@@ -701,10 +614,6 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(70)))));
             this.panel1.Controls.Add(this.tabellaStatistiche);
-            this.panel1.Controls.Add(this.costoTotaleBuoniLabel);
-            this.panel1.Controls.Add(this.label15);
-            this.panel1.Controls.Add(this.quantitaBuoniLabel);
-            this.panel1.Controls.Add(this.label14);
             this.panel1.Controls.Add(this.costoTotaleContantiLabel);
             this.panel1.Controls.Add(this.label13);
             this.panel1.Controls.Add(this.quantitaContantiLabel);
@@ -798,54 +707,12 @@
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             this.dataGridViewTextBoxColumn6.ReadOnly = true;
             // 
-            // costoTotaleBuoniLabel
-            // 
-            this.costoTotaleBuoniLabel.AutoSize = true;
-            this.costoTotaleBuoniLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.5F, System.Drawing.FontStyle.Bold);
-            this.costoTotaleBuoniLabel.ForeColor = System.Drawing.Color.Red;
-            this.costoTotaleBuoniLabel.Location = new System.Drawing.Point(229, 259);
-            this.costoTotaleBuoniLabel.Name = "costoTotaleBuoniLabel";
-            this.costoTotaleBuoniLabel.Size = new System.Drawing.Size(0, 25);
-            this.costoTotaleBuoniLabel.TabIndex = 13;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(9, 264);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(161, 20);
-            this.label15.TabIndex = 12;
-            this.label15.Text = "Costo totale buoni:";
-            // 
-            // quantitaBuoniLabel
-            // 
-            this.quantitaBuoniLabel.AutoSize = true;
-            this.quantitaBuoniLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.quantitaBuoniLabel.ForeColor = System.Drawing.Color.Red;
-            this.quantitaBuoniLabel.Location = new System.Drawing.Point(230, 194);
-            this.quantitaBuoniLabel.Name = "quantitaBuoniLabel";
-            this.quantitaBuoniLabel.Size = new System.Drawing.Size(0, 24);
-            this.quantitaBuoniLabel.TabIndex = 11;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(9, 197);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(200, 20);
-            this.label14.TabIndex = 10;
-            this.label14.Text = "Libri venduti con buono:";
-            // 
             // costoTotaleContantiLabel
             // 
             this.costoTotaleContantiLabel.AutoSize = true;
             this.costoTotaleContantiLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.5F, System.Drawing.FontStyle.Bold);
             this.costoTotaleContantiLabel.ForeColor = System.Drawing.Color.Red;
-            this.costoTotaleContantiLabel.Location = new System.Drawing.Point(229, 227);
+            this.costoTotaleContantiLabel.Location = new System.Drawing.Point(158, 253);
             this.costoTotaleContantiLabel.Name = "costoTotaleContantiLabel";
             this.costoTotaleContantiLabel.Size = new System.Drawing.Size(0, 25);
             this.costoTotaleContantiLabel.TabIndex = 9;
@@ -855,18 +722,18 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(9, 232);
+            this.label13.Location = new System.Drawing.Point(9, 256);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(182, 20);
+            this.label13.Size = new System.Drawing.Size(112, 20);
             this.label13.TabIndex = 8;
-            this.label13.Text = "Costo totale contanti:";
+            this.label13.Text = "Costo totale:";
             // 
             // quantitaContantiLabel
             // 
             this.quantitaContantiLabel.AutoSize = true;
             this.quantitaContantiLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.quantitaContantiLabel.ForeColor = System.Drawing.Color.Red;
-            this.quantitaContantiLabel.Location = new System.Drawing.Point(230, 159);
+            this.quantitaContantiLabel.Location = new System.Drawing.Point(159, 221);
             this.quantitaContantiLabel.Name = "quantitaContantiLabel";
             this.quantitaContantiLabel.Size = new System.Drawing.Size(0, 24);
             this.quantitaContantiLabel.TabIndex = 7;
@@ -940,11 +807,11 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(9, 159);
+            this.label9.Location = new System.Drawing.Point(9, 224);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(215, 20);
+            this.label9.Size = new System.Drawing.Size(111, 20);
             this.label9.TabIndex = 0;
-            this.label9.Text = "Libri venduti con contanti:";
+            this.label9.Text = "Libri venduti:";
             // 
             // menuStrip1
             // 
@@ -1013,10 +880,10 @@
             this.importaModificheDatabaseToolStripMenuItem.Text = "Importa Modifiche Database";
             this.importaModificheDatabaseToolStripMenuItem.Click += new System.EventHandler(this.ImportaModificheDatabaseToolStripMenuItem_Click);
             // 
-            // toolStripSeparator4
+            // toolStripSeparator1
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
             // 
             // aggiungiLibroToolStripMenuItem1
             // 
@@ -1024,6 +891,18 @@
             this.aggiungiLibroToolStripMenuItem1.Size = new System.Drawing.Size(224, 22);
             this.aggiungiLibroToolStripMenuItem1.Text = "Aggiungi Libro";
             this.aggiungiLibroToolStripMenuItem1.Click += new System.EventHandler(this.AggiungiLibroToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            // 
+            // svuotaInventarioToolStripMenuItem
+            // 
+            this.svuotaInventarioToolStripMenuItem.Name = "svuotaInventarioToolStripMenuItem";
+            this.svuotaInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.svuotaInventarioToolStripMenuItem.Text = "Svuota Inventario";
+            this.svuotaInventarioToolStripMenuItem.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem_Click);
             // 
             // backgroundWorker1
             // 
@@ -1037,18 +916,6 @@
             // backgroundWorker3
             // 
             this.backgroundWorker3.WorkerReportsProgress = true;
-            // 
-            // svuotaInventarioToolStripMenuItem
-            // 
-            this.svuotaInventarioToolStripMenuItem.Name = "svuotaInventarioToolStripMenuItem";
-            this.svuotaInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.svuotaInventarioToolStripMenuItem.Text = "Svuota Inventario";
-            this.svuotaInventarioToolStripMenuItem.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
             // 
             // Vendita
             // 
@@ -1065,8 +932,6 @@
             this.venditaTab.ResumeLayout(false);
             this.backgroundVendita.ResumeLayout(false);
             this.backgroundVendita.PerformLayout();
-            this.buonoPanel.ResumeLayout(false);
-            this.buonoPanel.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -1093,7 +958,6 @@
         private System.Windows.Forms.TabPage ricercaTab;
         private System.Windows.Forms.Panel backgroundVendita;
         private System.Windows.Forms.Button btnCancella;
-        private System.Windows.Forms.Label importoMaxBuono;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label libriTotLvl3;
         private System.Windows.Forms.Label label7;
@@ -1139,11 +1003,6 @@
         private System.Windows.Forms.Label quantitaContantiLabel;
         private System.Windows.Forms.Label costoTotaleContantiLabel;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.CheckBox cbBuono;
-        private System.Windows.Forms.Label quantitaBuoniLabel;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label costoTotaleBuoniLabel;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.DataGridView tabellaStatistiche;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
@@ -1151,11 +1010,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.TextBox costoTextbox;
-        private System.Windows.Forms.Panel buonoPanel;
-        private System.Windows.Forms.Label costoOriginaleLabel;
-        private System.Windows.Forms.Label importoOriginaleLabel;
-        private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel2;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
@@ -1172,6 +1026,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem svuotaInventarioToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker4;
+        private System.Windows.Forms.Label costoLabel;
     }
 }
 
