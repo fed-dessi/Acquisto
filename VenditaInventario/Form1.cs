@@ -288,6 +288,7 @@ namespace VenditaInventario
                                     fileStreamLogs.CopyTo(ftpStream);
                                 }
                             
+
                                 
                     }
                     else
