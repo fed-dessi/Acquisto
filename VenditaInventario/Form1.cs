@@ -21,7 +21,7 @@ namespace VenditaInventario
 {
     public partial class Vendita : Form
     {
-        SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;auto_vacuum=FULL;secure_delete=true;Version= 3;");
+        SQLiteConnection sqlite_conn = null;
 
         DataTable dtRicerca = new DataTable();
 
@@ -74,7 +74,7 @@ namespace VenditaInventario
             {
                 try
                 {
-                    sqlite_conn.Open();
+                    sqlite_conn = DatabaseManager.getConnection();
 
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
@@ -179,7 +179,7 @@ namespace VenditaInventario
             try
             {
                 log.Info("Inizio modifica database");
-                sqlite_conn.Open();
+                sqlite_conn = DatabaseManager.getConnection();
 
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
@@ -379,40 +379,37 @@ namespace VenditaInventario
 
                 Modifica frm = new Modifica();
 
-                using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;"))
+
+                sqlite_conn = DatabaseManager.getConnection();
+
+                using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
                 {
+                    sqlite_cmd.CommandText = "SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario WHERE codice='" + isbn + "'";
+                    sqlite_cmd.ExecuteNonQuery();
 
-                    sqlite_conn.Open();
-
-                    using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
-                    {
-                        sqlite_cmd.CommandText = "SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario WHERE codice='" + isbn + "'";
-                        sqlite_cmd.ExecuteNonQuery();
-
-                        SQLiteDataReader sqlite_dataReader = sqlite_cmd.ExecuteReader();
+                    SQLiteDataReader sqlite_dataReader = sqlite_cmd.ExecuteReader();
 
                         
 
-                        if (sqlite_dataReader.Read())
-                        {
+                    if (sqlite_dataReader.Read())
+                    {
                             
-                            frm.SetId = Convert.ToString(sqlite_dataReader[0]);
-                            frm.modificaTitoloTextbox.Text = (String)sqlite_dataReader[1];
-                            frm.modificaAutoreTextbox.Text = (String)sqlite_dataReader[2];
-                            frm.modificaCasaTextbox.Text = (String)sqlite_dataReader[3];
-                            frm.modificaIsbnTextbox.Text = (String)sqlite_dataReader[4];
-                            frm.modificaPrezzoTextbox.Text = (String)sqlite_dataReader[5];
-                            frm.modificaAnnoTextbox.Text = (String)sqlite_dataReader[6];
-                            frm.modificaIndiceCombo.Text = (String)sqlite_dataReader[7];
+                        frm.SetId = Convert.ToString(sqlite_dataReader[0]);
+                        frm.modificaTitoloTextbox.Text = (String)sqlite_dataReader[1];
+                        frm.modificaAutoreTextbox.Text = (String)sqlite_dataReader[2];
+                        frm.modificaCasaTextbox.Text = (String)sqlite_dataReader[3];
+                        frm.modificaIsbnTextbox.Text = (String)sqlite_dataReader[4];
+                        frm.modificaPrezzoTextbox.Text = (String)sqlite_dataReader[5];
+                        frm.modificaAnnoTextbox.Text = (String)sqlite_dataReader[6];
+                        frm.modificaIndiceCombo.Text = (String)sqlite_dataReader[7];
 
 
-                        }
-                        sqlite_dataReader.Close();
-                        sqlite_conn.Close();
+                    }
+                    sqlite_dataReader.Close();
+                    sqlite_conn.Close();
 
                         
                     }
-                }
 
                 frm.ShowDialog();
                 populateTable();
@@ -430,6 +427,8 @@ namespace VenditaInventario
         {
             try
             {
+                sqlite_conn = DatabaseManager.getConnection();
+
                 SQLiteDataAdapter sqlite_adapter = new SQLiteDataAdapter("SELECT * FROM inventario", sqlite_conn);
 
                 dtRicerca.Clear();
@@ -492,7 +491,7 @@ namespace VenditaInventario
                 if (isbn.Length == 13)
                 {
 
-                    sqlite_conn.Open();
+                    sqlite_conn = DatabaseManager.getConnection();
 
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
@@ -571,7 +570,7 @@ namespace VenditaInventario
                 }
                 else if (isbn.Length < 10)
                 {
-                    sqlite_conn.Open();
+                    sqlite_conn = DatabaseManager.getConnection();
 
                     SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
@@ -845,7 +844,7 @@ namespace VenditaInventario
                         rowCount--;
                     }
 
-                    sqlite_conn.Open();
+                    sqlite_conn = DatabaseManager.getConnection();
 
                     SQLiteTransaction transaction = sqlite_conn.BeginTransaction();
 
@@ -948,7 +947,7 @@ namespace VenditaInventario
             {
                 String data = null;
 
-                sqlite_conn.Open();
+                sqlite_conn = DatabaseManager.getConnection();
 
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
@@ -1077,7 +1076,7 @@ namespace VenditaInventario
             {
                 string selectedFileName = (string)e.Argument;
 
-                sqlite_conn.Open();
+                sqlite_conn = DatabaseManager.getConnection();
 
                 SQLiteTransaction transaction = null;
                 transaction = sqlite_conn.BeginTransaction();
@@ -1159,38 +1158,34 @@ namespace VenditaInventario
 
                 try
                 {
-                
-                    using (SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=inventario.sqlite;foreign keys=true;Version= 3;"))
+                    sqlite_conn = DatabaseManager.getConnection();
+
+                    using (SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand())
                     {
-
-                        sqlite_conn.Open();
-
-                        using (SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand())
+                        sqlite_cmd2.CommandText = "SELECT libriID FROM statistiche WHERE libriID='" + id + "'";
+                        SQLiteDataReader sqlite_dataReader = sqlite_cmd2.ExecuteReader();
+                        if (sqlite_dataReader.Read())
                         {
-                            sqlite_cmd2.CommandText = "SELECT libriID FROM statistiche WHERE libriID='" + id + "'";
-                            SQLiteDataReader sqlite_dataReader = sqlite_cmd2.ExecuteReader();
-                            if (sqlite_dataReader.Read())
+                            MessageBox.Show("Impossibile rimuovere il libro selezionato poiche' e' presente in una o piu' vendite.\nPer non comparlo piu' usare la modifica e impostare l'indice a VUOTO!", "Impossibile rimuovere libro!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
                             {
-                                MessageBox.Show("Impossibile rimuovere il libro selezionato poiche' e' presente in una o piu' vendite.\nPer non comparlo piu' usare la modifica e impostare l'indice a VUOTO!", "Impossibile rimuovere libro!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                            else
-                            {
-                                using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
-                                {
-                                    sqlite_cmd.CommandText = "DELETE FROM inventario WHERE id='" + id + "'";
-                                    sqlite_cmd.ExecuteNonQuery();
+                                sqlite_cmd.CommandText = "DELETE FROM inventario WHERE id='" + id + "'";
+                                sqlite_cmd.ExecuteNonQuery();
 
-                                    sqlite_cmd.Dispose();
-                                }
-                                MessageBox.Show("Libro rimosso!", "Rimosso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                sqlite_cmd.Dispose();
                             }
-
-                            sqlite_cmd2.Dispose();
+                            MessageBox.Show("Libro rimosso!", "Rimosso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
 
-                        
-                        sqlite_conn.Close();
+                        sqlite_cmd2.Dispose();
                     }
+
+                        
+                    sqlite_conn.Close();
+                    
                     populateTable();
                     
                 }
@@ -1355,7 +1350,7 @@ namespace VenditaInventario
                 int? lastVenditaID = null;
 
                 decimal costoContanti = 0, costoBuoni = 0;
-                sqlite_conn.Open();
+                sqlite_conn = DatabaseManager.getConnection();
 
                 SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
@@ -1495,7 +1490,7 @@ namespace VenditaInventario
             log.Info("Inizio cancellazione database libri e statistiche");
             try
             {
-                sqlite_conn.Open();
+                sqlite_conn = DatabaseManager.getConnection();
 
                 SQLiteTransaction transaction = null;
                 transaction = sqlite_conn.BeginTransaction();
