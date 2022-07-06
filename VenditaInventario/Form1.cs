@@ -385,7 +385,6 @@ namespace VenditaInventario
                 using (SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand())
                 {
                     sqlite_cmd.CommandText = "SELECT id, nome, autore, casa, codice, prezzo, anno, indice FROM inventario WHERE codice='" + isbn + "'";
-                    sqlite_cmd.ExecuteNonQuery();
 
                     SQLiteDataReader sqlite_dataReader = sqlite_cmd.ExecuteReader();
 
@@ -395,13 +394,13 @@ namespace VenditaInventario
                     {
                             
                         frm.SetId = Convert.ToString(sqlite_dataReader[0]);
-                        frm.modificaTitoloTextbox.Text = (String)sqlite_dataReader[1];
-                        frm.modificaAutoreTextbox.Text = (String)sqlite_dataReader[2];
-                        frm.modificaCasaTextbox.Text = (String)sqlite_dataReader[3];
-                        frm.modificaIsbnTextbox.Text = (String)sqlite_dataReader[4];
-                        frm.modificaPrezzoTextbox.Text = (String)sqlite_dataReader[5];
-                        frm.modificaAnnoTextbox.Text = (String)sqlite_dataReader[6];
-                        frm.modificaIndiceCombo.Text = (String)sqlite_dataReader[7];
+                        frm.modificaTitoloTextbox.Text = Convert.ToString(sqlite_dataReader[1]);
+                        frm.modificaAutoreTextbox.Text = Convert.ToString(sqlite_dataReader[2]);
+                        frm.modificaCasaTextbox.Text = Convert.ToString(sqlite_dataReader[3]);
+                        frm.modificaIsbnTextbox.Text = Convert.ToString(sqlite_dataReader[4]);
+                        frm.modificaPrezzoTextbox.Text = Convert.ToString(sqlite_dataReader[5]);
+                        frm.modificaAnnoTextbox.Text = Convert.ToString(sqlite_dataReader[6]);
+                        frm.modificaIndiceCombo.Text = Convert.ToString(sqlite_dataReader[7]);
 
 
                     }
@@ -414,10 +413,9 @@ namespace VenditaInventario
                 frm.ShowDialog();
                 populateTable();
             }
-
-            catch (SQLiteException ex)
+            catch(Exception ex) 
             {
-                MessageBox.Show("apriModifica() Error", "Database error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Errore nella modifica del libro", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Debug.WriteLine(ex.StackTrace);
                 log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
             }
