@@ -826,10 +826,12 @@ namespace VenditaInventario
                 //Otteniamo il nome del file da utilizzare per l'inserimento
                 string selectedPath = (string)e.Argument;
 
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
                 //Creaiamo un nuovo excelPackage con using cosi che venga rimosso automaticamente
                 using (var package = new ExcelPackage(new FileInfo(@selectedPath)))
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
                     int rowCount = worksheet.Dimension.Rows;
                     //Bisogna ottenere l'ultima riga "vera", quella contenente dei valori, e non le righe che hanno una formattazione ma sono vuote
@@ -878,6 +880,7 @@ namespace VenditaInventario
             } catch(Exception ex)
             {
                 log.Error("Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+                e.Cancel = true;
             }
             
 
@@ -895,7 +898,15 @@ namespace VenditaInventario
         //Questo metodo viene chiamato alla fine del backgroundWorker
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show("Foglio Excel importato!", "Importato", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if(e.Error == null && !e.Cancelled)
+            {
+                MessageBox.Show("Foglio Excel importato!", "Importato", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Errore nell'importo del foglio Excel!", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
 
             progressBar1.Visible = false;
 
