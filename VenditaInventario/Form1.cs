@@ -122,7 +122,7 @@ namespace VenditaInventario
                 try
                 {
                     //impostazione delle variabili
-                    String URLString = "https://www.libridicartaonline.it/acquistoAggiornamento.xml";
+                    String URLString = "https://www.libridicartaonline.it/acquistoAggiornamento.xml?" + DateTime.Now.Ticks;
                     String downloadURL = null;
                     var currentVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.ToString());
                     var remoteVersion = new Version();
