@@ -102,6 +102,10 @@ namespace VenditaInventario
             //Inizio il controllo per una nuova versione e il task di update
             update();
 
+            var currentVersion = new Version(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            versionInfoMenu.Text = "Versione " + currentVersion.ToString();
+
             //Controllo se devo effettuare modifiche al database
             String databaseUpdateFile = Path.GetDirectoryName(Application.ExecutablePath) + "\\databaseUpdate.txt";
 
@@ -1448,7 +1452,6 @@ namespace VenditaInventario
             }
         }
 
-        
         //Inventario export
         private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
         {

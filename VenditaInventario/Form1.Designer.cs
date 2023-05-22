@@ -109,14 +109,16 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.importaInventarioxlsxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importaModificheDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.aggiungiLibroToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.svuotaInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.versionInfoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            this.svuotaInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -305,7 +307,7 @@
             this.cbBuono.ForeColor = System.Drawing.Color.White;
             this.cbBuono.Location = new System.Drawing.Point(14, 68);
             this.cbBuono.Name = "cbBuono";
-            this.cbBuono.Size = new System.Drawing.Size(244, 20);
+            this.cbBuono.Size = new System.Drawing.Size(243, 20);
             this.cbBuono.TabIndex = 19;
             this.cbBuono.Text = "Buono libreria? (aggiunge 10%)";
             this.cbBuono.UseVisualStyleBackColor = true;
@@ -981,8 +983,10 @@
             this.importaModificheDatabaseToolStripMenuItem,
             this.toolStripSeparator1,
             this.aggiungiLibroToolStripMenuItem1,
+            this.toolStripSeparator2,
+            this.svuotaInventarioToolStripMenuItem,
             this.toolStripSeparator4,
-            this.svuotaInventarioToolStripMenuItem});
+            this.versionInfoMenu});
             this.strumentiToolStripMenuItem.Name = "strumentiToolStripMenuItem";
             this.strumentiToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.strumentiToolStripMenuItem.Text = "Strumenti";
@@ -1013,10 +1017,10 @@
             this.importaModificheDatabaseToolStripMenuItem.Text = "Importa Modifiche Database";
             this.importaModificheDatabaseToolStripMenuItem.Click += new System.EventHandler(this.ImportaModificheDatabaseToolStripMenuItem_Click);
             // 
-            // toolStripSeparator4
+            // toolStripSeparator1
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
             // 
             // aggiungiLibroToolStripMenuItem1
             // 
@@ -1024,6 +1028,29 @@
             this.aggiungiLibroToolStripMenuItem1.Size = new System.Drawing.Size(224, 22);
             this.aggiungiLibroToolStripMenuItem1.Text = "Aggiungi Libro";
             this.aggiungiLibroToolStripMenuItem1.Click += new System.EventHandler(this.AggiungiLibroToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(221, 6);
+            // 
+            // svuotaInventarioToolStripMenuItem
+            // 
+            this.svuotaInventarioToolStripMenuItem.Name = "svuotaInventarioToolStripMenuItem";
+            this.svuotaInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.svuotaInventarioToolStripMenuItem.Text = "Svuota Inventario";
+            this.svuotaInventarioToolStripMenuItem.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            // 
+            // versionInfoMenu
+            // 
+            this.versionInfoMenu.Enabled = false;
+            this.versionInfoMenu.Name = "versionInfoMenu";
+            this.versionInfoMenu.Size = new System.Drawing.Size(224, 22);
             // 
             // backgroundWorker1
             // 
@@ -1037,18 +1064,6 @@
             // backgroundWorker3
             // 
             this.backgroundWorker3.WorkerReportsProgress = true;
-            // 
-            // svuotaInventarioToolStripMenuItem
-            // 
-            this.svuotaInventarioToolStripMenuItem.Name = "svuotaInventarioToolStripMenuItem";
-            this.svuotaInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.svuotaInventarioToolStripMenuItem.Text = "Svuota Inventario";
-            this.svuotaInventarioToolStripMenuItem.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
             // 
             // Vendita
             // 
@@ -1172,6 +1187,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem svuotaInventarioToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem versionInfoMenu;
     }
 }
 
