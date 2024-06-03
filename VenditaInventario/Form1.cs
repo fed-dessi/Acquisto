@@ -1255,6 +1255,7 @@ namespace VenditaInventario
             if (importFile.ShowDialog() == DialogResult.OK)
             {
                 labelImporto.Visible = true;
+                labelImporto.Text = "Importo in corso..";
                 progressBar1.Visible = true;
                 progressBar1.Style = ProgressBarStyle.Marquee;
                 progressBar1.MarqueeAnimationSpeed = 30;
@@ -1275,6 +1276,7 @@ namespace VenditaInventario
                 if (result == DialogResult.OK)
                 {
                     labelImporto.Visible = true;
+                    labelImporto.Text = "Export in corso..";
                     progressBar1.Visible = true;
                     progressBar1.Style = ProgressBarStyle.Marquee;
                     progressBar1.MarqueeAnimationSpeed = 30;
