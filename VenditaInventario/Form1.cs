@@ -375,11 +375,16 @@ namespace VenditaInventario
 
         private void apriModifica()
         {
-            string isbn = tabellaRicerca.CurrentRow.Cells[4].Value.ToString();
-
-
             try
             {
+               
+                if(tabellaRicerca.CurrentRow == null)
+                {
+                    MessageBox.Show("Per modificare un libro bisogna selezionare almeno una riga dalla tabella", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string isbn = tabellaRicerca.CurrentRow.Cells[4].Value.ToString();
 
                 Modifica frm = new Modifica();
 
@@ -1164,13 +1169,20 @@ namespace VenditaInventario
 
         private void btnRimuoviRiga_Click(object sender, EventArgs e)
         {
+
+            if (tabellaRicerca.CurrentRow == null)
+            {
+                MessageBox.Show("Per eliminare un libro bisogna selezionare almeno una riga dalla tabella", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             DialogResult dialogResult = MessageBox.Show("Vuoi cancellare il libro selezionato?", "Rimozione", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                string id = tabellaRicerca.CurrentRow.Cells[0].Value.ToString();
-
                 try
                 {
+                    string id = tabellaRicerca.CurrentRow.Cells[0].Value.ToString();
+
                     sqlite_conn = DatabaseManager.getConnection();
 
                     using (SQLiteCommand sqlite_cmd2 = sqlite_conn.CreateCommand())
@@ -1272,21 +1284,7 @@ namespace VenditaInventario
 
         private void AggiungiLibroToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Aggiungi frm = new Aggiungi();
-
-                frm.ShowDialog();
-                populateTable();
-
-            }
-
-            catch (SQLiteException ex)
-            {
-                MessageBox.Show("aggiungiLibroToolStripMenuItem_Click Error", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Debug.WriteLine(ex.StackTrace);
-                log.Error("aggiungiLibroToolStripMenuItem_Click Error - Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
-            }
+            
         }
 
         private void costoTextbox_KeyDown(object sender, KeyEventArgs e)
@@ -1337,14 +1335,7 @@ namespace VenditaInventario
 
         private void svuotaInventarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Svuotare l'inventario corrente e le statistiche?\nQUESTA OPZIONE E' IRREVERSIBILE", "Svuota database", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.Yes)
-            {
-                progressBar1.Style = ProgressBarStyle.Marquee;
-                progressBar1.MarqueeAnimationSpeed = 30;
-                progressBar1.Visible = true;
-                backgroundWorker4.RunWorkerAsync();
-            }
+            
         }
 
         private void btnAggiornaRicerca_Click(object sender, EventArgs e)
@@ -1449,6 +1440,37 @@ namespace VenditaInventario
                         tabellaVendita.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Lime;
                         break;
                 }
+            }
+        }
+
+        private void aggiungiLibroToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                Aggiungi frm = new Aggiungi();
+
+                frm.ShowDialog();
+                populateTable();
+
+            }
+
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show("aggiungiLibroToolStripMenuItem_Click Error", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine(ex.StackTrace);
+                log.Error("aggiungiLibroToolStripMenuItem_Click Error - Messaggio: " + ex.Message + " Stacktrace: " + ex.StackTrace);
+            }
+        }
+
+        private void svuotaInventarioToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Svuotare l'inventario corrente e le statistiche?\nQUESTA OPZIONE E' IRREVERSIBILE", "Svuota database", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
+            {
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                progressBar1.MarqueeAnimationSpeed = 30;
+                progressBar1.Visible = true;
+                backgroundWorker4.RunWorkerAsync();
             }
         }
 

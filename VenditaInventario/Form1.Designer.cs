@@ -109,16 +109,15 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.importaInventarioxlsxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importaModificheDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.aggiungiLibroToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.svuotaInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.versionInfoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            this.gestioneInventarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aggiungiLibroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.svuotaInventarioToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.versionInfoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPages.SuspendLayout();
             this.venditaTab.SuspendLayout();
             this.backgroundVendita.SuspendLayout();
@@ -952,7 +951,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.strumentiToolStripMenuItem});
+            this.strumentiToolStripMenuItem,
+            this.gestioneInventarioToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1353, 24);
@@ -962,7 +962,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.chiudiToolStripMenuItem});
+            this.chiudiToolStripMenuItem,
+            this.versionInfoMenu});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -970,7 +971,7 @@
             // chiudiToolStripMenuItem
             // 
             this.chiudiToolStripMenuItem.Name = "chiudiToolStripMenuItem";
-            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.chiudiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.chiudiToolStripMenuItem.Text = "Chiudi";
             this.chiudiToolStripMenuItem.Click += new System.EventHandler(this.chiudiToolStripMenuItem_Click);
             // 
@@ -980,16 +981,10 @@
             this.exportInventarioToolStripMenuItem,
             this.toolStripSeparator3,
             this.importaInventarioxlsxToolStripMenuItem,
-            this.importaModificheDatabaseToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.aggiungiLibroToolStripMenuItem1,
-            this.toolStripSeparator2,
-            this.svuotaInventarioToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.versionInfoMenu});
+            this.importaModificheDatabaseToolStripMenuItem});
             this.strumentiToolStripMenuItem.Name = "strumentiToolStripMenuItem";
-            this.strumentiToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.strumentiToolStripMenuItem.Text = "Strumenti";
+            this.strumentiToolStripMenuItem.Size = new System.Drawing.Size(150, 20);
+            this.strumentiToolStripMenuItem.Text = "Import/Export Inventario";
             // 
             // exportInventarioToolStripMenuItem
             // 
@@ -1017,41 +1012,6 @@
             this.importaModificheDatabaseToolStripMenuItem.Text = "Importa Modifiche Database";
             this.importaModificheDatabaseToolStripMenuItem.Click += new System.EventHandler(this.ImportaModificheDatabaseToolStripMenuItem_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
-            // 
-            // aggiungiLibroToolStripMenuItem1
-            // 
-            this.aggiungiLibroToolStripMenuItem1.Name = "aggiungiLibroToolStripMenuItem1";
-            this.aggiungiLibroToolStripMenuItem1.Size = new System.Drawing.Size(224, 22);
-            this.aggiungiLibroToolStripMenuItem1.Text = "Aggiungi Libro";
-            this.aggiungiLibroToolStripMenuItem1.Click += new System.EventHandler(this.AggiungiLibroToolStripMenuItem1_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(221, 6);
-            // 
-            // svuotaInventarioToolStripMenuItem
-            // 
-            this.svuotaInventarioToolStripMenuItem.Name = "svuotaInventarioToolStripMenuItem";
-            this.svuotaInventarioToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.svuotaInventarioToolStripMenuItem.Text = "Svuota Inventario";
-            this.svuotaInventarioToolStripMenuItem.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
-            // 
-            // versionInfoMenu
-            // 
-            this.versionInfoMenu.Enabled = false;
-            this.versionInfoMenu.Name = "versionInfoMenu";
-            this.versionInfoMenu.Size = new System.Drawing.Size(224, 22);
-            // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
@@ -1064,6 +1024,41 @@
             // backgroundWorker3
             // 
             this.backgroundWorker3.WorkerReportsProgress = true;
+            // 
+            // gestioneInventarioToolStripMenuItem
+            // 
+            this.gestioneInventarioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aggiungiLibroToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.svuotaInventarioToolStripMenuItem1});
+            this.gestioneInventarioToolStripMenuItem.Name = "gestioneInventarioToolStripMenuItem";
+            this.gestioneInventarioToolStripMenuItem.Size = new System.Drawing.Size(121, 20);
+            this.gestioneInventarioToolStripMenuItem.Text = "Gestione Inventario";
+            // 
+            // aggiungiLibroToolStripMenuItem
+            // 
+            this.aggiungiLibroToolStripMenuItem.Name = "aggiungiLibroToolStripMenuItem";
+            this.aggiungiLibroToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aggiungiLibroToolStripMenuItem.Text = "Aggiungi Libro";
+            this.aggiungiLibroToolStripMenuItem.Click += new System.EventHandler(this.aggiungiLibroToolStripMenuItem_Click_1);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            // 
+            // svuotaInventarioToolStripMenuItem1
+            // 
+            this.svuotaInventarioToolStripMenuItem1.Name = "svuotaInventarioToolStripMenuItem1";
+            this.svuotaInventarioToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.svuotaInventarioToolStripMenuItem1.Text = "Svuota Inventario";
+            this.svuotaInventarioToolStripMenuItem1.Click += new System.EventHandler(this.svuotaInventarioToolStripMenuItem1_Click);
+            // 
+            // versionInfoMenu
+            // 
+            this.versionInfoMenu.Enabled = false;
+            this.versionInfoMenu.Name = "versionInfoMenu";
+            this.versionInfoMenu.Size = new System.Drawing.Size(180, 22);
             // 
             // Vendita
             // 
@@ -1181,13 +1176,12 @@
         private System.Windows.Forms.ToolStripMenuItem importaInventarioxlsxToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem importaModificheDatabaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem1;
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem svuotaInventarioToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker4;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem gestioneInventarioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aggiungiLibroToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem svuotaInventarioToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem versionInfoMenu;
     }
 }
